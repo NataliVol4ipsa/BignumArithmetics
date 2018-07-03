@@ -37,7 +37,7 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [MAYBE] 10.0. Learn how to use LINQ. Create DB with tests, that contain different test parameters. Implement some choice criterias (speed, length, errors) and write sql queries to add and get them from db, run and display results. //. Maybe I should sleep more :D
 
-[MAYBE] 11.0. I need to learn more about ASP.NET, so... try to involve it somehow.
+[MAYBE] 11.0. I need to learn more about ASP.NET, so... try to involve it somehow. Maybe add some cryptography for this (triple des, rsa)
 
 YET INVOLVED: regex, delegates+events, design patterns, parallel computing, async prog, what is reflection?
 
