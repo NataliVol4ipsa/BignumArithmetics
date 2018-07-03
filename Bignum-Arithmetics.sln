@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2006
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bignum-Arithmetics", "Bignum-Arithmetics.csproj", "{475D2AE5-CAAA-489E-82E2-A543352158A3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Debug|x86.ActiveCfg = Debug|x86
+		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Debug|x86.Build.0 = Debug|x86
+		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Release|x86.ActiveCfg = Release|x86
+		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6FF4D839-65A8-4190-B0D7-1962A582D0C3}
+	EndGlobalSection
+EndGlobal
