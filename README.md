@@ -7,7 +7,7 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [DONE] 0.1. Learn how to use git with Visual Studio 2017
 
-<b>[CURRENT] 1.0. Set up project environment. Implement Interface for storing numbers that will necessary have operator overloading. Create three classes that inherit from the interface. These are : fixed point, fractional and 2..16-base numbers.
+<b>[CURRENT] </b> 1.0. Set up project environment. Implement Interface for storing numbers that will necessary have operator overloading. Create three classes that inherit from the interface. These are : fixed point, fractional and 2..16-base numbers.
 
 [AWAITING] 1.1. Implement simple reading and storing either from a console and file.
 
