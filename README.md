@@ -7,11 +7,11 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [DONE] 0.1. Learn how to use git with Visual Studio 2017
 
-<b>[CURRENT] </b> 1.0. Set up project environment. Implement Interface\Abstract class for storing numbers. Create three classes with operators overloading that inherit from the interface. These are : fixed point, fractional and 2..16-base numbers.
+[AWAITING] 1.0. Set up project environment. Implement Interface\Abstract class for storing numbers. Create three classes with operators overloading that inherit from the interface. These are : fixed point, fractional and 2..16-base numbers.
 
 // I decided to delay implementing of classes except fixed point until the class structure is better defined.
 
-[AWAITING] 1.1. Implement simple reading and storing either from a console and file.
+<b>[CURRENT]</b> 1.1. Implement simple reading and storing either from a console and file.
 
 [AWAITING] 1.2. Start creating simple documentation
 
