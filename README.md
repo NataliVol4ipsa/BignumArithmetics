@@ -9,6 +9,8 @@ This is a small self-educational project I decided to start in order to refresh 
 
 <b>[CURRENT] </b> 1.0. Set up project environment. Implement Interface\Abstract class for storing numbers. Create three classes with operators overloading that inherit from the interface. These are : fixed point, fractional and 2..16-base numbers.
 
+// I decided to delay implementing of classes except fixed point until the class structure is better defined.
+
 [AWAITING] 1.1. Implement simple reading and storing either from a console and file.
 
 [AWAITING] 1.2. Start creating simple documentation
@@ -35,7 +37,7 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [AWAITING] 7.3. Create a config file to configure current parameters of testing. Create endless looped menu of reading input, like a local console.
 
-[MAYBE] 8.0 Try to implement a normal calculator, with brackets support. Look at stack-like collections. Regex? RPN?
+[MAYBE] 8.0 Try to implement a normal calculator, with brackets support. Look at stack-like collections. Regex? RPN? Class Expression. What if mul overflow?
 
 [MAYBE] 9.0. Try to implement multithreading. It can be used with low-level operations, parsing etc.
 
