@@ -11,13 +11,11 @@ This is a small self-educational project I decided to start in order to refresh 
 
 // I decided to delay implementing of classes except fixed point until the class structure is better defined.
 
-<b>[CURRENT]</b> 1.1. Implement simple reading and storing either from a console and file.
+[DONE] 1.1. Implement simple reading and storing either from a console and file.
 
-[AWAITING] 1.2. Start creating simple documentation
+<b>[CURRENT]</b> 2.0. Implement long sum and long dif for integers. Remember to proceed negative and zero numbers.
 
-[AWAITING] 2.0. Implement long sum and long dif for integers. Remember to proceed negative and zero numbers.
-
-[AWAITING] 3.0. Implement basic error management using exception system.
+[AWAITING] 3.0. Implement basic error management using exception system + advanced input parsing.
 
 [AWAITING] 4.0. Implement long mul. Try these methods: classic, Karatsuba, Schönhage–Strassen, Fürer’s algo
 
@@ -36,6 +34,8 @@ This is a small self-educational project I decided to start in order to refresh 
 [AWAITING] 7.2. Implement 2-6 for different base
 
 [AWAITING] 7.3. Create a config file to configure current parameters of testing. Create endless looped menu of reading input, like a local console.
+
+[AWAITING] 7.4. Start creating documentation
 
 [MAYBE] 8.0 Try to implement a normal calculator, with brackets support. Look at stack-like collections. Regex? RPN? Class Expression. What if mul overflow?
 
