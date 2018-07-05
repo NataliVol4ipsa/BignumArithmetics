@@ -8,13 +8,15 @@ namespace net.NataliVol4ica.BignumArithmetics
         public static int Main(string[] args)
         {
             /* Reading */
+            List<FixedPointNumber> numbers;
             try
             {
-                List<FixedPointNumber> numbers;
                 using (InputParser ip = new InputParser(out numbers, "Input.txt"))
                 {
                     ip.ReadInput();
                 }
+                Console.WriteLine("1: {0}.{1}", numbers[0].GetIntLen(), numbers[0].GetFracLen());
+                Console.WriteLine("2: {0}.{1}", numbers[1].GetIntLen(), numbers[1].GetFracLen());
             }
             catch (Exception e)
             {

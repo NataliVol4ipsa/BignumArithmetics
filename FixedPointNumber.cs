@@ -30,6 +30,21 @@ namespace net.NataliVol4ica.BignumArithmetics
         public static char ToChar(byte Digit) { return Convert.ToChar(Digit + '0'); }
         public static byte ToDigit(char C) { return Convert.ToByte(C - '0'); }
 
+        public int GetIntLen()
+        {
+            if (this.Dot < 0)
+                return this.Digits.Count;
+            return this.Dot;
+        }
+        public int GetFracLen()
+        {
+            if (this.Dot < 0)
+                return 0;
+            return this.Digits.Count - this.Dot;
+        }
+
+        //todo: parse sign!!!
+        //todo: func to cut heading and closing zeros
         void StringToDigits()
         {
             int DotPos = RawString.IndexOf(".");
@@ -72,6 +87,12 @@ namespace net.NataliVol4ica.BignumArithmetics
         //if gettype(a) != gettype(b) exception
         //else cast to relevant class object and call operator
 
+        public byte this[byte index]
+        {
+            get { return Digits[index]; }
+            set { Digits[index] = value; }
+        }
+
         public override string ToString() { return RawString; }
         public static bool operator ==(FixedPointNumber cmpA, FixedPointNumber cmpB)
         {
@@ -86,11 +107,14 @@ namespace net.NataliVol4ica.BignumArithmetics
             return true;
         }
 
-        public byte this[byte index]
+        /*public static FixedPointNumber operator +(FixedPointNumber A, FixedPointNumber B)
         {
-            get { return Digits[index]; }
-            set { Digits[index] = value; }
-        }
+            //todo: two getters : of len before dot and of len after dot
+            //todo: store number reversed
+            //todo: begin summing from the lowest digit
+            //todo: normalize digits at the end
+        }*/
+
     }
 }
 #pragma warning restore CS0660 // Тип определяет оператор == или оператор !=, но не переопределяет Object.Equals(object o)
