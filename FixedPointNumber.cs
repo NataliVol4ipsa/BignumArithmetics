@@ -17,6 +17,7 @@ namespace net.NataliVol4ica.BignumArithmetics
 
     class FixedPointNumber
     {
+        /* === Constructors === */
         public FixedPointNumber(string Str = "0")
         {
             if (Str == null || Str == "")
@@ -25,11 +26,15 @@ namespace net.NataliVol4ica.BignumArithmetics
             this.StringToDigits();
         }
 
-        /* methods */
-
+        /* === Methods === */
         public static char ToChar(byte Digit) { return Convert.ToChar(Digit + '0'); }
         public static byte ToDigit(char C) { return Convert.ToByte(C - '0'); }
-
+        public static void Swap(ref FixedPointNumber A, ref FixedPointNumber B)
+        {
+            FixedPointNumber buf = A;
+            A = B;
+            B = buf;
+        }
         public int GetIntLen()
         {
             if (this.Dot < 0)
@@ -45,54 +50,64 @@ namespace net.NataliVol4ica.BignumArithmetics
 
         //todo: parse sign!!!
         //todo: func to cut heading and closing zeros
+        //todo: func to convert digits to string
         void StringToDigits()
         {
             int DotPos = RawString.IndexOf(".");
 
-            if (DotPos < 0)
-                DotPos = RawString.Length;
             Digits = new List<byte>();
             this.Dot = -1;
-            //at first convert the integer part
+            if (DotPos < 0)
+                DotPos = RawString.Length;
+            //Convertin the integer part
             for (int i = Math.Max(0, DotPos - MaxSize); i < DotPos; i++)
                 if (Char.IsDigit(RawString[i]))
                     Digits.Add(FixedPointNumber.ToDigit(RawString[i]));
                 else
                     throw new IncorrectNumberFormatException("Number can only contain digits 0..9 and optional delimiter '.' or ','.");
+            //Converting the frac part
             for (int i = DotPos; i < RawString.Length && Digits.Count < MaxSize; i++)
                 if (Char.IsDigit(RawString[i]))
                     Digits.Add(FixedPointNumber.ToDigit(RawString[i]));
                 else if (RawString[i] == '.' || (RawString[i] == ','))
                 {
                     if (Digits.Count == 0)
-                        throw new IncorrectNumberFormatException("Number cannot begin of dot. Use \"0.*\" format.");
+                        throw new IncorrectNumberFormatException("Number cannot begin with dot. Use \"0.*\" format.");
                     if (this.Dot > 0)
                         throw new IncorrectNumberFormatException("Number cannot have more than one delimiter");
                     this.Dot = i;
                 }
                 else
                     throw new IncorrectNumberFormatException("Number can only contain digits 0..9 and optional delimiter '.' or ','.");
+            //todo: if dot and no digits - set dot as null
+            Digits.Reverse();
         }
 
-        /* variables */
-
+        /* === Variables === */
         private List<byte> Digits = new List<byte>();
         private int Dot { get; set; }
         public string RawString { get; private set; }
         public const int MaxSize = 100000;
 
-        /* overloading */
+        /* === Overloading tools === */
 
-        //thoughts for abstract class
-        //if gettype(a) != gettype(b) exception
-        //else cast to relevant class object and call operator
+        public void SetAsSum(FixedPointNumber A, FixedPointNumber B)
+        {
+            //todo: store number reversed
+            //todo: begin summing from the lowest digit
+            //todo: normalize digits at the end
 
+            int maxFrac = Math.Max(A.GetFracLen(), B.GetFracLen());
+
+
+        }
+
+        /* === Overloading === */
         public byte this[byte index]
         {
             get { return Digits[index]; }
             set { Digits[index] = value; }
         }
-
         public override string ToString() { return RawString; }
         public static bool operator ==(FixedPointNumber cmpA, FixedPointNumber cmpB)
         {
@@ -106,15 +121,16 @@ namespace net.NataliVol4ica.BignumArithmetics
                 return false;
             return true;
         }
-
-        /*public static FixedPointNumber operator +(FixedPointNumber A, FixedPointNumber B)
+        //todo: overload > and <
+        public static FixedPointNumber operator +(FixedPointNumber A, FixedPointNumber B)
         {
-            //todo: two getters : of len before dot and of len after dot
-            //todo: store number reversed
-            //todo: begin summing from the lowest digit
-            //todo: normalize digits at the end
-        }*/
+            FixedPointNumber ans = new FixedPointNumber();
 
+            if (A.GetFracLen() < B.GetFracLen())
+                FixedPointNumber.Swap(ref A, ref B);
+            ans.SetAsSum(A, B);
+            return (ans);
+        }
     }
 }
 #pragma warning restore CS0660 // Тип определяет оператор == или оператор !=, но не переопределяет Object.Equals(object o)

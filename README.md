@@ -11,6 +11,8 @@ This is a small self-educational project I decided to start in order to refresh 
 
 // I decided to delay implementing of classes except fixed point until the class structure is better defined.
 
+// After research on design patterns I understood that I don't need to use interface (at least in means of storing class instances) and template class can solve the storing problem.
+
 [DONE] 1.1. Implement simple reading and storing either from a console and file.
 
 <b>[CURRENT]</b> 2.0. Implement long sum and long dif for integers. Remember to proceed negative and zero numbers.
@@ -45,7 +47,7 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [MAYBE] 11.0. I need to learn more about ASP.NET, so... try to involve it somehow. Maybe add some cryptography for this (triple des, rsa)
 
-YET INVOLVED: regex, delegates+events, design patterns, parallel computing, async prog, what is reflection?
+YET INVOLVED: regex, delegates+events, parallel computing, async prog, what is reflection?
 
 ----------
 

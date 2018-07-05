@@ -28,3 +28,7 @@ namespace net.NataliVol4ica.BignumArithmetics
         }
     }
 }
+
+//thoughts for abstract class
+//if gettype(a) != gettype(b) exception
+//else cast to relevant class object and call operator
