@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 
 #pragma warning disable CS0660 // Тип определяет оператор == или оператор !=, но не переопределяет Object.Equals(object o)
@@ -27,11 +28,11 @@ namespace net.NataliVol4ica.BignumArithmetics
         }
 
         /* === Methods === */
-        public static char ToChar(byte Digit) { return Convert.ToChar(Digit + '0'); }
+        public static char ToChar(int Digit) { return Convert.ToChar(Digit + '0'); }
         public static byte ToDigit(char C) { return Convert.ToByte(C - '0'); }
-        public static void Swap(ref FixedPointNumber A, ref FixedPointNumber B)
+        public static void Swap<T>(ref T A, ref T B)
         {
-            FixedPointNumber buf = A;
+            T buf = A;
             A = B;
             B = buf;
         }
@@ -55,7 +56,7 @@ namespace net.NataliVol4ica.BignumArithmetics
         {
             int DotPos = RawString.IndexOf(".");
 
-            Digits = new List<byte>();
+            Digits = new List<int>();
             this.Dot = -1;
             if (DotPos < 0)
                 DotPos = RawString.Length;
@@ -84,26 +85,15 @@ namespace net.NataliVol4ica.BignumArithmetics
         }
 
         /* === Variables === */
-        private List<byte> Digits = new List<byte>();
+        private List<int> Digits = new List<int>();
         private int Dot { get; set; }
         public string RawString { get; private set; }
         public const int MaxSize = 100000;
 
         /* === Overloading tools === */
 
-        public void SetAsSum(FixedPointNumber A, FixedPointNumber B)
-        {
-            //todo: store number reversed
-            //todo: begin summing from the lowest digit
-            //todo: normalize digits at the end
-
-            int maxFrac = Math.Max(A.GetFracLen(), B.GetFracLen());
-
-
-        }
-
         /* === Overloading === */
-        public byte this[byte index]
+        public int this[int index]
         {
             get { return Digits[index]; }
             set { Digits[index] = value; }
@@ -124,12 +114,45 @@ namespace net.NataliVol4ica.BignumArithmetics
         //todo: overload > and <
         public static FixedPointNumber operator +(FixedPointNumber A, FixedPointNumber B)
         {
-            FixedPointNumber ans = new FixedPointNumber();
+            int i = 0;
+            int j = 0;
+
+            StringBuilder sb = new StringBuilder();
+
+            int maxFrac;
+            int maxInt;
+            int indexDif;
 
             if (A.GetFracLen() < B.GetFracLen())
                 FixedPointNumber.Swap(ref A, ref B);
-            ans.SetAsSum(A, B);
-            return (ans);
+            maxFrac = A.GetFracLen();
+            indexDif = A.GetFracLen() - B.GetFracLen();
+
+            //todo: begin summing from the lowest digit
+            //todo: normalize digits at the end
+            while (i < indexDif)
+            {
+                sb.Append(FixedPointNumber.ToChar(A[i]));
+                i++;
+            }
+            while (i < maxFrac)
+            {
+                sb.Append(FixedPointNumber.ToChar(A[i] + B[j]));
+                i++;
+                j++;
+            }
+            /* dot */
+            if (maxFrac > 0)
+                sb.Append('.');
+            /* eo dot */
+            if (A.GetIntLen() < B.GetIntLen())
+            {
+                FixedPointNumber.Swap(ref A, ref B);
+                FixedPointNumber.Swap(ref i, ref j);
+            }
+            maxInt = A.GetIntLen();
+            indexDif = A.GetIntLen() - B.GetIntLen();
+            return (new FixedPointNumber(sb.ToString()));
         }
     }
 }

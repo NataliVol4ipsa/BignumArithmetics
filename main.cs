@@ -17,6 +17,8 @@ namespace net.NataliVol4ica.BignumArithmetics
                 }
                 Console.WriteLine("1: {0}.{1}", numbers[0].GetIntLen(), numbers[0].GetFracLen());
                 Console.WriteLine("2: {0}.{1}", numbers[1].GetIntLen(), numbers[1].GetFracLen());
+                FixedPointNumber C = numbers[0] + numbers[1];
+                Console.WriteLine(C);
             }
             catch (Exception e)
             {
@@ -28,6 +30,9 @@ namespace net.NataliVol4ica.BignumArithmetics
         }
     }
 }
+
+//readonly????
+//create static class with swappers, converters?
 
 //thoughts for abstract class
 //if gettype(a) != gettype(b) exception
