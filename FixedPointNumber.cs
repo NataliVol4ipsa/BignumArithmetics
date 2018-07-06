@@ -26,6 +26,22 @@ namespace net.NataliVol4ica.BignumArithmetics
             this.RawString = Str.Trim();
             this.StringToDigits();
         }
+        public FixedPointNumber(List<int> digits, int Dot = -1)
+        {
+            //todo: add input validation
+            StringBuilder sb = new StringBuilder();
+            this.Dot = Dot;
+            Dot = Dot < 0 ? digits.Count : Dot;
+            for (int i = 0; i < Dot; i++)            
+                sb.Append(FixedPointNumber.ToChar(digits[i]));
+            if (this.Dot > 0)
+                sb.Append(".");
+            for (int i = Dot; i < digits.Count; i++)
+                sb.Append(FixedPointNumber.ToChar(digits[i]));
+            this.Digits = digits;
+            this.Digits.Reverse();
+            this.RawString = sb.ToString();
+        }
 
         /* === Methods === */
         public static char ToChar(int Digit) { return Convert.ToChar(Digit + '0'); }
@@ -112,47 +128,68 @@ namespace net.NataliVol4ica.BignumArithmetics
             return true;
         }
         //todo: overload > and <
+        //todo: overload unar -
         public static FixedPointNumber operator +(FixedPointNumber A, FixedPointNumber B)
         {
+            int newNumSize = Math.Max(A.GetFracLen(), B.GetFracLen()) +
+                                Math.Max(A.GetIntLen(), B.GetIntLen());
+            //todo: parse max new len
+            List<int> sum = new List<int>();
             int i = 0;
             int j = 0;
 
-            StringBuilder sb = new StringBuilder();
-
             int maxFrac;
-            int maxInt;
             int indexDif;
+            int plus;
 
             if (A.GetFracLen() < B.GetFracLen())
                 FixedPointNumber.Swap(ref A, ref B);
             maxFrac = A.GetFracLen();
             indexDif = A.GetFracLen() - B.GetFracLen();
+            plus = 0;
 
-            //todo: begin summing from the lowest digit
-            //todo: normalize digits at the end
+            //todo: remember to check if A[i] -> A.ToString[i] is fine
             while (i < indexDif)
             {
-                sb.Append(FixedPointNumber.ToChar(A[i]));
+                sum.Add(A[i]);
                 i++;
             }
             while (i < maxFrac)
             {
-                sb.Append(FixedPointNumber.ToChar(A[i] + B[j]));
+                sum.Add(A[i] + B[j] + plus);
+                plus = sum[i] / 10;
+                sum[i] %= 10;
                 i++;
                 j++;
             }
-            /* dot */
-            if (maxFrac > 0)
-                sb.Append('.');
             /* eo dot */
             if (A.GetIntLen() < B.GetIntLen())
             {
                 FixedPointNumber.Swap(ref A, ref B);
                 FixedPointNumber.Swap(ref i, ref j);
             }
-            maxInt = A.GetIntLen();
-            indexDif = A.GetIntLen() - B.GetIntLen();
-            return (new FixedPointNumber(sb.ToString()));
+            while (j < B.Digits.Count)
+            {
+                sum.Add(A[i] + B[j] + plus);
+                plus = sum[sum.Count - 1] / 10;
+                sum[sum.Count - 1] %= 10;
+                i++;
+                j++;
+            }
+            while (i < A.Digits.Count)
+            {
+                sum.Add(A[i] + plus);
+                plus = sum[sum.Count - 1] / 10;
+                sum[sum.Count - 1] %= 10;
+                i++;
+            }
+            while (plus > 0)
+            {
+                sum.Add(plus % 10);
+                plus /= 10;
+            }
+            sum.Reverse();
+            return (new FixedPointNumber(sum, sum.Count - maxFrac));
         }
     }
 }
