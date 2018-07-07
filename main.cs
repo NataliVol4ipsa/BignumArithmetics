@@ -25,7 +25,7 @@ namespace net.NataliVol4ica.BignumArithmetics
                 Console.WriteLine("Exception caught: {0}", e.Message);
             }
             //Console.WriteLine((new FixedPointNumber ()).GetType());*/
-            Console.WriteLine(new FixedPointNumber("--27.5") + new FixedPointNumber("+72.5"));
+            Console.WriteLine(new FixedPointNumber("27.5") + new FixedPointNumber("--073.5"));
             Console.Read();
             return 0;
         }

@@ -22,6 +22,7 @@ namespace net.NataliVol4ica.BignumArithmetics
         /* === Constructors === */
         public FixedPointNumber(string Str = "0")
         {
+            //add zeros cutting
             if (Str == null || Str == "")
                 throw new IncorrectNumberFormatException("FixedPointNumber cannot be created from an empty string");
             this.RawString = Str.Trim();
@@ -131,10 +132,10 @@ namespace net.NataliVol4ica.BignumArithmetics
         
         private static void NormalizeReverse(List<int> digits, ref int maxFrac)
         {
-            while (digits[digits.Count - 1] == '0' && digits.Count > maxFrac)
+            while (digits[digits.Count - 1] == 0 && digits.Count > maxFrac && digits.Count > 1)
                 digits.RemoveAt(digits.Count - 1);
             digits.Reverse();
-            while (digits[digits.Count - 1] == '0' && maxFrac > 0)
+            while (digits[digits.Count - 1] == 0 && maxFrac > 0)
             {
                 maxFrac--;
                 digits.RemoveAt(digits.Count - 1);
