@@ -87,7 +87,8 @@ namespace net.NataliVol4ica.BignumArithmetics
                     this.Sign = -this.Sign;
                 i++;
             }
-            RawString.Remove(0, i);
+            RawString = RawString.Remove(0, i);
+            i = 0;
             if (this.Sign < 0)
                 RawString = "-" + RawString;
             //todo: if (i == RawString.Length) exception
