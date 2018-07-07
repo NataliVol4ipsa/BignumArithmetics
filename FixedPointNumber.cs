@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 #pragma warning disable CS0660 // Тип определяет оператор == или оператор !=, но не переопределяет Object.Equals(object o)
 #pragma warning disable CS0661 // Тип определяет оператор == или оператор !=, но не переопределяет Object.GetHashCode()
@@ -34,7 +35,7 @@ namespace net.NataliVol4ica.BignumArithmetics
             Dot = Dot < 0 ? digits.Count : Dot;
             for (int i = 0; i < Dot; i++)            
                 sb.Append(FixedPointNumber.ToChar(digits[i]));
-            if (this.Dot > 0)
+            if (this.Dot > 0 && this.Dot < digits.Count)
                 sb.Append(".");
             for (int i = Dot; i < digits.Count; i++)
                 sb.Append(FixedPointNumber.ToChar(digits[i]));
@@ -64,26 +65,44 @@ namespace net.NataliVol4ica.BignumArithmetics
                 return 0;
             return this.Digits.Count - this.Dot;
         }
+        public FixedPointNumber Copy()
+        {
+            return new FixedPointNumber(this.RawString);
+        }
 
-        //todo: parse sign!!!
+        //Regex.Replace(RawString, @"\s+", ""); remove ws-s
         //todo: func to cut heading and closing zeros
         //todo: func to convert digits to string
+
         void StringToDigits()
         {
-            int DotPos = RawString.IndexOf(".");
+            int DotPos;
+            int i = 0;
 
             Digits = new List<int>();
+            this.Sign = 1;
+            while (i < RawString.Length && (RawString[i] == '+' || RawString[i] == '-'))
+            {
+                if (RawString[i] == '-')
+                    this.Sign = -this.Sign;
+                i++;
+            }
+            RawString.Remove(0, i);
+            if (this.Sign < 0)
+                RawString = "-" + RawString;
+            //todo: if (i == RawString.Length) exception
+            DotPos = RawString.IndexOf(".");
             this.Dot = -1;
             if (DotPos < 0)
                 DotPos = RawString.Length;
-            //Convertin the integer part
-            for (int i = Math.Max(0, DotPos - MaxSize); i < DotPos; i++)
+            //Converting the integer part
+            for (; i < DotPos; i++)
                 if (Char.IsDigit(RawString[i]))
                     Digits.Add(FixedPointNumber.ToDigit(RawString[i]));
                 else
                     throw new IncorrectNumberFormatException("Number can only contain digits 0..9 and optional delimiter '.' or ','.");
             //Converting the frac part
-            for (int i = DotPos; i < RawString.Length && Digits.Count < MaxSize; i++)
+            for (; i < RawString.Length; i++)
                 if (Char.IsDigit(RawString[i]))
                     Digits.Add(FixedPointNumber.ToDigit(RawString[i]));
                 else if (RawString[i] == '.' || (RawString[i] == ','))
@@ -103,37 +122,27 @@ namespace net.NataliVol4ica.BignumArithmetics
         /* === Variables === */
         private List<int> Digits = new List<int>();
         private int Dot { get; set; }
+        public int Sign { get; private set; }
         public string RawString { get; private set; }
-        public const int MaxSize = 100000;
+        //todo: change to max precision? meeeh
 
         /* === Overloading tools === */
+        
+        private static void NormalizeReverse(List<int> digits, ref int maxFrac)
+        {
+            while (digits[digits.Count - 1] == '0' && digits.Count > maxFrac)
+                digits.RemoveAt(digits.Count - 1);
+            digits.Reverse();
+            while (digits[digits.Count - 1] == '0' && maxFrac > 0)
+            {
+                maxFrac--;
+                digits.RemoveAt(digits.Count - 1);
+            }
+        }
 
-        /* === Overloading === */
-        public int this[int index]
+        static FixedPointNumber Sum(FixedPointNumber A, FixedPointNumber B)
         {
-            get { return Digits[index]; }
-            set { Digits[index] = value; }
-        }
-        public override string ToString() { return RawString; }
-        public static bool operator ==(FixedPointNumber cmpA, FixedPointNumber cmpB)
-        {
-            if (string.Compare(cmpA.RawString, cmpB.RawString) == 0)
-                return true;
-            return false;
-        }
-        public static bool operator !=(FixedPointNumber cmpA, FixedPointNumber cmpB)
-        {
-            if (string.Compare(cmpA.RawString, cmpB.RawString) == 0)
-                return false;
-            return true;
-        }
-        //todo: overload > and <
-        //todo: overload unar -
-        public static FixedPointNumber operator +(FixedPointNumber A, FixedPointNumber B)
-        {
-            int newNumSize = Math.Max(A.GetFracLen(), B.GetFracLen()) +
-                                Math.Max(A.GetIntLen(), B.GetIntLen());
-            //todo: parse max new len
+            //todo: parse max new len ?
             List<int> sum = new List<int>();
             int i = 0;
             int j = 0;
@@ -168,7 +177,7 @@ namespace net.NataliVol4ica.BignumArithmetics
                 FixedPointNumber.Swap(ref A, ref B);
                 FixedPointNumber.Swap(ref i, ref j);
             }
-            while (j < B.Digits.Count)
+            while (j<B.Digits.Count)
             {
                 sum.Add(A[i] + B[j] + plus);
                 plus = sum[sum.Count - 1] / 10;
@@ -176,7 +185,7 @@ namespace net.NataliVol4ica.BignumArithmetics
                 i++;
                 j++;
             }
-            while (i < A.Digits.Count)
+            while (i<A.Digits.Count)
             {
                 sum.Add(A[i] + plus);
                 plus = sum[sum.Count - 1] / 10;
@@ -188,8 +197,60 @@ namespace net.NataliVol4ica.BignumArithmetics
                 sum.Add(plus % 10);
                 plus /= 10;
             }
-            sum.Reverse();
+            FixedPointNumber.NormalizeReverse(sum, ref maxFrac);
             return (new FixedPointNumber(sum, sum.Count - maxFrac));
+        }
+        static FixedPointNumber Dif(FixedPointNumber A, FixedPointNumber B)
+        {
+            return new FixedPointNumber();
+        }
+
+        /* === Overloading === */
+        public int this[int index]
+        {
+            get { return Digits[index]; }
+            set { Digits[index] = value; }
+        }
+        public override string ToString() { return RawString; }
+        public static bool operator ==(FixedPointNumber cmpA, FixedPointNumber cmpB)
+        {
+            if (string.Compare(cmpA.RawString, cmpB.RawString) == 0)
+                return true;
+            return false;
+        }
+        public static bool operator !=(FixedPointNumber cmpA, FixedPointNumber cmpB)
+        {
+            if (string.Compare(cmpA.RawString, cmpB.RawString) == 0)
+                return false;
+            return true;
+        }
+        public static FixedPointNumber operator -(FixedPointNumber num)
+        {
+            return (new FixedPointNumber("-" + num.RawString));
+        }
+
+        //todo: overload > and < ?
+        //todo: overload unar -
+        public static FixedPointNumber operator +(FixedPointNumber A, FixedPointNumber B)
+        {
+            if (A.Sign > 0 && B.Sign > 0)
+                return Sum(A, B);
+            if (A.Sign < 0 && B.Sign < 0)
+                return -Sum(A, B);
+            if (A.Sign > 0 && B.Sign < 0)
+                return Dif(A, -B);
+            return Dif(B, -A);
+        }
+        
+        public static FixedPointNumber operator -(FixedPointNumber A, FixedPointNumber B)
+        {
+            if (A.Sign > 0 && B.Sign > 0)
+                return Dif(A, B);
+            if (A.Sign < 0 && B.Sign < 0)
+                return -Sum(A, B);
+            if (A.Sign > 0 && B.Sign < 0)
+                return Dif(A, -B);
+            return Dif(B, -A);
         }
     }
 }

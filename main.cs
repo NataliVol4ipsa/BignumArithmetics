@@ -8,7 +8,7 @@ namespace net.NataliVol4ica.BignumArithmetics
         public static int Main(string[] args)
         {
             /* Reading */
-            List<FixedPointNumber> numbers;
+            /*List<FixedPointNumber> numbers;
             try
             {
                 using (InputParser ip = new InputParser(out numbers, "Input.txt"))
@@ -24,7 +24,8 @@ namespace net.NataliVol4ica.BignumArithmetics
             {
                 Console.WriteLine("Exception caught: {0}", e.Message);
             }
-            //Console.WriteLine((new FixedPointNumber ()).GetType());
+            //Console.WriteLine((new FixedPointNumber ()).GetType());*/
+            Console.WriteLine(new FixedPointNumber("--27.5") + new FixedPointNumber("72.5"));
             Console.Read();
             return 0;
         }
