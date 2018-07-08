@@ -226,13 +226,64 @@ namespace net.NataliVol4ica.BignumArithmetics
                 return false;
             return true;
         }
+        public static bool operator >(FixedPointNumber A, FixedPointNumber B)
+        {
+            // A > 0
+            if (A.Sign > 0)
+            {
+                if (B.Sign < 0)
+                    return true;
+                if (A.GetIntLen() > B.GetIntLen())
+                    return true;
+                if (A.GetIntLen() < B.GetIntLen())
+                    return false;
+                if (String.Compare(A.RawString, B.RawString) > 0)
+                    return true;
+                return false;
+            }
+            // A < 0
+            if (B.Sign > 0)
+                return false;
+            if (A.GetIntLen() > B.GetIntLen())
+                return false;
+            if (A.GetIntLen() < B.GetIntLen())
+                return true;
+            if (String.Compare(A.RawString, B.RawString) > 0)
+                return false;
+            return true;
+        }
+        public static bool operator <(FixedPointNumber A, FixedPointNumber B)
+        {
+            // A > 0
+            if (A.Sign > 0)
+            {
+                if (B.Sign < 0)
+                    return false;
+                if (A.GetIntLen() > B.GetIntLen())
+                    return false;
+                if (A.GetIntLen() < B.GetIntLen())
+                    return true;
+                if (String.Compare(A.RawString, B.RawString) > 0)
+                    return false;
+                return true;
+            }
+            // A < 0
+            if (B.Sign > 0)
+                return true;
+            if (A.GetIntLen() > B.GetIntLen())
+                return true;
+            if (A.GetIntLen() < B.GetIntLen())
+                return false;
+            if (String.Compare(A.RawString, B.RawString) > 0)
+                return true;
+            return false;
+        }
         public static FixedPointNumber operator -(FixedPointNumber num)
         {
             return (new FixedPointNumber("-" + num.RawString));
         }
 
         //todo: overload > and < ?
-        //todo: overload unar -
         public static FixedPointNumber operator +(FixedPointNumber A, FixedPointNumber B)
         {
             if (A.Sign > 0 && B.Sign > 0)
@@ -247,7 +298,7 @@ namespace net.NataliVol4ica.BignumArithmetics
         public static FixedPointNumber operator -(FixedPointNumber A, FixedPointNumber B)
         {
             if (A.Sign > 0 && B.Sign > 0)
-                return Dif(A, B);
+                return A > B ? Dif(A, B) : -Dif(B, A);
             if (A.Sign < 0 && B.Sign < 0)
                 return -Sum(A, B);
             if (A.Sign > 0 && B.Sign < 0)
