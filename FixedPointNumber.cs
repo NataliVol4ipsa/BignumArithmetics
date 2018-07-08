@@ -20,29 +20,19 @@ namespace net.NataliVol4ica.BignumArithmetics
     class FixedPointNumber
     {
         /* === Constructors === */
-        public FixedPointNumber(string Str = "0")
+        //todo: add input validation
+        public FixedPointNumber(string str = "0")
         {
             //add zeros cutting
-            if (Str == null || Str == "")
+            if (str == null || str == "")
                 throw new IncorrectNumberFormatException("FixedPointNumber cannot be created from an empty string");
-            this.RawString = Str.Trim();
-            this.StringToDigits();
+            this.StringToDigits(str.Trim());
         }
         public FixedPointNumber(List<int> digits, int Dot = -1)
         {
-            //todo: add input validation
-            StringBuilder sb = new StringBuilder();
             this.Dot = Dot;
-            Dot = Dot < 0 ? digits.Count : Dot;
-            for (int i = 0; i < Dot; i++)            
-                sb.Append(FixedPointNumber.ToChar(digits[i]));
-            if (this.Dot > 0 && this.Dot < digits.Count)
-                sb.Append(".");
-            for (int i = Dot; i < digits.Count; i++)
-                sb.Append(FixedPointNumber.ToChar(digits[i]));
             this.Digits = digits;
             this.Digits.Reverse();
-            this.RawString = sb.ToString();
         }
 
         /* === Methods === */
@@ -53,6 +43,12 @@ namespace net.NataliVol4ica.BignumArithmetics
             T buf = A;
             A = B;
             B = buf;
+        }
+        public static FixedPointNumber Abs(FixedPointNumber num)
+        {
+            if (num.Sign > 0)
+                return num;
+            return -num;
         }
         public int GetIntLen()
         {
@@ -68,14 +64,12 @@ namespace net.NataliVol4ica.BignumArithmetics
         }
         public FixedPointNumber Copy()
         {
-            return new FixedPointNumber(this.RawString);
+            List<int> newList = new List<int>(this.Digits);
+            newList.Reverse();
+            return new FixedPointNumber(newList, this.Dot);
         }
-
-        //Regex.Replace(RawString, @"\s+", ""); remove ws-s
-        //todo: func to cut heading and closing zeros
-        //todo: func to convert digits to string
-
-        void StringToDigits()
+        
+        void StringToDigits(string str)
         {
             int DotPos;
             int i = 0;
@@ -125,12 +119,11 @@ namespace net.NataliVol4ica.BignumArithmetics
         private List<int> Digits = new List<int>();
         private int Dot { get; set; }
         public int Sign { get; private set; }
-        public string RawString { get; private set; }
+        public string RawString { get; private set; } = null;
         //todo: change to max precision? meeeh
 
         /* === Overloading tools === */
-        
-        private static void NormalizeReverse(List<int> digits, ref int maxFrac)
+        private static void CutZeroesReverse(List<int> digits, ref int maxFrac)
         {
             while (digits[digits.Count - 1] == 0 && digits.Count > maxFrac && digits.Count > 1)
                 digits.RemoveAt(digits.Count - 1);
@@ -141,7 +134,6 @@ namespace net.NataliVol4ica.BignumArithmetics
                 digits.RemoveAt(digits.Count - 1);
             }
         }
-
         static FixedPointNumber Sum(FixedPointNumber A, FixedPointNumber B)
         {
             //todo: parse max new len ?
@@ -199,7 +191,7 @@ namespace net.NataliVol4ica.BignumArithmetics
                 sum.Add(plus % 10);
                 plus /= 10;
             }
-            FixedPointNumber.NormalizeReverse(sum, ref maxFrac);
+            FixedPointNumber.CutZeroesReverse(sum, ref maxFrac);
             return (new FixedPointNumber(sum, sum.Count - maxFrac));
         }
         static FixedPointNumber Dif(FixedPointNumber A, FixedPointNumber B)
@@ -213,7 +205,30 @@ namespace net.NataliVol4ica.BignumArithmetics
             get { return Digits[index]; }
             set { Digits[index] = value; }
         }
-        public override string ToString() { return RawString; }
+        public override string ToString()
+        {
+            StringBuilder sb;
+            int Dot;
+
+            if (this.RawString != null)
+                return this.RawString;
+            sb = new StringBuilder();
+            Dot = this.Dot < 0 ? Digits.Count : this.Dot;
+            for (int i = 0; i < Dot; i++)
+                sb.Append(FixedPointNumber.ToChar(Digits[i]));
+            if (this.Dot > 0 && this.Dot < Digits.Count)
+                sb.Append(".");
+            for (int i = Dot; i < Digits.Count; i++)
+                sb.Append(FixedPointNumber.ToChar(Digits[i]));
+            this.RawString = sb.ToString();
+            return this.RawString;
+        }
+        //unar
+        public static FixedPointNumber operator -(FixedPointNumber num)
+        {
+            return (new FixedPointNumber("-" + num.RawString));
+        }
+        //binary
         public static bool operator ==(FixedPointNumber cmpA, FixedPointNumber cmpB)
         {
             if (string.Compare(cmpA.RawString, cmpB.RawString) == 0)
@@ -278,12 +293,6 @@ namespace net.NataliVol4ica.BignumArithmetics
                 return true;
             return false;
         }
-        public static FixedPointNumber operator -(FixedPointNumber num)
-        {
-            return (new FixedPointNumber("-" + num.RawString));
-        }
-
-        //todo: overload > and < ?
         public static FixedPointNumber operator +(FixedPointNumber A, FixedPointNumber B)
         {
             if (A.Sign > 0 && B.Sign > 0)
@@ -294,13 +303,12 @@ namespace net.NataliVol4ica.BignumArithmetics
                 return Dif(A, -B);
             return Dif(B, -A);
         }
-        
         public static FixedPointNumber operator -(FixedPointNumber A, FixedPointNumber B)
         {
             if (A.Sign > 0 && B.Sign > 0)
                 return A > B ? Dif(A, B) : -Dif(B, A);
             if (A.Sign < 0 && B.Sign < 0)
-                return -Sum(A, B);
+                return A > B ? -Dif(B, A) : Dif(A, B);
             if (A.Sign > 0 && B.Sign < 0)
                 return Dif(A, -B);
             return Dif(B, -A);

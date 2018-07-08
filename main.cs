@@ -35,6 +35,8 @@ namespace net.NataliVol4ica.BignumArithmetics
 //readonly????
 //create static class with swappers, converters?
 
+//Regex.Replace(RawString, @"\s+", "");  - removes ws-s
+
 //thoughts for abstract class
 //if gettype(a) != gettype(b) exception
 //else cast to relevant class object and call operator
