@@ -27,11 +27,11 @@ namespace net.NataliVol4ica.BignumArithmetics
             //Console.WriteLine((new FixedPointNumber ()).GetType());*/
             try
             {
-                FixedPointNumber A = new FixedPointNumber("27.5");
-                FixedPointNumber B = new FixedPointNumber("13.5");
+                FixedPointNumber A = new FixedPointNumber("123.45");
+                FixedPointNumber B = new FixedPointNumber("45.678");
                 FixedPointNumber C;
 
-                C = A - B;
+                C = A + B;
                 Console.WriteLine(C);
             }
             catch (Exception e)
