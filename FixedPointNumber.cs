@@ -20,6 +20,7 @@ namespace net.NataliVol4ica.BignumArithmetics
     {
         /* === Constructors === */
         //todo: add input validation
+        /// <exception cref="BigNumberException.IncorrectNumberFormatException" />
         public FixedPointNumber(string str = "0")
         {
             //add zeros cutting
@@ -121,7 +122,30 @@ namespace net.NataliVol4ica.BignumArithmetics
                 Digits.RemoveAt(Digits.Count - 1);
             Digits.Reverse();
         }
-        
+
+        /* === Operations === */
+
+        public override BigNumber Sum(BigNumber op)
+        {
+            FixedPointNumber num = (FixedPointNumber)op;
+            return BigSum.Count(this, num);
+        }
+        public override BigNumber Dif(BigNumber op)
+        {
+            FixedPointNumber num = (FixedPointNumber)op;
+            return BigDif.Count(this, num);
+        }
+        public override BigNumber Mul(BigNumber op)
+        {
+            FixedPointNumber num = (FixedPointNumber)op;
+            return BigMul.Count(this, num);
+        }
+        public override BigNumber Div(BigNumber op)
+        {
+            FixedPointNumber num = (FixedPointNumber)op;
+            return BigDiv.Count(this, num);
+        }
+
         /* === Overloading === */
         public override string ToString()
         {

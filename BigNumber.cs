@@ -10,6 +10,10 @@ namespace net.NataliVol4ica.BignumArithmetics
     public abstract class BigNumber
     {
         /* === Methods === */
+        public abstract BigNumber Sum(BigNumber op);
+        public abstract BigNumber Dif(BigNumber op);
+        public abstract BigNumber Mul(BigNumber op);
+        public abstract BigNumber Div(BigNumber op);
         public static char ToChar(int Digit)
         {
             return Convert.ToChar(Digit + '0');
@@ -40,6 +44,24 @@ namespace net.NataliVol4ica.BignumArithmetics
             {
                 return Digits.Count;
             }
+        }
+
+        /* === Operators === */ //????
+        public static BigNumber operator +(BigNumber A, BigNumber B)
+        {
+            return A.Sum(B);
+        }
+        public static BigNumber operator -(BigNumber A, BigNumber B)
+        {
+            return A.Dif(B);
+        }
+        public static BigNumber operator *(BigNumber A, BigNumber B)
+        {
+            return A.Mul(B);
+        }
+        public static BigNumber operator /(BigNumber A, BigNumber B)
+        {
+            return A.Div(B);
         }
     }
 }

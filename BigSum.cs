@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace net.NataliVol4ica.BignumArithmetics
 {
-    class BigSum
+    static class BigSum
     {
-        private BigSum() { }
         public static FixedPointNumber Count(FixedPointNumber A, FixedPointNumber B)
         {
             List<int> sum = new List<int>();

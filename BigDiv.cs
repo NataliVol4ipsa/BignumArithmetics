@@ -2,11 +2,10 @@
 
 namespace net.NataliVol4ica.BignumArithmetics
 {
-    static class BigDif
+    static class BigDiv
     {
         public static FixedPointNumber Count(FixedPointNumber A, FixedPointNumber B)
         {
-            //A is always bigger than B !!!!!
             return (new FixedPointNumber());
         }
     }

@@ -39,7 +39,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BigInteger.cs" />
+    <Compile Include="BigDif.cs" />
     <Compile Include="BigNumber.cs" />
     <Compile Include="BigSum.cs" />
     <Compile Include="FixedPointNumber.cs" />
