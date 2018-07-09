@@ -131,14 +131,17 @@ namespace net.NataliVol4ica.BignumArithmetics
         {
             FixedPointNumber A = this;
             FixedPointNumber B = (FixedPointNumber)op;
+            FixedPointNumber C;
 
             if (A.Sign > 0 && B.Sign > 0)
-                return BigSum.Count(A, B);
-            if (A.Sign < 0 && B.Sign < 0)
-                return -BigSum.Count(A, B);
-            if (A.Sign > 0 && B.Sign < 0)
-                return (A - -B);
-            return (B - -A);
+                C = BigSum.Count(A, B);
+            else if (A.Sign < 0 && B.Sign < 0)
+                C = -BigSum.Count(A, B);
+            else if (A.Sign > 0 && B.Sign < 0)
+                C = (A - -B);
+            else
+                C = (B - -A);
+            return C;
         }
         public override BigNumber Dif(BigNumber op)
         {
@@ -147,9 +150,13 @@ namespace net.NataliVol4ica.BignumArithmetics
             FixedPointNumber C;
 
             if (A.Sign > 0 && B.Sign > 0)
-                C = A > B ? BigDif.Count(A, B) : -BigDif.Count(B, A);
+                C = A > B ?
+                    BigDif.Count(A, B)
+                  : -BigDif.Count(B, A);
             else if (A.Sign < 0 && B.Sign < 0)
-                C = A > B ? -BigDif.Count(B, A) : BigDif.Count(A, B);
+                C = A > B ?
+                    -BigDif.Count(B, A)
+                  : BigDif.Count(A, B);
             else if (A.Sign > 0 && B.Sign < 0)
                 C = BigSum.Count(A, B);
             else
@@ -258,11 +265,13 @@ namespace net.NataliVol4ica.BignumArithmetics
         }
         public static FixedPointNumber operator +(FixedPointNumber A, FixedPointNumber B)
         {
-            return (FixedPointNumber)A.Sum(B);
+            FixedPointNumber result = (FixedPointNumber)A.Sum(B);
+            return result;
         }
         public static FixedPointNumber operator -(FixedPointNumber A, FixedPointNumber B)
         {
-            return (FixedPointNumber)A.Dif(B);
+            FixedPointNumber result = (FixedPointNumber)A.Dif(B);
+            return result;
         }
 
         /* === Vaiables === */
