@@ -10,13 +10,18 @@ namespace net.NataliVol4ica.BignumArithmetics
     public abstract class BigNumber
     {
         /* === Methods === */
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        /// <returns></returns>
         public abstract BigNumber Sum(BigNumber op);
         public abstract BigNumber Dif(BigNumber op);
         public abstract BigNumber Mul(BigNumber op);
         public abstract BigNumber Div(BigNumber op);
         public static char ToChar(int Digit)
         {
-            return Convert.ToChar(Digit + '0');
+            return Digit.ToString()[0];
         }
         public static byte ToDigit(char C)
         {
@@ -28,10 +33,19 @@ namespace net.NataliVol4ica.BignumArithmetics
             A = B;
             B = buf;
         }
+        //todo: index exception
         public int this[int index]
         {
-            get { return Digits[index]; }
-            set { Digits[index] = value; }
+            get
+            {
+                if (index < 0 || index >= Digits.Count)
+                    return 0;
+                return Digits[index];
+            }
+            private set
+            {
+                Digits[index] = value;
+            }
         }
 
         /* === Variables === */

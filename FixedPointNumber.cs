@@ -87,13 +87,13 @@ namespace net.NataliVol4ica.BignumArithmetics
             //Converting the integer part
             for (; i < DotPos; i++)
                 if (Char.IsDigit(str[i]))
-                    Digits.Add(FixedPointNumber.ToDigit(str[i]));
+                    Digits.Add((int)Char.GetNumericValue(str[i]));
                 else
                     throw new IncorrectNumberFormatException("Number can only contain digits 0..9 and optional delimiter '.' or ','.");
             //Converting the frac part
             for (; i < str.Length; i++)
                 if (Char.IsDigit(str[i]))
-                    Digits.Add(FixedPointNumber.ToDigit(str[i]));
+                    Digits.Add((int)Char.GetNumericValue(str[i]));
                 else if (str[i] == '.' || str[i] == ',')
                 {
                     if (Digits.Count == 0)
@@ -196,7 +196,7 @@ namespace net.NataliVol4ica.BignumArithmetics
         //unar
         public static FixedPointNumber operator -(FixedPointNumber num)
         {
-            return (new FixedPointNumber("-" + num.RawString));
+            return (new FixedPointNumber("-" + num.ToString()));
         }
         //binary
         public static bool operator ==(FixedPointNumber cmpA, FixedPointNumber cmpB)
