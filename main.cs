@@ -32,6 +32,8 @@ namespace net.NataliVol4ica.BignumArithmetics
     }
 }
 
+//totest 29! = 8841761993739701954543616000000
+
 //readonly????
 //create static class with swappers, converters?
 

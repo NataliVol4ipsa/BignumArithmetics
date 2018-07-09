@@ -7,11 +7,13 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [DONE] 0.1. Learn how to use git with Visual Studio 2017
 
-[AWAITING] 1.0. Set up project environment. Implement Interface\Abstract class for storing numbers. Create three classes with operators overloading that inherit from the interface. These are : fixed point, fractional and 2..16-base numbers.
+[AWAITING] 1.0. Set up project environment. Implement Interface\Abstract class for storing numbers. Create classes with operators overloading that inherit from the interface. These are : fixed point, fractional and 2..16-base numbers.
 
-// I decided to delay implementing of classes except fixed point until the class structure is better defined.
+// I decided to delay implementing classes except fixed point until the class structure is better defined.
 
-// After research on design patterns I understood that I don't need to use interface (at least in means of storing class instances) and template class can solve the storing problem.
+// After research on design patterns I understood that I don't need to use interface (at least in means of storing class instances in one array) and template class can solve the storing problem.
+
+// Create a class for every single operation !!!
 
 [DONE] 1.1. Implement simple reading and storing either from a console and file.
 
@@ -27,7 +29,7 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [AWAITING] 5.0. Implement div
 
-[AWAITING] 6.0. Implement mod for integers. Remember to create exception. Or fmod?
+[AWAITING] 6.0. Implement mod. Remember to create exception. fmod?
 
 [AWAITING] 7.0. Implement 2-6 for fixed point
 
