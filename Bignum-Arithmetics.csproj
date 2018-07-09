@@ -40,6 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BigDif.cs" />
+    <Compile Include="BigDiv.cs" />
+    <Compile Include="BigMul.cs" />
     <Compile Include="BigNumber.cs" />
     <Compile Include="BigSum.cs" />
     <Compile Include="FixedPointNumber.cs" />
