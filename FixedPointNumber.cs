@@ -16,10 +16,11 @@ namespace net.NataliVol4ica.BignumArithmetics
             : base(message, inner) { }
     }
 
-    class FixedPointNumber : BigNumber
+    public class FixedPointNumber : BigNumber
     {
         /* === Constructors === */
         //todo: add input validation
+        //todo: dot is better as -1 or at the end??
         /// <exception cref="BigNumberException.IncorrectNumberFormatException" />
         public FixedPointNumber(string str = "0")
         {
@@ -70,32 +71,30 @@ namespace net.NataliVol4ica.BignumArithmetics
 
             Digits = new List<int>();
             this.Sign = 1;
-            while (i < RawString.Length && (RawString[i] == '+' || RawString[i] == '-'))
+            while (i < str.Length && (str[i] == '+' || str[i] == '-'))
             {
-                if (RawString[i] == '-')
+                if (str[i] == '-')
                     this.Sign = -this.Sign;
                 i++;
             }
-            RawString = RawString.Remove(0, i);
+            str = str.Remove(0, i);
             i = 0;
-            if (this.Sign < 0)
-                RawString = "-" + RawString;
-            //todo: if (i == RawString.Length) exception
-            DotPos = RawString.IndexOf(".");
+           //todo: if (i == str.Length) exception
+            DotPos = str.IndexOf(".");
             this.Dot = -1;
             if (DotPos < 0)
-                DotPos = RawString.Length;
+                DotPos = str.Length;
             //Converting the integer part
             for (; i < DotPos; i++)
-                if (Char.IsDigit(RawString[i]))
-                    Digits.Add(FixedPointNumber.ToDigit(RawString[i]));
+                if (Char.IsDigit(str[i]))
+                    Digits.Add(FixedPointNumber.ToDigit(str[i]));
                 else
                     throw new IncorrectNumberFormatException("Number can only contain digits 0..9 and optional delimiter '.' or ','.");
             //Converting the frac part
-            for (; i < RawString.Length; i++)
-                if (Char.IsDigit(RawString[i]))
-                    Digits.Add(FixedPointNumber.ToDigit(RawString[i]));
-                else if (RawString[i] == '.' || (RawString[i] == ','))
+            for (; i < str.Length; i++)
+                if (Char.IsDigit(str[i]))
+                    Digits.Add(FixedPointNumber.ToDigit(str[i]));
+                else if (str[i] == '.' || str[i] == ',')
                 {
                     if (Digits.Count == 0)
                         throw new IncorrectNumberFormatException("Number cannot begin with dot. Use \"0.*\" format.");
@@ -112,28 +111,50 @@ namespace net.NataliVol4ica.BignumArithmetics
         {
             int maxFrac = this.Dot;
 
-            while (Digits[Digits.Count - 1] == 0 && maxFrac > 0)
+            while (this.Digits[this.Digits.Count - 1] == 0 && maxFrac > 0)
             {
                 maxFrac--;
-                Digits.RemoveAt(Digits.Count - 1);
+                this.Digits.RemoveAt(Digits.Count - 1);
             }
-            Digits.Reverse();
-            while (Digits[Digits.Count - 1] == 0 && Digits.Count > maxFrac && Digits.Count > 1)
-                Digits.RemoveAt(Digits.Count - 1);
-            Digits.Reverse();
+            this.Digits.Reverse();
+            while (this.Digits[this.Digits.Count - 1] == 0
+                && this.Digits.Count > maxFrac
+                && this.Digits.Count > 1)
+                this.Digits.RemoveAt(Digits.Count - 1);
+            this.Digits.Reverse();
+            if (this.Digits.Count == 1 && this.Digits[0] == 0)
+                this.Sign = 1;
         }
 
         /* === Operations === */
-
         public override BigNumber Sum(BigNumber op)
         {
-            FixedPointNumber num = (FixedPointNumber)op;
-            return BigSum.Count(this, num);
+            FixedPointNumber A = this;
+            FixedPointNumber B = (FixedPointNumber)op;
+
+            if (A.Sign > 0 && B.Sign > 0)
+                return BigSum.Count(A, B);
+            if (A.Sign < 0 && B.Sign < 0)
+                return -BigSum.Count(A, B);
+            if (A.Sign > 0 && B.Sign < 0)
+                return (A - -B);
+            return (B - -A);
         }
         public override BigNumber Dif(BigNumber op)
         {
-            FixedPointNumber num = (FixedPointNumber)op;
-            return BigDif.Count(this, num);
+            FixedPointNumber A = this;
+            FixedPointNumber B = (FixedPointNumber)op;
+            FixedPointNumber C;
+
+            if (A.Sign > 0 && B.Sign > 0)
+                C = A > B ? BigDif.Count(A, B) : -BigDif.Count(B, A);
+            else if (A.Sign < 0 && B.Sign < 0)
+                C = A > B ? -BigDif.Count(B, A) : BigDif.Count(A, B);
+            else if (A.Sign > 0 && B.Sign < 0)
+                C = BigSum.Count(A, B);
+            else
+                C = -BigSum.Count(B, A);
+            return C;
         }
         public override BigNumber Mul(BigNumber op)
         {
@@ -155,12 +176,12 @@ namespace net.NataliVol4ica.BignumArithmetics
             if (this.RawString != null)
                 return this.RawString;
             sb = new StringBuilder();
-            Dot = this.Dot < 0 ? Digits.Count : this.Dot;
-            for (int i = 0; i < Dot; i++)
+            Dot = this.Dot < 0 ? 0 : Digits.Count - this.Dot;
+            for (int i = Digits.Count - 1; i >= Dot; i--)
                 sb.Append(FixedPointNumber.ToChar(Digits[i]));
             if (this.Dot > 0 && this.Dot < Digits.Count)
                 sb.Append(".");
-            for (int i = Dot; i < Digits.Count; i++)
+            for (int i = Dot - 1; i >= 0; i--)
                 sb.Append(FixedPointNumber.ToChar(Digits[i]));
             this.RawString = sb.ToString();
             return this.RawString;
@@ -237,23 +258,11 @@ namespace net.NataliVol4ica.BignumArithmetics
         }
         public static FixedPointNumber operator +(FixedPointNumber A, FixedPointNumber B)
         {
-            if (A.Sign > 0 && B.Sign > 0)
-                return BigSum.Count(A, B);
-            if (A.Sign < 0 && B.Sign < 0)
-                return -BigSum.Count(A, B);
-            if (A.Sign > 0 && B.Sign < 0)
-                return (A - -B);
-            return (B - -A);
+            return (FixedPointNumber)A.Sum(B);
         }
         public static FixedPointNumber operator -(FixedPointNumber A, FixedPointNumber B)
         {
-            if (A.Sign > 0 && B.Sign > 0)
-                return A > B ? BigDif.Count(A, B) : -BigDif.Count(B, A);
-            if (A.Sign < 0 && B.Sign < 0)
-                return A > B ? -BigDif.Count(B, A) : BigDif.Count(A, B);
-            if (A.Sign > 0 && B.Sign < 0)
-                return BigSum.Count(A, B);
-            return -BigSum.Count(B, A);
+            return (FixedPointNumber)A.Dif(B);
         }
 
         /* === Vaiables === */
