@@ -7,17 +7,11 @@ namespace net.NataliVol4ica.BignumArithmetics
         public static int Main(string[] args)
         {
             try
-            {
-                /*FixedPointNumber A = new FixedPointNumber("123.45");
-                FixedPointNumber B = new FixedPointNumber("45.678");
-                FixedPointNumber C;
-                
-                C = A + B;
-                */
+            {         
                 FixedPointNumber A = new FixedPointNumber("27.5");
                 FixedPointNumber B = new FixedPointNumber("13.5");
                 FixedPointNumber C;
-
+                
                 C = A - B;
                 Console.WriteLine(C);
             }

@@ -6,34 +6,61 @@ namespace net.NataliVol4ica.BignumArithmetics
     /// <summary>
     /// Abstract class for big numbers
     /// </summary>
-    
     public abstract class BigNumber
     {
         /* === Methods === */
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="op"></param>
-        /// <returns></returns>
+
         public abstract BigNumber Sum(BigNumber op);
         public abstract BigNumber Dif(BigNumber op);
         public abstract BigNumber Mul(BigNumber op);
         public abstract BigNumber Div(BigNumber op);
-        public static char ToChar(int Digit)
+        /// <summary>
+        /// Converts numbers into matching char symbols
+        /// </summary>
+        /// <param name="digit">Number to be converted. Must be in [0..15] range</param>
+        /// <returns>A matching char; '0' if digit does not match limits</returns>
+        public static char ToChar(int digit)
         {
-            return Digit.ToString()[0];
+            if (digit >= 0 && digit < 10)
+                return digit.ToString()[0];
+            if (digit > 9 && digit < 16)
+                return Convert.ToChar('a' + digit - 10);
+            return '0';
         }
-        public static byte ToDigit(char C)
+        /// <summary>
+        /// Converts [0..9a..dA..D] characters to matching number
+        /// </summary>
+        /// <param name="c">Character to be converted</param>
+        /// <returns>A matching number; -1 if c does not match limits.</returns>
+        public static int ToDigit(char c)
         {
-            return Convert.ToByte(C - '0');
+            if (Char.IsDigit(c))
+                return Convert.ToInt32(c - '0');
+            if (char.IsLetter(c))
+            {
+                c = Char.ToLower(c);
+                if (c < 'g')
+                    return c - 'a' + 10;
+            }
+            return -1;
         }
+        /// <summary>
+        /// Swaps two objects of type T
+        /// </summary>
+        /// <typeparam name="T">Any type</typeparam>
+        /// <param name="A">First parameter to swap</param>
+        /// <param name="B">Second parameter to swap</param>
         public static void Swap<T>(ref T A, ref T B)
         {
             T buf = A;
             A = B;
             B = buf;
         }
-        //todo: index exception
+        /// <summary>
+        /// BigNumber indexer overload
+        /// </summary>
+        /// <param name="index">an integer, position of desired digit</param>
+        /// <returns>digit at [index] position or 0 if index is invalis</returns>
         public int this[int index]
         {
             get
@@ -44,6 +71,8 @@ namespace net.NataliVol4ica.BignumArithmetics
             }
             private set
             {
+                if (index < 0 || index >= Digits.Count)
+                    return ;
                 Digits[index] = value;
             }
         }
@@ -60,7 +89,8 @@ namespace net.NataliVol4ica.BignumArithmetics
             }
         }
 
-        /* === Operators === */ //????
+        /* === Operators === */
+        //todo: force children to overload those operators
         public static BigNumber operator +(BigNumber A, BigNumber B)
         {
             return A.Sum(B);

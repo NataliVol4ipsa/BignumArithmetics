@@ -5,16 +5,40 @@ VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bignum-Arithmetics", "Bignum-Arithmetics.csproj", "{475D2AE5-CAAA-489E-82E2-A543352158A3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BignumberArithmetics.Tests", "BignumberArithmetics.Tests\BignumberArithmetics.Tests.csproj", "{23DF90CE-2E85-471E-BC76-E3E4DB4618C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Debug|x64.ActiveCfg = Debug|x86
+		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Debug|x64.Build.0 = Debug|x86
 		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Debug|x86.ActiveCfg = Debug|x86
 		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Debug|x86.Build.0 = Debug|x86
+		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Release|Any CPU.ActiveCfg = Release|x86
+		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Release|x64.ActiveCfg = Release|x64
+		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Release|x64.Build.0 = Release|x64
 		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Release|x86.ActiveCfg = Release|x86
 		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Release|x86.Build.0 = Release|x86
+		{23DF90CE-2E85-471E-BC76-E3E4DB4618C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23DF90CE-2E85-471E-BC76-E3E4DB4618C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23DF90CE-2E85-471E-BC76-E3E4DB4618C1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{23DF90CE-2E85-471E-BC76-E3E4DB4618C1}.Debug|x64.Build.0 = Debug|Any CPU
+		{23DF90CE-2E85-471E-BC76-E3E4DB4618C1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{23DF90CE-2E85-471E-BC76-E3E4DB4618C1}.Debug|x86.Build.0 = Debug|Any CPU
+		{23DF90CE-2E85-471E-BC76-E3E4DB4618C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23DF90CE-2E85-471E-BC76-E3E4DB4618C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23DF90CE-2E85-471E-BC76-E3E4DB4618C1}.Release|x64.ActiveCfg = Release|Any CPU
+		{23DF90CE-2E85-471E-BC76-E3E4DB4618C1}.Release|x64.Build.0 = Release|Any CPU
+		{23DF90CE-2E85-471E-BC76-E3E4DB4618C1}.Release|x86.ActiveCfg = Release|Any CPU
+		{23DF90CE-2E85-471E-BC76-E3E4DB4618C1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

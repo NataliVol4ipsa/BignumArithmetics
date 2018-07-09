@@ -7,17 +7,11 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [DONE] 0.1. Learn how to use git with Visual Studio 2017
 
-[AWAITING] 1.0. Set up project environment. Implement Interface\Abstract class for storing numbers. Create classes with operators overloading that inherit from the interface. These are : fixed point, fractional and 2..16-base numbers.
-
-// I decided to delay implementing classes except fixed point until the class structure is better defined.
-
-// After research on design patterns I understood that I don't need to use interface (at least in means of storing class instances in one array) and template class can solve the storing problem.
-
-// Create a class for every single operation !!!
+[CURRENT] 1.0. Set up project environment. Implement Interface\Abstract class for storing numbers. Create classes with operators overloading that inherit from the interface. These are : fixed point, fractional and 2..16-base numbers.
 
 [DONE] 1.1. Implement simple reading and storing either from a console and file.
 
-<b>[CURRENT]</b> 2.0. Implement long sum and long dif for integers. Remember to proceed negative and zero numbers.
+<b>[AWAITING]</b> 2.0. Implement long sum and long dif for integers. Remember to proceed negative and zero numbers.
 
 [AWAITING] 3.0. Implement basic error management using exception system + advanced input parsing.
 
@@ -41,7 +35,7 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [AWAITING] 7.4. Start creating documentation
 
-[AWAITING] 8.0 Try to implement a normal calculator, with brackets support. Look at stack-like collections. Regex? RPN? Class Expression. What if mul overflow?
+[AWAITING] 8.0. Try to implement a normal calculator, with brackets support. Look at stack-like collections. Regex? RPN? Class Expression. What if mul overflow?
 
 [AWAITING] 8.1. Improve input error management
 
@@ -51,7 +45,7 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [MAYBE] 11.0. I need to learn more about ASP.NET, so... try to involve it somehow. Maybe add some cryptography for this (triple des, rsa)
 
-YET INVOLVED: regex, delegates+events, parallel computing, async prog, what is reflection?
+YET INVOLVED: regex, delegates+events, parallel computing, async prog
 
 ----------
 
