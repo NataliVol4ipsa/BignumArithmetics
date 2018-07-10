@@ -267,11 +267,15 @@ namespace net.NataliVol4ica.BignumArithmetics
         }
         public static FixedPointNumber operator +(FixedPointNumber A, FixedPointNumber B)
         {
+            if (A == null || B == null)
+                return null;
             FixedPointNumber result = (FixedPointNumber)A.Sum(B);
             return result;
         }
         public static FixedPointNumber operator -(FixedPointNumber A, FixedPointNumber B)
         {
+            if (A == null || B == null)
+                return null;
             FixedPointNumber result = (FixedPointNumber)A.Dif(B);
             return result;
         }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+//todo: force children to overload operators
+
 namespace net.NataliVol4ica.BignumArithmetics
 {
     /// <summary>
@@ -90,21 +92,28 @@ namespace net.NataliVol4ica.BignumArithmetics
         }
 
         /* === Operators === */
-        //todo: force children to overload those operators
         public static BigNumber operator +(BigNumber A, BigNumber B)
         {
+            if (A is null || B is null)
+                return null;
             return A.Sum(B);
         }
         public static BigNumber operator -(BigNumber A, BigNumber B)
         {
+            if (A is null || B is null)
+                return null;
             return A.Dif(B);
         }
         public static BigNumber operator *(BigNumber A, BigNumber B)
         {
+            if (A is null || B is null)
+                return null;
             return A.Mul(B);
         }
         public static BigNumber operator /(BigNumber A, BigNumber B)
         {
+            if (A is null || B is null)
+                return null;
             return A.Div(B);
         }
     }

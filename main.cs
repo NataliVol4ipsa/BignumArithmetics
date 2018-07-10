@@ -7,12 +7,10 @@ namespace net.NataliVol4ica.BignumArithmetics
         public static int Main(string[] args)
         {
             try
-            {         
-                FixedPointNumber A = new FixedPointNumber("27.5");
-                FixedPointNumber B = new FixedPointNumber("13.5");
+            {
                 FixedPointNumber C;
                 
-                C = A - B;
+                C = (FixedPointNumber)null - (FixedPointNumber)null;
                 Console.WriteLine(C);
             }
             catch (Exception e)
