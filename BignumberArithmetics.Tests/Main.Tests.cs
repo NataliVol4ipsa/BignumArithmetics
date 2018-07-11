@@ -6,7 +6,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
     [TestClass]
     public class MainTests
     {
-        [TestMethod]
+       /* [TestMethod]
         public void Sum_123d45_and_45d678_result_169d128()
         {
             /*FixedPointNumber A = new FixedPointNumber("123.45");
@@ -14,7 +14,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
             FixedPointNumber C;
 
             C = A + B;
-            Assert.AreEqual("169.128", C.ToString());*/
-        }
+            Assert.AreEqual("169.128", C.ToString());
+        }*/
     }
 }

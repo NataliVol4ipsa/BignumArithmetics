@@ -10,7 +10,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         [TestMethod]
         [ExpectedException(typeof(NumberFormatException),
         "Cannot create FixedPointNumber of \"null\"")]
-        public void NullStringInConstructor()
+        public void NullString_In_Constructor()
         {
             FixedPointNumber empty = new FixedPointNumber(null);
         }
@@ -18,7 +18,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         [TestMethod]
         [ExpectedException(typeof(NumberFormatException),
         "Cannot create FixedPointNumber of \" +.5\"")]
-        public void IncorrectStringInConstructor_1()
+        public void NumberWithoutInteger_In_Constructor()
         {
             FixedPointNumber actual = new FixedPointNumber(" +.5");
         }
@@ -26,7 +26,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         [TestMethod]
         [ExpectedException(typeof(NumberFormatException),
         "Cannot create FixedPointNumber of \"1234.\"")]
-        public void IncorrectStringInConstructor_2()
+        public void NumberWithDotWithoutFrac_In_Constructor()
         {
             FixedPointNumber actual = new FixedPointNumber("1234.");
         }
@@ -34,7 +34,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         [TestMethod]
         [ExpectedException(typeof(NumberFormatException),
         "Cannot create FixedPointNumber of \"1.14.5\"")]
-        public void IncorrectStringInConstructor_3()
+        public void NumWithTwoDots_In_Constructor()
         {
             FixedPointNumber actual = new FixedPointNumber("1.14.5");
         }
@@ -42,13 +42,13 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         [TestMethod]
         [ExpectedException(typeof(NumberFormatException),
         "Cannot create FixedPointNumber of \"  1a12.3 \"")]
-        public void IncorrectStringInConstructor_4()
+        public void NumberWithAlpha_In_Constructor()
         {
             FixedPointNumber actual = new FixedPointNumber("  1a12.3 ");
         }
 
         [TestMethod]
-        public void CorrectStringInConstructor_1()
+        public void Zero_In_Constructor()
         {
             FixedPointNumber actual = new FixedPointNumber("   0     ");
 
@@ -56,7 +56,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         }
 
         [TestMethod]
-        public void CorrectStringInConstructor_2()
+        public void PlusZero_In_Constructor()
         {
             FixedPointNumber actual = new FixedPointNumber(" +0");
 
@@ -64,7 +64,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         }
 
         [TestMethod]
-        public void CorrectStringInConstructor_3()
+        public void MinusZero_In_Constructor()
         {
             FixedPointNumber actual = new FixedPointNumber(" -0");
 
@@ -72,7 +72,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         }
 
         [TestMethod]
-        public void CorrectStringInConstructor_4()
+        public void Plus12Dot3_In_Constructor()
         {
             FixedPointNumber actual = new FixedPointNumber(" +12.3");
 
@@ -80,7 +80,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         }
 
         [TestMethod]
-        public void CorrectStringInConstructor_5()
+        public void Minus17_In_Constructor()
         {
             FixedPointNumber actual = new FixedPointNumber(" -17    ");
 
@@ -88,7 +88,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         }
 
         [TestMethod]
-        public void CorrectStringInConstructor_6()
+        public void RandomBigNumber_In_Constructor()
         {
             FixedPointNumber actual = new FixedPointNumber("    -6473794237942.4723984729");
 
@@ -96,7 +96,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         }
 
         [TestMethod]
-        public void CorrectStringInConstructor_7()
+        public void Number_12Dot0_In_Constructor()
         {
             FixedPointNumber actual = new FixedPointNumber("12.0");
 

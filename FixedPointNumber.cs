@@ -66,7 +66,7 @@ namespace net.NataliVol4ica.BignumArithmetics
         }
 
         /* === Variables === */
-        public static readonly string validStringRegEx = @"\s*[+-]?[0-9]+(\.[0-9]+)?\s";
+        public static readonly string validStringRegEx = @"^\s*[+-]?[0-9]+(\.[0-9]+)?\s*$";
         //take care of later
         public int Dot;
     }
