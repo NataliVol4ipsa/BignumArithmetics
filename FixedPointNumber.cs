@@ -41,11 +41,9 @@ namespace net.NataliVol4ica.BignumArithmetics
             _dotPos = CleanString.IndexOf(".");
             if (_dotPos < 0)
                 _dotPos = CleanString.Length;
-            if (Sign < 0)
-                _dotPos--;
         }
 
-        /* === Overrides === */
+        /* === Parent Overrides === */
         public override BigNumber Sum(BigNumber op)
         {
             return new FixedPointNumber();
@@ -62,19 +60,19 @@ namespace net.NataliVol4ica.BignumArithmetics
         {
             return new FixedPointNumber();
         }
-
-        /* === Overloading === */
-        public override string ToString()
-        {
-            return (Sign < 0 ? "-" : "") + this.CleanString;
-        }
+        
+        /* === Operators === */        
 
         /* === Variables === */
         public static readonly string validStringRegEx = @"^\s*[+-]?[0-9]+(\.[0-9]+)?\s*$";
         public static readonly string cleanStringRegEx = @"([1-9]+[0-9]*(\.[0-9]*[1-9]+)?|0\.[0-9]*[1-9]+)";
 
         private volatile int _dotPos = 0;
+        private volatile int _fracLen = -1;
+
+        /* === Mutexes === */
         private Object dotPosMutex = new Object();
+        private Object fracLenMutex = new Object();
 
         /* === Properties === */
         public int DotPos
@@ -100,6 +98,27 @@ namespace net.NataliVol4ica.BignumArithmetics
             get
             {
                 return cleanStringRegEx;
+            }
+        }
+        public int Integer
+        {
+            get
+            {
+                return DotPos;
+            }
+        }
+        public int Fracial
+        {
+            get
+            {
+                if (_fracLen < 0)
+                    lock(fracLenMutex)
+                    {
+                        _fracLen = CleanString.Length - DotPos;
+                        if (_fracLen > 0)
+                            _fracLen--;
+                    }
+                return _fracLen;
             }
         }
     }

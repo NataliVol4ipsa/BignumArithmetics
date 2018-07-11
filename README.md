@@ -7,13 +7,15 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [DONE] 0.1. Learn how to use git with Visual Studio 2017
 
-[CURRENT] 1.0. Set up project environment. Implement Interface\Abstract class for storing numbers. Create classes with operators overloading that inherit from the interface. These are : fixed point, fractional and 2..16-base numbers.
+[DONE] 1.0. Set up project environment. Implement Interface\Abstract class for storing numbers. Create classes with operators overloading that inherit from the interface. These are : fixed point, fractional and 2..16-base numbers.
 
 [DONE] 1.1. Implement simple reading and storing either from a console and file.
 
-<b>[AWAITING]</b> 2.0. Implement long sum and long dif for integers. Remember to proceed negative and zero numbers.
+<b>[CURRENT]</b> 2.0. Implement long sum
 
-[AWAITING] 3.0. Implement basic error management using exception system + advanced input parsing.
+[AWAITING] 2.1. Implement long dif. Remember to proceed negative and zero numbers.
+
+[DONE] 3.0. Implement basic error management using exception system + advanced input parsing.
 
 [AWAITING] 4.0. Implement long mul. Try these methods: classic, Karatsuba, Schönhage–Strassen, Fürer’s algo
 
@@ -33,7 +35,7 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [AWAITING] 7.3. Create a config file to configure current parameters of testing. Create endless looped menu of reading input, like a local console.
 
-[AWAITING] 7.4. Start creating documentation
+[DONE] 7.4. Start creating documentation
 
 [AWAITING] 8.0. Try to implement a normal calculator, with brackets support. Look at stack-like collections. Regex? RPN? Class Expression. What if mul overflow?
 
@@ -45,7 +47,7 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [MAYBE] 11.0. I need to learn more about ASP.NET, so... try to involve it somehow. Maybe add some cryptography for this (triple des, rsa)
 
-YET INVOLVED: regex, delegates+events, parallel computing, async prog
+YET INVOLVED: delegates+events, parallel computing, async prog
 
 ----------
 

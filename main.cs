@@ -4,10 +4,23 @@ namespace net.NataliVol4ica.BignumArithmetics
 {
     public static class BignumArithmetics
     {
+        static void Test()
+        {
+            FixedPointNumber actual = new FixedPointNumber("-0.156");
+
+            Console.WriteLine("Int {0}, Frac {1}", actual.Integer, actual.Fracial);
+        }
+
         public static int Main(string[] args)
         {
-            FixedPointNumber actual = new FixedPointNumber("+0000");
-            string str = actual.ToString();
+            try
+            {
+                Test();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
             Console.Read();
             return 0;
         }

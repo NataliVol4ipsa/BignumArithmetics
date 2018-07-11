@@ -11,55 +11,6 @@ namespace net.NataliVol4ica.BignumArithmetics
     /// </summary>
     public abstract class BigNumber
     {
-        /* === Variables === */
-        protected string _cleanString = null;
-        protected int _sign = 1;
-        
-        /* === Properties === */
-        /// <summary>The CleanString property represents number without spaces, extra zeroes etc</summary>
-        /// <value> The CleanString property gets/sets the value of the string field, _cleanString</value>
-        public string CleanString
-        {
-            get
-            {
-                return _cleanString;
-            }
-            protected set
-            {
-                _cleanString = value;
-            }
-        }
-        /// <summary>The Sign property represents sign of the number</summary>
-        /// <value> The CleanString property gets/sets the value of the int field, _sign</value>
-        public int Sign
-        {
-            get
-            {
-                return _sign;
-            }
-            protected set
-            {
-                _sign = value;
-            }
-        }
-
-        /*
-        protected List<int> Digits = new List<int>();
-        public int Size
-        {
-            get
-            {
-                return Digits.Count;
-            }
-        }*/
-
-        /// <summary>The CleanStringRegEx property represents RegEx that is used in input parsing</summary>
-        /// <value> The CleanString property gets the RegEx string</value>
-        protected abstract string CleanStringRegEx
-        {
-            get;
-        }
-
         /* === Abstarct Methods === */
         public abstract BigNumber Sum(BigNumber op);
         public abstract BigNumber Dif(BigNumber op);
@@ -149,6 +100,62 @@ namespace net.NataliVol4ica.BignumArithmetics
             if (A is null || B is null)
                 return null;
             return A.Div(B);
+        }
+
+        /* === Overloading === */
+        public override string ToString()
+        {
+            return (Sign < 0 ? "-" : "") + this.CleanString;
+        }
+
+        /* === Variables === */
+        protected string _cleanString = null;
+        protected int _sign = 1;
+
+        private Object sizeMutex = new Object();
+        /* === Properties === */
+        /// <summary>The CleanString property represents number without spaces, extra zeroes etc</summary>
+        /// <value> The CleanString property gets/sets the value of the string field, _cleanString</value>
+        public string CleanString
+        {
+            get
+            {
+                return _cleanString;
+            }
+            protected set
+            {
+                _cleanString = value;
+            }
+        }
+        /// <summary>The Sign property represents sign of the number</summary>
+        /// <value> The CleanString property gets/sets the value of the int field, _sign</value>
+        public int Sign
+        {
+            get
+            {
+                return _sign;
+            }
+            protected set
+            {
+                _sign = value;
+            }
+        }
+
+        /*
+        protected List<int> Digits = new List<int>();
+        public int Size
+        {
+            get
+            {
+                return Digits.Count;
+            }
+        }*/
+
+        /// <summary>The CleanStringRegEx property represents RegEx that is used in input parsing</summary>
+        /// <value> The CleanString property gets the RegEx string</value>
+        protected abstract string CleanStringRegEx
+        {
+            get;
         }
     }
 }

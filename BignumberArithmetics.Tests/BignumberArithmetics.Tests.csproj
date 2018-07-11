@@ -71,6 +71,7 @@
     <Compile Include="Main.Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FixedPointNumberConstructor.Tests.cs" />
+    <Compile Include="FixedPointNumberIntFracTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

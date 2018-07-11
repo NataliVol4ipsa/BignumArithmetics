@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace net.NataliVol4ica.BignumArithmetics.Tests
 {
     [TestClass]
-    public class ConstructorErrorTests
+    public class FixedPointNumberConstructorTests
     {
         [TestMethod]
         [ExpectedException(typeof(NumberFormatException),
