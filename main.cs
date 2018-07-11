@@ -6,17 +6,8 @@ namespace net.NataliVol4ica.BignumArithmetics
     {
         public static int Main(string[] args)
         {
-            /*try
-            {
-                FixedPointNumber C;
-                
-                C = (FixedPointNumber)null - (FixedPointNumber)null;
-                Console.WriteLine(C);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Exception caught: {0}", e.Message);
-            }*/
+            FixedPointNumber actual = new FixedPointNumber("+0000");
+            string str = actual.ToString();
             Console.Read();
             return 0;
         }

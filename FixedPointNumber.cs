@@ -29,17 +29,10 @@ namespace net.NataliVol4ica.BignumArithmetics
             if (str is null ||
                 !Regex.IsMatch(str, validStringRegEx, RegexOptions.None))
                 throw new NumberFormatException("Cannot create FixedPointNumber of \"" + str + "\"");
-            str = str.Trim();
-            if (str[0] == '+')
-                this.RawString = str.Substring(1);
-            else
-                if (str == "-0")
-                this.RawString = "0";
-            else
-                this.RawString = str;
+            this.RawString = str;           
         }
 
-        /* === Parent class overrides === */
+        /* === Overrides === */
         public override BigNumber Sum(BigNumber op)
         {
             return new FixedPointNumber();
@@ -57,18 +50,30 @@ namespace net.NataliVol4ica.BignumArithmetics
             return new FixedPointNumber();
         }
 
+        protected override void CreateCleanString()
+        {
+            string substr;
+
+            if (RawString is null)
+                throw new Exception("Hvatit govnokodit', allo!");
+            Sign = RawString.Contains("-") ? -1 : 1;
+            CleanString = Sign > 0 ? "" : "-";
+            substr = Regex.Match(RawString, cleanStringRegEx).Value;
+            if (substr == "")
+                CleanString = "0";
+            else
+                CleanString += substr;            
+        }
+
         /* === Overloading === */
         public override string ToString()
         {
-            if (this.RawString is null)
-                throw new Exception("Hvatit govnokodit', allo! Undexpected error, karo4e");
-            return this.RawString;
+            return this.CleanString;
         }
 
         /* === Variables === */
         public static readonly string validStringRegEx = @"^\s*[+-]?[0-9]+(\.[0-9]+)?\s*$";
-        //take care of later
-        public int Dot;
+        public static readonly string cleanStringRegEx = @"[1-9]+[0-9]*(\.[0-9]*[1-9]+)?";
     }
 }
 

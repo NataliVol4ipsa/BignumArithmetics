@@ -11,22 +11,72 @@ namespace net.NataliVol4ica.BignumArithmetics
     public abstract class BigNumber
     {
         /* === Variables === */
+        protected string _rawString;
+        protected string _cleanString = null;
+        protected int _sign = 1;
+
+        /* === Properties === */
+        /// <summary>The RawString property represents string that the constructor is called with</summary>
+        /// <value> The RawString property gets/sets the value of the string field, _rawString</value>
+        public string RawString
+        {
+            get
+            {
+                return _rawString;
+            }
+            protected set
+            {
+                _rawString = value;
+            }
+        }
+        /// <summary>The CleanString property represents number without spaces, extra zeroes etc.</summary>
+        /// <value> The CleanString property gets/sets the value of the string field, _cleanString</value>
+        public string CleanString
+        {
+            get
+            {
+                if (_cleanString is null)
+                    CreateCleanString();
+                return CleanString;
+            }
+            protected set
+            {
+                _cleanString = value;
+            }
+        }
+
+        /// <summary>The Sign property represents sign of the number.</summary>
+        /// <value> The CleanString property gets/sets the value of the int field, _sign</value>
+        public int Sign
+        {
+            get
+            {
+                return _sign;
+            }
+            protected set
+            {
+                _sign = value;
+            }
+        }
+        
+        /*
         protected List<int> Digits = new List<int>();
-        protected string RawString = null;
-        public int Sign { get; protected set; }
         public int Size
         {
             get
             {
                 return Digits.Count;
             }
-        }
+        }*/
+
 
         /* === Abstarct Methods === */
         public abstract BigNumber Sum(BigNumber op);
         public abstract BigNumber Dif(BigNumber op);
         public abstract BigNumber Mul(BigNumber op);
         public abstract BigNumber Div(BigNumber op);
+
+        protected abstract void CreateCleanString();
 
         /* === Static Methods === */
         /// <summary>
@@ -71,6 +121,7 @@ namespace net.NataliVol4ica.BignumArithmetics
             A = B;
             B = buf;
         }
+        /*
         /// <summary>
         /// BigNumber indexer overload
         /// </summary>
@@ -90,7 +141,7 @@ namespace net.NataliVol4ica.BignumArithmetics
                     return ;
                 Digits[index] = value;
             }
-        }
+        } */
 
         /* === Operators === */
         public static BigNumber operator +(BigNumber A, BigNumber B)

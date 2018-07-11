@@ -52,7 +52,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         {
             FixedPointNumber actual = new FixedPointNumber("   0     ");
 
-            Assert.AreEqual("0", actual.ToString());
+            Assert.AreEqual("0", actual.RawString);
         }
 
         [TestMethod]
@@ -60,7 +60,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         {
             FixedPointNumber actual = new FixedPointNumber(" +0");
 
-            Assert.AreEqual("0", actual.ToString());
+            Assert.AreEqual("0", actual.RawString);
         }
 
         [TestMethod]
@@ -68,7 +68,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         {
             FixedPointNumber actual = new FixedPointNumber(" -0");
 
-            Assert.AreEqual("0", actual.ToString());
+            Assert.AreEqual("0", actual.RawString);
         }
 
         [TestMethod]
@@ -76,7 +76,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         {
             FixedPointNumber actual = new FixedPointNumber(" +12.3");
 
-            Assert.AreEqual("12.3", actual.ToString());
+            Assert.AreEqual("12.3", actual.RawString);
         }
 
         [TestMethod]
@@ -84,7 +84,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         {
             FixedPointNumber actual = new FixedPointNumber(" -17    ");
 
-            Assert.AreEqual("-17", actual.ToString());
+            Assert.AreEqual("-17", actual.RawString);
         }
 
         [TestMethod]
@@ -92,7 +92,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         {
             FixedPointNumber actual = new FixedPointNumber("    -6473794237942.4723984729");
 
-            Assert.AreEqual("-6473794237942.4723984729", actual.ToString());
+            Assert.AreEqual("-6473794237942.4723984729", actual.RawString);
         }
 
         [TestMethod]
@@ -100,8 +100,58 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         {
             FixedPointNumber actual = new FixedPointNumber("12.0");
 
-            Assert.AreEqual("12.0", actual.ToString());
+            Assert.AreEqual("12.0", actual.RawString);
         }
+
+        [TestMethod]
+        public void Plus_12Dot0_ToString()
+        {
+            FixedPointNumber actual = new FixedPointNumber("+12.0");
+
+            Assert.AreEqual("12", actual.ToString());
+        }
+
+        [TestMethod]
+        public void ManyZeros_ToString()
+        {
+            FixedPointNumber actual = new FixedPointNumber("+0000");
+
+            Assert.AreEqual("0", actual.ToString());
+        }
+
+        [TestMethod]
+        public void ManyZerosDotManyZeros_ToString()
+        {
+            FixedPointNumber actual = new FixedPointNumber("-0000.000");
+
+            Assert.AreEqual("0", actual.ToString());
+        }
+
+        [TestMethod]
+        public void PlusHeadingZeros_ToString()
+        {
+            FixedPointNumber actual = new FixedPointNumber("+00001234");
+
+            Assert.AreEqual("1234", actual.ToString());
+        }
+
+        [TestMethod]
+        public void MinusHeadingZeros_ToString()
+        {
+            FixedPointNumber actual = new FixedPointNumber("-00001234");
+
+            Assert.AreEqual("1234", actual.ToString());
+        }
+
+        [TestMethod]
+        public void MinusHeadingAndTailingZeros_ToString()
+        {
+            FixedPointNumber actual = new FixedPointNumber("-00001234.0024823000");
+
+            Assert.AreEqual("-1234.0024823", actual.ToString());
+        }
+
+
 
     }
 }
