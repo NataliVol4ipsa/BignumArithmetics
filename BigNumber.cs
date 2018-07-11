@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 //todo: force children to overload operators
 
@@ -13,7 +14,7 @@ namespace net.NataliVol4ica.BignumArithmetics
         /* === Variables === */
         protected string _cleanString = null;
         protected int _sign = 1;
-
+        
         /* === Properties === */
         /// <summary>The CleanString property represents number without spaces, extra zeroes etc.</summary>
         /// <value> The CleanString property gets/sets the value of the string field, _cleanString</value>
@@ -42,7 +43,7 @@ namespace net.NataliVol4ica.BignumArithmetics
                 _sign = value;
             }
         }
-        
+
         /*
         protected List<int> Digits = new List<int>();
         public int Size
@@ -53,13 +54,17 @@ namespace net.NataliVol4ica.BignumArithmetics
             }
         }*/
 
+        protected abstract string CleanStringRegEx
+        {
+            get;
+            set;
+        }
+
         /* === Abstarct Methods === */
         public abstract BigNumber Sum(BigNumber op);
         public abstract BigNumber Dif(BigNumber op);
         public abstract BigNumber Mul(BigNumber op);
         public abstract BigNumber Div(BigNumber op);
-
-        protected abstract void CreateCleanString(string RawString);
 
         /* === Static Methods === */
         /// <summary>
@@ -125,6 +130,20 @@ namespace net.NataliVol4ica.BignumArithmetics
                 Digits[index] = value;
             }
         } */
+
+        /* === Protected Methods === */
+        protected void CreateCleanString(string RawString)
+        {
+            string substr;
+
+            Sign = RawString.Contains("-") ? -1 : 1;
+            _cleanString = Sign > 0 ? "" : "-";
+            substr = Regex.Match(RawString, CleanStringRegEx).Value;
+            if (substr == "")
+                _cleanString = "0";
+            else
+                _cleanString += substr;
+        }
 
         /* === Operators === */
         public static BigNumber operator +(BigNumber A, BigNumber B)

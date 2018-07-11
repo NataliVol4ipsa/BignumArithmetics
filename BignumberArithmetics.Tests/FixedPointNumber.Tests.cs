@@ -151,7 +151,12 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
             Assert.AreEqual("-1234.0024823", actual.ToString());
         }
 
+        [TestMethod]
+        public void Minus0Dot5_ToString()
+        {
+            FixedPointNumber actual = new FixedPointNumber("-0.5");
 
-
+            Assert.AreEqual("-0.5", actual.ToString());
+        }
     }
 }

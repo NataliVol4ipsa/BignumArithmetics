@@ -2,6 +2,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using System.Threading;
 
 #pragma warning disable CS0660 // Тип определяет оператор == или оператор !=, но не переопределяет Object.Equals(object o)
 #pragma warning disable CS0661 // Тип определяет оператор == или оператор !=, но не переопределяет Object.GetHashCode()
@@ -23,13 +24,25 @@ namespace net.NataliVol4ica.BignumArithmetics
 
     public class FixedPointNumber : BigNumber
     {
-        //todo: cut zeros
+        //todo: dot is better as -1 or at the end??
         public FixedPointNumber(string str = "0")
         {
             if (str is null ||
                 !Regex.IsMatch(str, validStringRegEx, RegexOptions.None))
                 throw new NumberFormatException("Cannot create FixedPointNumber of \"" + str + "\"");
             CreateCleanString(str);
+        }
+
+        /* === Private Methods === */
+        private void FindDotPos()
+        {
+            if (_dotPos > 0)
+                return;
+            _dotPos = CleanString.IndexOf(".");
+            if (_dotPos < 0)
+                _dotPos = CleanString.Length;
+            if (Sign < 0)
+                _dotPos--;
         }
 
         /* === Overrides === */
@@ -50,64 +63,55 @@ namespace net.NataliVol4ica.BignumArithmetics
             return new FixedPointNumber();
         }
 
-        protected override void CreateCleanString(string RawString)
-        {
-            string substr;
-
-            if (RawString is null)
-                throw new Exception("Hvatit govnokodit', allo!");
-            Sign = RawString.Contains("-") ? -1 : 1;
-            _cleanString = Sign > 0 ? "" : "-";
-            substr = Regex.Match(RawString, cleanStringRegEx).Value;
-            if (substr == "")
-                _cleanString = "0";
-            else
-                _cleanString += substr;
-        }
-        /*
-        protected override void CreateCleanString()
-        {
-            string substr;
-
-            if (RawString is null)
-                throw new Exception("Hvatit govnokodit', allo!");
-            Sign = RawString.Contains("-") ? -1 : 1;
-            CleanString = Sign > 0 ? "" : "-";
-            substr = Regex.Match(RawString, cleanStringRegEx).Value;
-            if (substr == "")
-                CleanString = "0";
-            else
-                CleanString += substr;            
-        }
-        */
         /* === Overloading === */
         public override string ToString()
         {
             return this.CleanString;
         }
-        
 
         /* === Variables === */
         public static readonly string validStringRegEx = @"^\s*[+-]?[0-9]+(\.[0-9]+)?\s*$";
-        public static readonly string cleanStringRegEx = @"[1-9]+[0-9]*(\.[0-9]*[1-9]+)?";
+        public static readonly string cleanStringRegEx = @"([1-9]+[0-9]*(\.[0-9]*[1-9]+)?|0\.[0-9]*[1-9]+)";
+
+        private volatile int _dotPos = 0;
+        private Object dotPosMutex = new Object();
+
+        /* === Properties === */
+        public int DotPos
+        {
+            get
+            {
+                if (_dotPos == 0)
+                {
+                    lock (dotPosMutex)
+                    {
+                        FindDotPos();
+                    }
+                }
+                return _dotPos;
+            }
+            private set
+            {
+                _dotPos = value;
+            }
+        }
+        protected override string CleanStringRegEx
+        {
+            get
+            {
+                return cleanStringRegEx;
+            }
+            set
+            {
+                ;
+            }
+        }
     }
 }
 
 //namespace net.NataliVol4ica.BignumArithmetics
 //{
-//    public class IncorrectNumberFormatException : Exception
-//    {
-//        public IncorrectNumberFormatException() { }
-//        public IncorrectNumberFormatException(string message)
-//            : base(message) { }
-//        public IncorrectNumberFormatException(string message, Exception inner)
-//            : base(message, inner) { }
-//    }
-
-//    public class FixedPointNumber : BigNumber
-//    {
-//        /* === Constructors === */
-//        //todo: add input validation
+//   
 //        //todo: dot is better as -1 or at the end??
 //        /// <exception cref="BigNumberException.IncorrectNumberFormatException" />
 //        public FixedPointNumber(string str = "0")
