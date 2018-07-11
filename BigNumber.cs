@@ -10,12 +10,25 @@ namespace net.NataliVol4ica.BignumArithmetics
     /// </summary>
     public abstract class BigNumber
     {
-        /* === Methods === */
+        /* === Variables === */
+        protected List<int> Digits = new List<int>();
+        protected string RawString = null;
+        public int Sign { get; protected set; }
+        public int Size
+        {
+            get
+            {
+                return Digits.Count;
+            }
+        }
 
+        /* === Abstarct Methods === */
         public abstract BigNumber Sum(BigNumber op);
         public abstract BigNumber Dif(BigNumber op);
         public abstract BigNumber Mul(BigNumber op);
         public abstract BigNumber Div(BigNumber op);
+
+        /* === Static Methods === */
         /// <summary>
         /// Converts numbers into matching char symbols
         /// </summary>
@@ -76,18 +89,6 @@ namespace net.NataliVol4ica.BignumArithmetics
                 if (index < 0 || index >= Digits.Count)
                     return ;
                 Digits[index] = value;
-            }
-        }
-
-        /* === Variables === */
-        protected List<int> Digits = new List<int>();
-        protected string RawString = null;
-        public int Sign { get; protected set; }
-        public int Size
-        {
-            get
-            {
-                return Digits.Count;
             }
         }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace net.NataliVol4ica.BignumArithmetics
 {
-    static class BigSum
+   /* static class BigSum
     {
         public static FixedPointNumber Count(FixedPointNumber A, FixedPointNumber B)
         {
@@ -34,7 +34,6 @@ namespace net.NataliVol4ica.BignumArithmetics
                 i++;
                 j++;
             }
-            /* eo dot */
             if (A.GetIntLen() < B.GetIntLen())
             {
                 FixedPointNumber.Swap(ref A, ref B);
@@ -63,5 +62,5 @@ namespace net.NataliVol4ica.BignumArithmetics
             sum.Reverse();
             return (new FixedPointNumber(sum, sum.Count - maxFrac));
         }
-    }
+    }*/
 }

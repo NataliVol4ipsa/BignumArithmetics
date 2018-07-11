@@ -6,7 +6,7 @@ namespace net.NataliVol4ica.BignumArithmetics
     {
         public static int Main(string[] args)
         {
-            try
+            /*try
             {
                 FixedPointNumber C;
                 
@@ -16,7 +16,7 @@ namespace net.NataliVol4ica.BignumArithmetics
             catch (Exception e)
             {
                 Console.WriteLine("Exception caught: {0}", e.Message);
-            }
+            }*/
             Console.Read();
             return 0;
         }
