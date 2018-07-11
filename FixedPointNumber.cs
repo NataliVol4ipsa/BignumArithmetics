@@ -29,7 +29,7 @@ namespace net.NataliVol4ica.BignumArithmetics
             if (str is null ||
                 !Regex.IsMatch(str, validStringRegEx, RegexOptions.None))
                 throw new NumberFormatException("Cannot create FixedPointNumber of \"" + str + "\"");
-            this.RawString = str;           
+            CreateCleanString(str);
         }
 
         /* === Overrides === */
@@ -50,6 +50,21 @@ namespace net.NataliVol4ica.BignumArithmetics
             return new FixedPointNumber();
         }
 
+        protected override void CreateCleanString(string RawString)
+        {
+            string substr;
+
+            if (RawString is null)
+                throw new Exception("Hvatit govnokodit', allo!");
+            Sign = RawString.Contains("-") ? -1 : 1;
+            _cleanString = Sign > 0 ? "" : "-";
+            substr = Regex.Match(RawString, cleanStringRegEx).Value;
+            if (substr == "")
+                _cleanString = "0";
+            else
+                _cleanString += substr;
+        }
+        /*
         protected override void CreateCleanString()
         {
             string substr;
@@ -64,12 +79,13 @@ namespace net.NataliVol4ica.BignumArithmetics
             else
                 CleanString += substr;            
         }
-
+        */
         /* === Overloading === */
         public override string ToString()
         {
             return this.CleanString;
         }
+        
 
         /* === Variables === */
         public static readonly string validStringRegEx = @"^\s*[+-]?[0-9]+(\.[0-9]+)?\s*$";

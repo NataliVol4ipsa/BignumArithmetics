@@ -11,33 +11,17 @@ namespace net.NataliVol4ica.BignumArithmetics
     public abstract class BigNumber
     {
         /* === Variables === */
-        protected string _rawString;
         protected string _cleanString = null;
         protected int _sign = 1;
 
         /* === Properties === */
-        /// <summary>The RawString property represents string that the constructor is called with</summary>
-        /// <value> The RawString property gets/sets the value of the string field, _rawString</value>
-        public string RawString
-        {
-            get
-            {
-                return _rawString;
-            }
-            protected set
-            {
-                _rawString = value;
-            }
-        }
         /// <summary>The CleanString property represents number without spaces, extra zeroes etc.</summary>
         /// <value> The CleanString property gets/sets the value of the string field, _cleanString</value>
         public string CleanString
         {
             get
             {
-                if (_cleanString is null)
-                    CreateCleanString();
-                return CleanString;
+                return _cleanString;
             }
             protected set
             {
@@ -69,14 +53,13 @@ namespace net.NataliVol4ica.BignumArithmetics
             }
         }*/
 
-
         /* === Abstarct Methods === */
         public abstract BigNumber Sum(BigNumber op);
         public abstract BigNumber Dif(BigNumber op);
         public abstract BigNumber Mul(BigNumber op);
         public abstract BigNumber Div(BigNumber op);
 
-        protected abstract void CreateCleanString();
+        protected abstract void CreateCleanString(string RawString);
 
         /* === Static Methods === */
         /// <summary>
