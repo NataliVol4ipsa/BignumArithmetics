@@ -3,9 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace net.NataliVol4ica.BignumArithmetics.Tests
 {
-    //TODO: RENAME METHODS
     [TestClass]
-    public class FixedPointNumberTests
+    public class ConstructorErrorTests
     {
         [TestMethod]
         [ExpectedException(typeof(NumberFormatException),
@@ -53,6 +52,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
             FixedPointNumber actual = new FixedPointNumber("   0     ");
 
             Assert.AreEqual("0", actual.ToString());
+            Assert.AreEqual(1, actual.Sign);
         }
 
         [TestMethod]
@@ -61,6 +61,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
             FixedPointNumber actual = new FixedPointNumber(" +0");
 
             Assert.AreEqual("0", actual.ToString());
+            Assert.AreEqual(1, actual.Sign);
         }
         
         [TestMethod]
@@ -69,6 +70,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
             FixedPointNumber actual = new FixedPointNumber(" -0");
 
             Assert.AreEqual("0", actual.ToString());
+            Assert.AreEqual(1, actual.Sign);
         }
 
         [TestMethod]
@@ -77,6 +79,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
             FixedPointNumber actual = new FixedPointNumber(" +12.3");
 
             Assert.AreEqual("12.3", actual.ToString());
+            Assert.AreEqual(1, actual.Sign);
         }
 
         [TestMethod]
@@ -85,6 +88,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
             FixedPointNumber actual = new FixedPointNumber(" -17    ");
 
             Assert.AreEqual("-17", actual.ToString());
+            Assert.AreEqual(-1, actual.Sign);
         }
 
         [TestMethod]
@@ -93,6 +97,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
             FixedPointNumber actual = new FixedPointNumber("    -6473794237942.4723984729");
 
             Assert.AreEqual("-6473794237942.4723984729", actual.ToString());
+            Assert.AreEqual(-1, actual.Sign);
         }
 
         [TestMethod]
@@ -101,6 +106,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
             FixedPointNumber actual = new FixedPointNumber("12.0");
 
             Assert.AreEqual("12", actual.ToString());
+            Assert.AreEqual(1, actual.Sign);
         }
 
         [TestMethod]
@@ -109,22 +115,25 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
             FixedPointNumber actual = new FixedPointNumber("+12.0");
 
             Assert.AreEqual("12", actual.ToString());
+            Assert.AreEqual(1, actual.Sign);
         }
 
         [TestMethod]
         public void ManyZeros_ToString()
         {
-            FixedPointNumber actual = new FixedPointNumber("+0000");
+            FixedPointNumber actual = new FixedPointNumber("-0000");
 
             Assert.AreEqual("0", actual.ToString());
+            Assert.AreEqual(1, actual.Sign);
         }
 
         [TestMethod]
         public void ManyZerosDotManyZeros_ToString()
         {
-            FixedPointNumber actual = new FixedPointNumber("-0000.000");
+            FixedPointNumber actual = new FixedPointNumber("0000.000");
 
             Assert.AreEqual("0", actual.ToString());
+            Assert.AreEqual(1, actual.Sign);
         }
 
         [TestMethod]
@@ -133,6 +142,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
             FixedPointNumber actual = new FixedPointNumber("+00001234");
 
             Assert.AreEqual("1234", actual.ToString());
+            Assert.AreEqual(1, actual.Sign);
         }
 
         [TestMethod]
@@ -141,6 +151,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
             FixedPointNumber actual = new FixedPointNumber("-00001234");
 
             Assert.AreEqual("-1234", actual.ToString());
+            Assert.AreEqual(-1, actual.Sign);
         }
 
         [TestMethod]
@@ -149,6 +160,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
             FixedPointNumber actual = new FixedPointNumber("-00001234.0024823000");
 
             Assert.AreEqual("-1234.0024823", actual.ToString());
+            Assert.AreEqual(-1, actual.Sign);
         }
 
         [TestMethod]
@@ -157,6 +169,16 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
             FixedPointNumber actual = new FixedPointNumber("-0.5");
 
             Assert.AreEqual("-0.5", actual.ToString());
+            Assert.AreEqual(-1, actual.Sign);
+        }
+
+        [TestMethod]
+        public void Minus000Dot5000_ToString()
+        {
+            FixedPointNumber actual = new FixedPointNumber("-000.5000");
+
+            Assert.AreEqual("-0.5", actual.ToString());
+            Assert.AreEqual(-1, actual.Sign);
         }
     }
 }

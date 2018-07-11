@@ -16,7 +16,7 @@ namespace net.NataliVol4ica.BignumArithmetics
         protected int _sign = 1;
         
         /* === Properties === */
-        /// <summary>The CleanString property represents number without spaces, extra zeroes etc.</summary>
+        /// <summary>The CleanString property represents number without spaces, extra zeroes etc</summary>
         /// <value> The CleanString property gets/sets the value of the string field, _cleanString</value>
         public string CleanString
         {
@@ -29,8 +29,7 @@ namespace net.NataliVol4ica.BignumArithmetics
                 _cleanString = value;
             }
         }
-
-        /// <summary>The Sign property represents sign of the number.</summary>
+        /// <summary>The Sign property represents sign of the number</summary>
         /// <value> The CleanString property gets/sets the value of the int field, _sign</value>
         public int Sign
         {
@@ -54,10 +53,11 @@ namespace net.NataliVol4ica.BignumArithmetics
             }
         }*/
 
+        /// <summary>The CleanStringRegEx property represents RegEx that is used in input parsing</summary>
+        /// <value> The CleanString property gets the RegEx string</value>
         protected abstract string CleanStringRegEx
         {
             get;
-            set;
         }
 
         /* === Abstarct Methods === */
@@ -109,40 +109,20 @@ namespace net.NataliVol4ica.BignumArithmetics
             A = B;
             B = buf;
         }
-        /*
-        /// <summary>
-        /// BigNumber indexer overload
-        /// </summary>
-        /// <param name="index">an integer, position of desired digit</param>
-        /// <returns>digit at [index] position or 0 if index is invalis</returns>
-        public int this[int index]
-        {
-            get
-            {
-                if (index < 0 || index >= Digits.Count)
-                    return 0;
-                return Digits[index];
-            }
-            private set
-            {
-                if (index < 0 || index >= Digits.Count)
-                    return ;
-                Digits[index] = value;
-            }
-        } */
-
+       
         /* === Protected Methods === */
-        protected void CreateCleanString(string RawString)
+        protected string CleanNumericString(string RawString, ref int sign)
         {
             string substr;
 
-            Sign = RawString.Contains("-") ? -1 : 1;
-            _cleanString = Sign > 0 ? "" : "-";
             substr = Regex.Match(RawString, CleanStringRegEx).Value;
             if (substr == "")
-                _cleanString = "0";
-            else
-                _cleanString += substr;
+            {
+                sign = 1;
+                return "0";
+            }
+             sign = RawString.Contains("-") ? -1 : 1;
+             return substr;
         }
 
         /* === Operators === */

@@ -70,7 +70,7 @@
     <Compile Include="BigNumber.Tests.cs" />
     <Compile Include="Main.Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FixedPointNumber.Tests.cs" />
+    <Compile Include="FixedPointNumberConstructor.Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

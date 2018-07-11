@@ -30,7 +30,7 @@ namespace net.NataliVol4ica.BignumArithmetics
             if (str is null ||
                 !Regex.IsMatch(str, validStringRegEx, RegexOptions.None))
                 throw new NumberFormatException("Cannot create FixedPointNumber of \"" + str + "\"");
-            CreateCleanString(str);
+            CleanString = CleanNumericString(str, ref _sign);
         }
 
         /* === Private Methods === */
@@ -66,7 +66,7 @@ namespace net.NataliVol4ica.BignumArithmetics
         /* === Overloading === */
         public override string ToString()
         {
-            return this.CleanString;
+            return (Sign < 0 ? "-" : "") + this.CleanString;
         }
 
         /* === Variables === */
@@ -100,10 +100,6 @@ namespace net.NataliVol4ica.BignumArithmetics
             get
             {
                 return cleanStringRegEx;
-            }
-            set
-            {
-                ;
             }
         }
     }
