@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace net.NataliVol4ica.BignumArithmetics.Tests
 {
     [TestClass]
-    public class FixedPointNumberConstructorTests
+    public class BigFloatConstructorTests
     {
         [TestMethod]
         public void NullString_In_Constructor()

@@ -20,7 +20,7 @@ namespace net.NataliVol4ica.BignumArithmetics
             if (from.Sign < 0)
                 SwitchSign();
             DotPos = from.DotPos;
-            Fracial = from.Fracial;
+            Fractional = from.Fractional;
         }
         private BigFloat(string str, int sign)
         {
@@ -54,17 +54,20 @@ namespace net.NataliVol4ica.BignumArithmetics
             sign = RawString.Contains("-") ? -1 : 1;
             return substr;
         }
-        //this method returns the list reversed!
-        //[UNTESTED]
+
+        /// <summary>Сonverts BigNum into reversed digit list</summary>
+        /// <param name="desiredInt">int represening how many digits should integer part contain</param>
+        /// <param name="desiredFrac">int represening how many digits should fractional part contain</param>
+        /// <returns>List of digits</returns>
         public static List<int> BigFloatToIntList(BigFloat num, int desiredInt, int desiredFrac)
         {
             List<int> ret = new List<int>();
             int IntZeros, FracZeros;
 
             if (num is null)
-                return ret;
+                return null;
             IntZeros = Math.Max(num.Integer, desiredInt) - num.Integer;
-            FracZeros = Math.Max(num.Fracial, desiredFrac) - num.Fracial;
+            FracZeros = Math.Max(num.Fractional, desiredFrac) - num.Fractional;
             ret.AddRange(Enumerable.Repeat(0, FracZeros));
             for (int i = num.CleanString.Length - 1; i >= 0; i--)
                 if (num.CleanString[i] != '.')
@@ -72,7 +75,8 @@ namespace net.NataliVol4ica.BignumArithmetics
             ret.AddRange(Enumerable.Repeat(0, IntZeros));
             return ret;
         }
-        //[UNTESTED]
+        /// <summary>Normalizes reversed list of digits</summary>
+        /// <param name="digits">List of digits</param>
         public static void NormalizeList(List<int> digits)
         {
             int i;
@@ -91,7 +95,10 @@ namespace net.NataliVol4ica.BignumArithmetics
                 i++;
             }
         }
-        //[UNTESTED]
+        /// <summary>Converts digit list to string</summary>
+        /// <param name="digits">List of digits</param>
+        /// <param name="dotPos">Integer representing position of dot in string</param>
+        /// <returns>A string representing a number; null in case of invalid arguments</returns>
         public static string IntListToString(List<int> digits, int dotPos)
         {
             int i;
@@ -100,13 +107,15 @@ namespace net.NataliVol4ica.BignumArithmetics
 
             if (digits is null || digits.Count == 0)
                 return "";
+            if (dotPos < 0)
+                dotPos = 0;
             reverseDot = digits.Count - dotPos;
             for (i = digits.Count - 1; i >= reverseDot; i--)
                 sb.Append(ToChar(digits[i]));
-            if (i > 0)
+            if (i >= 0)
             {
                 sb.Append(".");
-                while (i > 0)
+                while (i >= 0)
                     sb.Append(ToChar(digits[i--]));
             }
             return sb.ToString();
@@ -186,7 +195,7 @@ namespace net.NataliVol4ica.BignumArithmetics
                 return DotPos;
             }
         }
-        public int Fracial
+        public int Fractional
         {
             get
             {

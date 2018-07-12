@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace net.NataliVol4ica.BignumArithmetics.Tests
 {
     [TestClass]
-    public class FixedPointNumberIntFracTests
+    public class BigFloatIntFracTests
     {
         [TestMethod]
         public void Zero()
@@ -12,7 +12,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
             BigFloat actual = BigFloat.CreateFromString("0");
 
             Assert.AreEqual(1, actual.Integer);
-            Assert.AreEqual(0, actual.Fracial);
+            Assert.AreEqual(0, actual.Fractional);
         }
         [TestMethod]
         public void Hundred()
@@ -20,7 +20,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
             BigFloat actual = BigFloat.CreateFromString("-100");
 
             Assert.AreEqual(3, actual.Integer);
-            Assert.AreEqual(0, actual.Fracial);
+            Assert.AreEqual(0, actual.Fractional);
         }
         [TestMethod]
         public void ZeroDot156()
@@ -28,7 +28,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
             BigFloat actual = BigFloat.CreateFromString("-0.156");
 
             Assert.AreEqual(1, actual.Integer);
-            Assert.AreEqual(3, actual.Fracial);
+            Assert.AreEqual(3, actual.Fractional);
         }
         [TestMethod]
         public void BigNumber()
@@ -36,7 +36,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
             BigFloat actual = BigFloat.CreateFromString("923742.42382");
 
             Assert.AreEqual(6, actual.Integer);
-            Assert.AreEqual(5, actual.Fracial);
+            Assert.AreEqual(5, actual.Fractional);
         }       
     }
 }

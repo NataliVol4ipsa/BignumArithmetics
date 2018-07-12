@@ -8,9 +8,8 @@ namespace net.NataliVol4ica.BignumArithmetics
     {
         static void Test()
         {
-            BigFloat actual = BigFloat.CreateFromString("-0.156");
-
-            Console.WriteLine("Int {0}, Frac {1}", actual.Integer, actual.Fracial);
+            var list = new List<int> { 7, 6, 5 };
+            string actual = BigFloat.IntListToString(list, 3);
         }
 
         public static int Main(string[] args)

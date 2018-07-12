@@ -70,11 +70,23 @@
     <Compile Include="BigNumber.Tests.cs" />
     <Compile Include="Main.Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FixedPointNumberConstructor.Tests.cs" />
-    <Compile Include="FixedPointNumberIntFracTests.cs" />
+    <Compile Include="BigFloat.Constructor.Tests.cs" />
+    <Compile Include="BigFloat.IntAndFrac.Tests.cs" />
+    <Compile Include="BigFloat.BigFloatToIntList.Test.cs" />
+    <Compile Include="BigFloat.NormalizeList.Tests.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="BigFloat.IntListToString.Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
