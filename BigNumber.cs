@@ -87,7 +87,7 @@ namespace BignumArithmetics
         /* === Overloading === */
         public override string ToString()
         {
-            return (Sign < 0 ? "-" : "") + this.CleanString;
+            return (Sign > 0 ? CleanString : "-" + CleanString);
         }
 
         /* === Properties === */

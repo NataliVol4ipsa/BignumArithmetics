@@ -16,7 +16,7 @@ namespace BignumArithmetics
         }
         public BigFloat(BigFloat from)
         {
-            CleanString = from.ToString();
+            CleanString = from.CleanString;
             if (from.Sign < 0)
                 SwitchSign();
             DotPos = from.DotPos;
@@ -144,8 +144,9 @@ namespace BignumArithmetics
         //no sign support
         public override BigNumber Sum(BigNumber op)
         {
+            //5 + -6 = 5 - -(-6) = 5 - 6
             if (Sign != op.Sign)
-                return Dif(-(BigFloat)op);
+                return Dif(-((BigFloat)op));
 
             BigFloat bfOp = (BigFloat)op;
             BigFloat ans;
@@ -176,12 +177,15 @@ namespace BignumArithmetics
                 return (-(BigFloat)op).Dif(-this);
             //+5 - +6 = 5 - 6
             //both operands are > 0 now
+            int sign = 1;
             BigFloat bfLeft = this;
             BigFloat bfRight = (BigFloat)op;
-            
-            if (bfLeft < bfRight)
-                Swap(ref bfLeft, ref bfRight);
 
+            if (bfLeft < bfRight)
+            {
+                sign = -sign;
+                Swap(ref bfLeft, ref bfRight);
+            }
             BigFloat ans;
             int desiredInt = Math.Max(bfLeft.Integer, bfRight.Integer);
             int desiredFrac = Math.Max(bfLeft.Fractional, bfRight.Fractional);
@@ -193,6 +197,8 @@ namespace BignumArithmetics
                 dif.Add(left[i] - right[i]);
             NormalizeList(dif);
             ans = CreateFromString(IntListToString(dif, desiredInt));
+            if (sign < 0)
+                ans.SwitchSign();
             return ans;
         }
         public override BigNumber Mul(BigNumber op)
@@ -240,13 +246,13 @@ namespace BignumArithmetics
 
         public static bool operator >(BigFloat left, BigFloat right)
         {
-            if (string.Compare(left.CleanString, right.CleanString) < 0)
+            if (string.Compare(left.CleanString, right.CleanString, StringComparison.Ordinal) > 0)
                 return true;
             return false;
         }
         public static bool operator <(BigFloat left, BigFloat right)
         {
-            if (string.Compare(left.CleanString, right.CleanString) > 0)
+            if (string.Compare(left.CleanString, right.CleanString, StringComparison.Ordinal) < 0)
                 return true;
             return false;
         }
