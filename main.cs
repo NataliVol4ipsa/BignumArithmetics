@@ -11,16 +11,16 @@ namespace BignumArithmetics
             BigFloat A = BigFloat.CreateFromString(left);
             BigFloat B = BigFloat.CreateFromString(right);
 
-            BigFloat C = A + B;
+            //BigFloat C = A + B;
             BigFloat D = A - B;
-            Console.WriteLine(C);
-            Console.WriteLine(sum);
+            //Console.WriteLine(C);
+            //Console.WriteLine(sum);
             Console.WriteLine(D);
             Console.WriteLine(dif);
         }
         static void Test()
         {
-            DoTesting("-5", "6", "1", "-11");
+            DoTesting("123.45", "45.678", "169.128", "77.772");
         }
 
         public static int Main(string[] args)

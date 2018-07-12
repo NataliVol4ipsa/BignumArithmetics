@@ -246,12 +246,20 @@ namespace BignumArithmetics
 
         public static bool operator >(BigFloat left, BigFloat right)
         {
+            if (left.Integer > right.Integer)
+                return true;
+            if (left.Integer < right.Integer)
+                return false;
             if (string.Compare(left.CleanString, right.CleanString, StringComparison.Ordinal) > 0)
                 return true;
             return false;
         }
         public static bool operator <(BigFloat left, BigFloat right)
         {
+            if (left.Integer > right.Integer)
+                return false;
+            if (left.Integer < right.Integer)
+                return true;
             if (string.Compare(left.CleanString, right.CleanString, StringComparison.Ordinal) < 0)
                 return true;
             return false;
