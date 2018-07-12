@@ -8,8 +8,12 @@ namespace net.NataliVol4ica.BignumArithmetics
     {
         static void Test()
         {
-            var list = new List<int> { 7, 6, 5 };
-            string actual = BigFloat.IntListToString(list, 3);
+            var A = BigFloat.CreateFromString("+123.45");
+            var B = BigFloat.CreateFromString("+00045.678");
+
+            BigFloat C = A + B;
+            Console.WriteLine(C);
+            Console.WriteLine(123.45 + 45.678);
         }
 
         public static int Main(string[] args)

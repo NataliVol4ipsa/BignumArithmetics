@@ -132,9 +132,20 @@ namespace net.NataliVol4ica.BignumArithmetics
         }
 
         /* === Parent Overrides === */
+        //no sign support
         public override BigNumber Sum(BigNumber op)
         {
-            return new BigFloat();
+            BigFloat bfOp = (BigFloat)op;
+            int desiredInt = Math.Max(Integer, bfOp.Integer);
+            int desiredFrac = Math.Max(Fractional, bfOp.Fractional);
+            var left = BigFloatToIntList(this, desiredInt, desiredFrac);
+            var right = BigFloatToIntList(bfOp, desiredInt, desiredFrac);
+            var sum = new List<int>(left.Count);
+
+            for (int i = 0; i < left.Count; i++)
+                sum.Add(left[i] + right[i]);
+            NormalizeList(sum);
+            return CreateFromString(IntListToString(sum, desiredInt));
         }
         public override BigNumber Dif(BigNumber op)
         {
@@ -156,6 +167,31 @@ namespace net.NataliVol4ica.BignumArithmetics
 
             ret.SwitchSign();
             return ret;
+        }
+
+        public static BigFloat operator +(BigFloat left, BigFloat right)
+        {
+            if (left is null || right is null)
+                return null;
+            return (BigFloat)left.Sum(right);
+        }
+        public static BigFloat operator -(BigFloat left, BigFloat right)
+        {
+            if (left is null || right is null)
+                return null;
+            return (BigFloat)left.Dif(right);
+        }
+        public static BigFloat operator *(BigFloat left, BigFloat right)
+        {
+            if (left is null || right is null)
+                return null;
+            return (BigFloat)left.Mul(right);
+        }
+        public static BigFloat operator /(BigFloat left, BigFloat right)
+        {
+            if (left is null || right is null)
+                return null;
+            return (BigFloat)left.Div(right);
         }
 
         /* === Variables === */
