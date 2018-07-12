@@ -111,6 +111,7 @@ namespace net.NataliVol4ica.BignumArithmetics
         /* === Variables === */
         protected string _cleanString = null;
         protected int _sign = 1;
+
         /* === Properties === */
         /// <summary>The CleanString property represents number without spaces, extra zeroes etc</summary>
         /// <value> The CleanString property gets/sets the value of the string field, _cleanString</value>
@@ -138,17 +139,6 @@ namespace net.NataliVol4ica.BignumArithmetics
                 _sign = value;
             }
         }
-
-        /*
-        protected List<int> Digits = new List<int>();
-        public int Size
-        {
-            get
-            {
-                return Digits.Count;
-            }
-        }*/
-
         /// <summary>The CleanStringRegEx property represents RegEx that is used in input parsing</summary>
         /// <value> The CleanString property gets the RegEx string</value>
         protected abstract string CleanStringRegEx

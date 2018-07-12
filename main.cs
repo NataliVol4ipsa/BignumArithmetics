@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+//totest: 29! = 8841761993739701954543616000000
 namespace net.NataliVol4ica.BignumArithmetics
 {
     public static class BignumArithmetics
@@ -16,14 +17,7 @@ namespace net.NataliVol4ica.BignumArithmetics
         {
             try
             {
-                List<int> test = new List<int>();
-                test.Add(1);
-                test.Add(2);
-                test.Add(3);
-                test.Add(4);
-                test.Add(5);
-                Console.WriteLine(test.ToString());
-                //Test();
+                Test();
             }
             catch (Exception e)
             {
@@ -34,14 +28,3 @@ namespace net.NataliVol4ica.BignumArithmetics
         }
     }
 }
-
-//totest 29! = 8841761993739701954543616000000
-
-//readonly????
-//create static class with swappers, converters?
-
-//Regex.Replace(RawString, @"\s+", "");  - removes ws-s
-
-//thoughts for abstract class
-//if gettype(a) != gettype(b) exception
-//else cast to relevant class object and call operator
