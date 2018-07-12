@@ -135,7 +135,11 @@ namespace net.NataliVol4ica.BignumArithmetics
         //no sign support
         public override BigNumber Sum(BigNumber op)
         {
+            if (Sign != op.Sign)
+                return (Dif(-(BigFloat)op));
+
             BigFloat bfOp = (BigFloat)op;
+            BigFloat ans;
             int desiredInt = Math.Max(Integer, bfOp.Integer);
             int desiredFrac = Math.Max(Fractional, bfOp.Fractional);
             var left = BigFloatToIntList(this, desiredInt, desiredFrac);
@@ -145,7 +149,10 @@ namespace net.NataliVol4ica.BignumArithmetics
             for (int i = 0; i < left.Count; i++)
                 sum.Add(left[i] + right[i]);
             NormalizeList(sum);
-            return CreateFromString(IntListToString(sum, desiredInt));
+            ans = CreateFromString(IntListToString(sum, desiredInt));
+            if (Sign < 0)
+                ans.SwitchSign();
+            return ans;
         }
         public override BigNumber Dif(BigNumber op)
         {
