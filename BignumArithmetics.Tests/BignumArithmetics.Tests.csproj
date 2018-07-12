@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{23DF90CE-2E85-471E-BC76-E3E4DB4618C1}</ProjectGuid>
+    <ProjectGuid>{11ACD228-4CFF-4A21-A8B9-E00932D6E01B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BignumberArithmetics.Tests</RootNamespace>

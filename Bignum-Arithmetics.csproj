@@ -57,7 +57,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BigFLoatExceptions.cs" />
     <Compile Include="BigNumber.cs" />
     <Compile Include="BigFloat.cs" />
     <Compile Include="InputParser.cs" />
