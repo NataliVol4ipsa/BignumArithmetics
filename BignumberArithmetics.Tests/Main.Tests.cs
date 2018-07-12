@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace net.NataliVol4ica.BignumArithmetics.Tests
+namespace BignumArithmetics.Tests
 {
     [TestClass]
     public class MainTests

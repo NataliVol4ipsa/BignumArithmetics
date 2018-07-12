@@ -2,7 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 
-namespace net.NataliVol4ica.BignumArithmetics
+namespace BignumArithmetics
 {
     class InputParser : IDisposable
     {

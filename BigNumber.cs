@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 //todo: force children to overload operators
 
-namespace net.NataliVol4ica.BignumArithmetics
+namespace BignumArithmetics
 {
     /// <summary>Abstract class for big numbers</summary>
     public abstract class BigNumber
@@ -90,36 +90,12 @@ namespace net.NataliVol4ica.BignumArithmetics
             return (Sign < 0 ? "-" : "") + this.CleanString;
         }
 
-        /* === Variables === */
-        private string _cleanString = null;
-        private int _sign = 1;
-
         /* === Properties === */
         /// <summary>The CleanString property represents number without spaces, extra zeroes etc</summary>
         /// <value> The CleanString property gets/sets the value of the string field, _cleanString</value>
-        public string CleanString
-        {
-            get
-            {
-                return _cleanString;
-            }
-            protected set
-            {
-                _cleanString = value;
-            }
-        }
+        public string CleanString { get; protected set; } = "0";
         /// <summary>The Sign property represents sign of the number</summary>
         /// <value> The CleanString property gets/sets the value of the int field, _sign</value>
-        public int Sign
-        {
-            get
-            {
-                return _sign;
-            }
-            private set
-            {
-                _sign = value;
-            }
-        }   
+        public int Sign { get; private set; } = 1;
     }
 }

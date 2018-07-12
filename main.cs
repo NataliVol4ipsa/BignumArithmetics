@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 //totest: 29! = 8841761993739701954543616000000
-namespace net.NataliVol4ica.BignumArithmetics
+namespace BignumArithmetics
 {
     public static class BignumArithmetics
     {
@@ -14,6 +14,15 @@ namespace net.NataliVol4ica.BignumArithmetics
             BigFloat C = A + B;
             Console.WriteLine(C);
             Console.WriteLine(123.45 + 45.678);
+
+            Console.WriteLine();
+
+            A = BigFloat.CreateFromString("+123.45");
+            B = BigFloat.CreateFromString("+00045.678");
+
+            C = A - B;
+            Console.WriteLine(C);
+            Console.WriteLine(123.45 - 45.678);
         }
 
         public static int Main(string[] args)

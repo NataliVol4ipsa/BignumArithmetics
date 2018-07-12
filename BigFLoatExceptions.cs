@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace net.NataliVol4ica.BignumArithmetics
+namespace BignumArithmetics
 {
     public class NumberFormatException : Exception
     {

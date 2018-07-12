@@ -6,7 +6,7 @@ using System.Linq;
 
 //todo: add constructor taking numeric types as parameter
 
-namespace net.NataliVol4ica.BignumArithmetics
+namespace BignumArithmetics
 {
     public class BigFloat : BigNumber
     {
@@ -37,7 +37,7 @@ namespace net.NataliVol4ica.BignumArithmetics
         {
             if (str is null ||
                 !Regex.IsMatch(str, validStringRegEx, RegexOptions.None))
-                return null;
+                return new BigFloat();
             str = CleanNumericString(str, out int sign);
             return new BigFloat(str, sign);
         }
@@ -85,8 +85,17 @@ namespace net.NataliVol4ica.BignumArithmetics
                 return;
             for (i = 0; i < digits.Count - 1; i++)
             {
-                digits[i + 1] += digits[i] / 10;
-                digits[i] %= 10;
+                if (digits[i] < 0)
+                {
+                    //if i + 1 >= Count then error
+                    digits[i] += 10;
+                    digits[i + 1]--;
+                }
+                else
+                {
+                    digits[i + 1] += digits[i] / 10;
+                    digits[i] %= 10;
+                }
             }
             while (digits[i] > 9)
             {
@@ -136,7 +145,7 @@ namespace net.NataliVol4ica.BignumArithmetics
         public override BigNumber Sum(BigNumber op)
         {
             if (Sign != op.Sign)
-                return (Dif(-(BigFloat)op));
+                return Dif(-(BigFloat)op);
 
             BigFloat bfOp = (BigFloat)op;
             BigFloat ans;
@@ -156,7 +165,35 @@ namespace net.NataliVol4ica.BignumArithmetics
         }
         public override BigNumber Dif(BigNumber op)
         {
-            return new BigFloat();
+            //+5 - -6 = 5 + 6
+            if (Sign > 0 && op.Sign < 0)
+                return Sum(-(BigFloat)op);
+            //-5 - +6 = -(5 + 6)
+            if (Sign < 0 && op.Sign > 0)
+                return -(BigFloat)op.Sum(-this);
+            //-5 - -6 = -5 + 6 = 6 - 5
+            if (Sign < 0 && op.Sign < 0)
+                return (-(BigFloat)op).Dif(-this);
+            //+5 - +6 = 5 - 6
+            //both operands are > 0 now
+            BigFloat bfLeft = this;
+            BigFloat bfRight = (BigFloat)op;
+            
+            if (bfLeft < bfRight)
+                Swap(ref bfLeft, ref bfRight);
+
+            BigFloat ans;
+            int desiredInt = Math.Max(bfLeft.Integer, bfRight.Integer);
+            int desiredFrac = Math.Max(bfLeft.Fractional, bfRight.Fractional);
+            var left = BigFloatToIntList(bfLeft, desiredInt, desiredFrac);
+            var right = BigFloatToIntList(bfRight, desiredInt, desiredFrac);
+            var dif = new List<int>(left.Count);
+
+            for (int i = 0; i < left.Count; i++)
+                dif.Add(left[i] - right[i]);
+            NormalizeList(dif);
+            ans = CreateFromString(IntListToString(dif, desiredInt));
+            return ans;
         }
         public override BigNumber Mul(BigNumber op)
         {
@@ -201,16 +238,29 @@ namespace net.NataliVol4ica.BignumArithmetics
             return (BigFloat)left.Div(right);
         }
 
+        public static bool operator >(BigFloat left, BigFloat right)
+        {
+            if (string.Compare(left.CleanString, right.CleanString) < 0)
+                return true;
+            return false;
+        }
+        public static bool operator <(BigFloat left, BigFloat right)
+        {
+            if (string.Compare(left.CleanString, right.CleanString) > 0)
+                return true;
+            return false;
+        }
+
         /* === Variables === */
-        public static readonly string validStringRegEx = @"^\s*[+-]?[0-9]+(\.[0-9]+)?\s*$";
-        public static readonly string cleanStringRegEx = @"([1-9]+[0-9]*(\.[0-9]*[1-9]+)?|0\.[0-9]*[1-9]+)";
+        private static readonly string validStringRegEx = @"^\s*[+-]?[0-9]+(\.[0-9]+)?\s*$";
+        private static readonly string cleanStringRegEx = @"([1-9]+[0-9]*(\.[0-9]*[1-9]+)?|0\.[0-9]*[1-9]+)";
 
         private volatile int _dotPos = 0;
         private volatile int _fracLen = -1;
 
         /* === Mutexes === */
-        private Object dotPosMutex = new Object();
-        private Object fracLenMutex = new Object();
+        private readonly Object dotPosMutex = new Object();
+        private readonly Object fracLenMutex = new Object();
 
         /* === Properties === */
         public int DotPos

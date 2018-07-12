@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace net.NataliVol4ica.BignumArithmetics.Tests
+namespace BignumArithmetics.Tests
 {
     [TestClass]
     public class BigFloatConstructorTests
@@ -10,35 +10,45 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         public void NullString_In_Constructor()
         {
             BigFloat empty = BigFloat.CreateFromString(null);
-            Assert.AreEqual(null, empty);
+
+            Assert.AreEqual("0", empty.ToString());
+            Assert.AreEqual(1, empty.Sign);
         }
 
         [TestMethod]
         public void NumberWithoutInteger_In_Constructor()
         {
             BigFloat actual = BigFloat.CreateFromString(" +.5");
-            Assert.AreEqual(null, actual);
+
+            Assert.AreEqual("0", actual.ToString());
+            Assert.AreEqual(1, actual.Sign);
         }
 
         [TestMethod]
         public void NumberWithDotWithoutFrac_In_Constructor()
         {
             BigFloat actual = BigFloat.CreateFromString("1234.");
-            Assert.AreEqual(null, actual);
+
+            Assert.AreEqual("0", actual.ToString());
+            Assert.AreEqual(1, actual.Sign);
         }
 
         [TestMethod]
         public void NumWithTwoDots_In_Constructor()
         {
             BigFloat actual = BigFloat.CreateFromString("1.14.5");
-            Assert.AreEqual(null, actual);
+
+            Assert.AreEqual("0", actual.ToString());
+            Assert.AreEqual(1, actual.Sign);
         }
 
         [TestMethod]
         public void NumberWithAlpha_In_Constructor()
         {
             BigFloat actual = BigFloat.CreateFromString("  1a12.3 ");
-            Assert.AreEqual(null, actual);
+
+            Assert.AreEqual("0", actual.ToString());
+            Assert.AreEqual(1, actual.Sign);
         }
 
         [TestMethod]
