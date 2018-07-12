@@ -250,7 +250,7 @@ namespace BignumArithmetics
                 return true;
             if (left.Integer < right.Integer)
                 return false;
-            if (string.Compare(left.CleanString, right.CleanString, StringComparison.Ordinal) > 0)
+            if (string.Compare(left.CleanString, right.CleanString) > 0)
                 return true;
             return false;
         }
@@ -260,7 +260,7 @@ namespace BignumArithmetics
                 return false;
             if (left.Integer < right.Integer)
                 return true;
-            if (string.Compare(left.CleanString, right.CleanString, StringComparison.Ordinal) < 0)
+            if (string.Compare(left.CleanString, right.CleanString) < 0)
                 return true;
             return false;
         }

@@ -45,7 +45,12 @@ namespace BignumArithmetics.Tests
         [TestMethod]
         public void m3D1_p10D005()
         {
-            DoTesting("-3.1", "10.005", "6.095", "-13.105");
+            DoTesting("-3.1", "10.005", "6.905", "-13.105");
+        }
+        [TestMethod]
+        public void m10D005_m3D1()
+        {
+            DoTesting("-10.005", "-3.1", "-13.105", "-6.905");
         }
     }
 }
