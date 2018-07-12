@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Threading;
+using System.Linq;
 
 #pragma warning disable CS0660 // Тип определяет оператор == или оператор !=, но не переопределяет Object.Equals(object o)
 #pragma warning disable CS0661 // Тип определяет оператор == или оператор !=, но не переопределяет Object.GetHashCode()
@@ -22,15 +23,81 @@ namespace net.NataliVol4ica.BignumArithmetics
             : base(message, inner) { }
     }
 
-    public class FixedPointNumber : BigNumber
+    public class BigFloat : BigNumber
     {
         //todo: dot is better as -1 or at the end??
-        public FixedPointNumber(string str = "0")
+        public BigFloat(string str = "0")
         {
             if (str is null ||
                 !Regex.IsMatch(str, validStringRegEx, RegexOptions.None))
-                throw new NumberFormatException("Cannot create FixedPointNumber of \"" + str + "\"");
+                throw new NumberFormatException("Cannot create BigFloat of \"" + str + "\"");
             CleanString = CleanNumericString(str, ref _sign);
+        }
+        public BigFloat(BigFloat from)
+        {
+            _cleanString = from.ToString();
+            _sign = from.Sign;
+            _dotPos = from.DotPos;
+            _fracLen = from.Fracial;
+        }
+
+        /* === Static Methods === */
+        //this method returns the list reversed!
+        //[UNTESTED]
+        public static List<int> BigFloatToIntList(BigFloat num, int DesiredInt, int DesiredFrac)
+        {
+            List<int> ret = new List<int>();
+            int IntZeros, FracZeros;
+
+            if (num is null)
+                return ret;
+            IntZeros = Math.Max(num.Integer, DesiredInt) - num.Integer;
+            FracZeros = Math.Max(num.Fracial, DesiredFrac) - num.Fracial;
+            ret.AddRange(Enumerable.Repeat(0, FracZeros));
+            for (int i = num.CleanString.Length - 1; i >= 0; i--)
+                if (num.CleanString[i] != '.')
+                    ret.Add(ToDigit(num.CleanString[i]));
+            ret.AddRange(Enumerable.Repeat(0, IntZeros));
+            return ret;
+        }
+        //[UNTESTED]
+        public static void NormalizeList(List<int> digits)
+        {
+            int i;
+
+            if (digits is null || digits.Count == 0)
+                return;
+            for (i = 0; i < digits.Count - 1; i++)
+            {
+                digits[i + 1] += digits[i] / 10;
+                digits[i] %= 10;
+            }
+            while (digits[i] > 9)
+            {
+                digits.Add(digits[i] / 10);
+                digits[i] %= 10;
+                i++;
+            }
+        }
+        //[UNTESTED]
+        public static string IntListToString(List<int> digits, int DotPos)
+        {
+            int i;
+            int reverseDot;
+            StringBuilder sb = new StringBuilder();
+
+            if (digits is null || digits.Count == 0)
+                return "";
+            reverseDot = digits.Count - DotPos;
+            for (i = digits.Count - 1; i >= reverseDot; i--)
+                sb.Append(ToChar(digits[i]));
+            if (i > 0)
+            {
+                sb.Append(".");
+                while (i > 0)
+                    sb.Append(ToChar(digits[i--]));
+            }
+            return sb.ToString();
         }
 
         /* === Private Methods === */
@@ -46,22 +113,29 @@ namespace net.NataliVol4ica.BignumArithmetics
         /* === Parent Overrides === */
         public override BigNumber Sum(BigNumber op)
         {
-            return new FixedPointNumber();
+            return new BigFloat();
         }
         public override BigNumber Dif(BigNumber op)
         {
-            return new FixedPointNumber();
+            return new BigFloat();
         }
         public override BigNumber Mul(BigNumber op)
         {
-            return new FixedPointNumber();
+            return new BigFloat();
         }
         public override BigNumber Div(BigNumber op)
         {
-            return new FixedPointNumber();
+            return new BigFloat();
         }
-        
-        /* === Operators === */        
+
+        /* === Operators === */
+        public static BigFloat operator -(BigFloat num)
+        {
+            BigFloat ret = new BigFloat(num);
+
+            ret.Sign = -ret.Sign;
+            return ret;
+        }
 
         /* === Variables === */
         public static readonly string validStringRegEx = @"^\s*[+-]?[0-9]+(\.[0-9]+)?\s*$";
@@ -126,94 +200,14 @@ namespace net.NataliVol4ica.BignumArithmetics
 
 //namespace net.NataliVol4ica.BignumArithmetics
 //{
-//   
-//        //todo: dot is better as -1 or at the end??
-//        /// <exception cref="BigNumberException.IncorrectNumberFormatException" />
-//        public FixedPointNumber(string str = "0")
-//        {
-//            //add zeros cutting
-//            if (str == null || str == "")
-//                throw new IncorrectNumberFormatException("FixedPointNumber cannot be created from an empty string");
-//            this.StringToDigits(str.Trim());
-//            this.Normalize();
-//        }
-//        public FixedPointNumber(List<int> digits, int Dot = -1)
-//        {
-//            this.Dot = Dot;
-//            this.Digits = digits;
-//            this.Digits.Reverse();
-//            this.Normalize();
-//        }
-
-//        /* === Methods === */
-//        //Abs seems unneeded
-//        public static FixedPointNumber Abs(FixedPointNumber num)
-//        {
-//            if (num.Sign > 0)
-//                return num;
-//            return -num;
-//        }
-//        public int GetIntLen()
-//        {
-//            if (this.Dot < 0)
-//                return this.Digits.Count;
-//            return this.Dot;
-//        }
-//        public int GetFracLen()
-//        {
-//            if (this.Dot < 0)
-//                return 0;
-//            return this.Digits.Count - this.Dot;
-//        }
+// 
 //        public FixedPointNumber Copy()
 //        {
 //            List<int> newList = new List<int>(this.Digits);
 //            newList.Reverse();
 //            return new FixedPointNumber(newList, this.Dot);
 //        }
-//        private void StringToDigits(string str)
-//        {
-//            int DotPos;
-//            int i = 0;
-
-//            Digits = new List<int>();
-//            this.Sign = 1;
-//            while (i < str.Length && (str[i] == '+' || str[i] == '-'))
-//            {
-//                if (str[i] == '-')
-//                    this.Sign = -this.Sign;
-//                i++;
-//            }
-//            str = str.Remove(0, i);
-//            i = 0;
-//           //todo: if (i == str.Length) exception
-//            DotPos = str.IndexOf(".");
-//            this.Dot = -1;
-//            if (DotPos < 0)
-//                DotPos = str.Length;
-//            //Converting the integer part
-//            for (; i < DotPos; i++)
-//                if (Char.IsDigit(str[i]))
-//                    Digits.Add((int)Char.GetNumericValue(str[i]));
-//                else
-//                    throw new IncorrectNumberFormatException("Number can only contain digits 0..9 and optional delimiter '.' or ','.");
-//            //Converting the frac part
-//            for (; i < str.Length; i++)
-//                if (Char.IsDigit(str[i]))
-//                    Digits.Add((int)Char.GetNumericValue(str[i]));
-//                else if (str[i] == '.' || str[i] == ',')
-//                {
-//                    if (Digits.Count == 0)
-//                        throw new IncorrectNumberFormatException("Number cannot begin with dot. Use \"0.*\" format.");
-//                    if (this.Dot > 0)
-//                        throw new IncorrectNumberFormatException("Number cannot have more than one delimiter");
-//                    this.Dot = i;
-//                }
-//                else
-//                    throw new IncorrectNumberFormatException("Number can only contain digits 0..9 and optional delimiter '.' or ','.");
-//            //todo: if dot and no digits - set dot as null
-//            Digits.Reverse();
-//        }
+// 
 //        private void Normalize()
 //        {
 //            int maxFrac = this.Dot;
@@ -270,41 +264,8 @@ namespace net.NataliVol4ica.BignumArithmetics
 //                C = -BigSum.Count(B, A);
 //            return C;
 //        }
-//        public override BigNumber Mul(BigNumber op)
-//        {
-//            FixedPointNumber num = (FixedPointNumber)op;
-//            return BigMul.Count(this, num);
-//        }
-//        public override BigNumber Div(BigNumber op)
-//        {
-//            FixedPointNumber num = (FixedPointNumber)op;
-//            return BigDiv.Count(this, num);
-//        }
-
-//        /* === Overloading === */
-//        public override string ToString()
-//        {
-//            StringBuilder sb;
-//            int Dot;
-
-//            if (this.RawString != null)
-//                return this.RawString;
-//            sb = new StringBuilder();
-//            Dot = this.Dot < 0 ? 0 : Digits.Count - this.Dot;
-//            for (int i = Digits.Count - 1; i >= Dot; i--)
-//                sb.Append(FixedPointNumber.ToChar(Digits[i]));
-//            if (this.Dot > 0 && this.Dot < Digits.Count)
-//                sb.Append(".");
-//            for (int i = Dot - 1; i >= 0; i--)
-//                sb.Append(FixedPointNumber.ToChar(Digits[i]));
-//            this.RawString = sb.ToString();
-//            return this.RawString;
-//        }
-//        //unar
-//        public static FixedPointNumber operator -(FixedPointNumber num)
-//        {
-//            return (new FixedPointNumber("-" + num.ToString()));
-//        }
+// 
+//        
 //        //binary
 //        public static bool operator ==(FixedPointNumber cmpA, FixedPointNumber cmpB)
 //        {

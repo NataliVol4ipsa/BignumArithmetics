@@ -9,7 +9,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         [TestMethod]
         public void Zero()
         {
-            FixedPointNumber actual = new FixedPointNumber("0");
+            BigFloat actual = new BigFloat("0");
 
             Assert.AreEqual(1, actual.Integer);
             Assert.AreEqual(0, actual.Fracial);
@@ -17,7 +17,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         [TestMethod]
         public void Hundred()
         {
-            FixedPointNumber actual = new FixedPointNumber("-100");
+            BigFloat actual = new BigFloat("-100");
 
             Assert.AreEqual(3, actual.Integer);
             Assert.AreEqual(0, actual.Fracial);
@@ -25,7 +25,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         [TestMethod]
         public void ZeroDot156()
         {
-            FixedPointNumber actual = new FixedPointNumber("-0.156");
+            BigFloat actual = new BigFloat("-0.156");
 
             Assert.AreEqual(1, actual.Integer);
             Assert.AreEqual(3, actual.Fracial);
@@ -33,7 +33,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         [TestMethod]
         public void BigNumber()
         {
-            FixedPointNumber actual = new FixedPointNumber("923742.42382");
+            BigFloat actual = new BigFloat("923742.42382");
 
             Assert.AreEqual(6, actual.Integer);
             Assert.AreEqual(5, actual.Fracial);

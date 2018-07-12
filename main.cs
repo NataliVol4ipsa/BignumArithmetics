@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace net.NataliVol4ica.BignumArithmetics
 {
@@ -6,7 +7,7 @@ namespace net.NataliVol4ica.BignumArithmetics
     {
         static void Test()
         {
-            FixedPointNumber actual = new FixedPointNumber("-0.156");
+            BigFloat actual = new BigFloat("-0.156");
 
             Console.WriteLine("Int {0}, Frac {1}", actual.Integer, actual.Fracial);
         }
@@ -15,7 +16,14 @@ namespace net.NataliVol4ica.BignumArithmetics
         {
             try
             {
-                Test();
+                List<int> test = new List<int>();
+                test.Add(1);
+                test.Add(2);
+                test.Add(3);
+                test.Add(4);
+                test.Add(5);
+                Console.WriteLine(test.ToString());
+                //Test();
             }
             catch (Exception e)
             {

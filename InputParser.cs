@@ -6,10 +6,10 @@ namespace net.NataliVol4ica.BignumArithmetics
 {
     class InputParser : IDisposable
     {
-        public InputParser(out List<FixedPointNumber> Numbers, string FileName = null)
+        public InputParser(out List<BigFloat> Numbers, string FileName = null)
         {
             this.FileName = FileName;
-            this.Numbers = new List<FixedPointNumber>();
+            this.Numbers = new List<BigFloat>();
             Numbers = this.Numbers;
         }
 
@@ -17,14 +17,14 @@ namespace net.NataliVol4ica.BignumArithmetics
         {
             if (FileName == null)
             {
-                this.Numbers.Add(new FixedPointNumber(Console.ReadLine()));
-                this.Numbers.Add(new FixedPointNumber(Console.ReadLine()));
+                this.Numbers.Add(new BigFloat(Console.ReadLine()));
+                this.Numbers.Add(new BigFloat(Console.ReadLine()));
             }
             else
             {
                 SR = new StreamReader(FileName);
-                this.Numbers.Add(new FixedPointNumber(SR.ReadLine()));
-                this.Numbers.Add(new FixedPointNumber(SR.ReadLine()));
+                this.Numbers.Add(new BigFloat(SR.ReadLine()));
+                this.Numbers.Add(new BigFloat(SR.ReadLine()));
             }
         }
 
@@ -36,6 +36,6 @@ namespace net.NataliVol4ica.BignumArithmetics
 
         private string FileName;
         private StreamReader SR;
-        private List<FixedPointNumber> Numbers;
+        private List<BigFloat> Numbers;
     }
 }

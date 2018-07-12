@@ -11,7 +11,7 @@ namespace net.NataliVol4ica.BignumArithmetics.Tests
         {
             StringBuilder sb = new StringBuilder();
             for (int i = -2; i < 18; i++)
-                sb.Append(FixedPointNumber.ToChar(i));
+                sb.Append(BigFloat.ToChar(i));
             Assert.AreEqual("000123456789abcdef00", sb.ToString());
         }
         [TestMethod]

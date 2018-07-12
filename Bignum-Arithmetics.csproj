@@ -58,8 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BigNumber.cs" />
-    <Compile Include="BigSum.cs" />
-    <Compile Include="FixedPointNumber.cs" />
+    <Compile Include="BigFloat.cs" />
     <Compile Include="InputParser.cs" />
     <Compile Include="main.cs" />
   </ItemGroup>

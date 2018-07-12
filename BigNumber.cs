@@ -111,8 +111,6 @@ namespace net.NataliVol4ica.BignumArithmetics
         /* === Variables === */
         protected string _cleanString = null;
         protected int _sign = 1;
-
-        private Object sizeMutex = new Object();
         /* === Properties === */
         /// <summary>The CleanString property represents number without spaces, extra zeroes etc</summary>
         /// <value> The CleanString property gets/sets the value of the string field, _cleanString</value>
@@ -135,7 +133,7 @@ namespace net.NataliVol4ica.BignumArithmetics
             {
                 return _sign;
             }
-            protected set
+            set
             {
                 _sign = value;
             }
