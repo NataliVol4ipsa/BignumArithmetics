@@ -87,7 +87,7 @@ namespace BignumArithmetics
             {
                 if (digits[i] < 0)
                 {
-                    //if i + 1 >= Count then error
+                    //todo: if i + 1 >= Count then error
                     digits[i] += 10;
                     digits[i + 1]--;
                 }
@@ -144,62 +144,61 @@ namespace BignumArithmetics
         //no sign support
         public override BigNumber Sum(BigNumber op)
         {
+            BigFloat bfLeft = this;
+            BigFloat bfRight = (BigFloat)op;
+            BigFloat bfAns;
+
             //5 + -6 = 5 - -(-6) = 5 - 6
-            if (Sign != op.Sign)
-                return Dif(-((BigFloat)op));
+            if (bfLeft.Sign != bfRight.Sign)
+                return bfLeft.Dif(-bfRight);
+            
+            int desiredInt = Math.Max(Integer, bfRight.Integer);
+            int desiredFrac = Math.Max(Fractional, bfRight.Fractional);
+            var leftList = BigFloatToIntList(this, desiredInt, desiredFrac);
+            var rightList = BigFloatToIntList(bfRight, desiredInt, desiredFrac);
+            var resultList = new List<int>(leftList.Count);
 
-            BigFloat bfOp = (BigFloat)op;
-            BigFloat ans;
-            int desiredInt = Math.Max(Integer, bfOp.Integer);
-            int desiredFrac = Math.Max(Fractional, bfOp.Fractional);
-            var left = BigFloatToIntList(this, desiredInt, desiredFrac);
-            var right = BigFloatToIntList(bfOp, desiredInt, desiredFrac);
-            var sum = new List<int>(left.Count);
-
-            for (int i = 0; i < left.Count; i++)
-                sum.Add(left[i] + right[i]);
-            NormalizeList(sum);
-            ans = CreateFromString(IntListToString(sum, sum.Count - desiredFrac));
+            for (int i = 0; i < leftList.Count; i++)
+                resultList.Add(leftList[i] + rightList[i]);
+            NormalizeList(resultList);
+            bfAns = CreateFromString(IntListToString(resultList, resultList.Count - desiredFrac));
             if (Sign < 0)
-                ans.SwitchSign();
-            return ans;
+                bfAns.SwitchSign();
+            return bfAns;
         }
         public override BigNumber Dif(BigNumber op)
         {
-            //+5 - -6 = 5 + 6
-            if (Sign > 0 && op.Sign < 0)
-                return Sum(-(BigFloat)op);
-            //-5 - +6 = -(5 + 6)
-            if (Sign < 0 && op.Sign > 0)
-                return -(BigFloat)op.Sum(-this);
-            //-5 - -6 = -5 + 6 = 6 - 5
-            if (Sign < 0 && op.Sign < 0)
-                return (-(BigFloat)op).Dif(-this);
-            //+5 - +6 = 5 - 6
-            //both operands are > 0 now
-            int sign = 1;
             BigFloat bfLeft = this;
             BigFloat bfRight = (BigFloat)op;
+            BigFloat bfAns;
+            
+            if (bfLeft.Sign > 0 && bfRight.Sign < 0)
+                return bfLeft.Sum(-bfRight);
+            if (bfLeft.Sign < 0 && bfRight.Sign > 0)
+                return -(BigFloat)bfRight.Sum(-bfLeft);
+            if (bfLeft.Sign < 0 && bfRight.Sign < 0)
+                return (-bfRight).Dif(-bfLeft);
+            //both operands are > 0 here
+            int sign = 1;
 
             if (bfLeft < bfRight)
             {
                 sign = -sign;
                 Swap(ref bfLeft, ref bfRight);
             }
-            BigFloat ans;
             int desiredInt = Math.Max(bfLeft.Integer, bfRight.Integer);
             int desiredFrac = Math.Max(bfLeft.Fractional, bfRight.Fractional);
-            var left = BigFloatToIntList(bfLeft, desiredInt, desiredFrac);
-            var right = BigFloatToIntList(bfRight, desiredInt, desiredFrac);
-            var dif = new List<int>(left.Count);
+            var leftList = BigFloatToIntList(bfLeft, desiredInt, desiredFrac);
+            var rightList = BigFloatToIntList(bfRight, desiredInt, desiredFrac);
+            var resultList = new List<int>(leftList.Count);
 
-            for (int i = 0; i < left.Count; i++)
-                dif.Add(left[i] - right[i]);
-            NormalizeList(dif);
-            ans = CreateFromString(IntListToString(dif, dif.Count - desiredFrac));
+            for (int i = 0; i < leftList.Count; i++)
+                resultList.Add(leftList[i] - rightList[i]);
+            NormalizeList(resultList);
+            bfAns = CreateFromString(IntListToString(resultList, resultList.Count - desiredFrac));
             if (sign < 0)
-                ans.SwitchSign();
-            return ans;
+                bfAns.SwitchSign();
+            return bfAns;
         }
         public override BigNumber Mul(BigNumber op)
         {
