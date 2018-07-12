@@ -5,9 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace net.NataliVol4ica.BignumArithmetics
 {
-    /// <summary>
-    /// Abstract class for big numbers
-    /// </summary>
+    /// <summary>Abstract class for big numbers</summary>
     public abstract class BigNumber
     {
         /* === Abstarct Methods === */
@@ -17,9 +15,7 @@ namespace net.NataliVol4ica.BignumArithmetics
         public abstract BigNumber Div(BigNumber op);
 
         /* === Static Methods === */
-        /// <summary>
-        /// Converts numbers into matching char symbols
-        /// </summary>
+        /// <summary>Converts numbers into matching char symbols</summary>
         /// <param name="digit">Number to be converted. Must be in [0..15] range</param>
         /// <returns>A matching char; '0' if digit does not match limits</returns>
         public static char ToChar(int digit)
@@ -30,11 +26,9 @@ namespace net.NataliVol4ica.BignumArithmetics
                 return Convert.ToChar('a' + digit - 10);
             return '0';
         }
-        /// <summary>
-        /// Converts [0..9a..dA..D] characters to matching number
-        /// </summary>
-        /// <param name="c">Character to be converted</param>
-        /// <returns>A matching number; -1 if c does not match limits.</returns>
+        /// <summary>Converts characters to matching number</summary>
+        /// <param name="c">Character to be converted. Must consist of [0..9a..dA..D]</param>
+        /// <returns>A matching number; -1 if parameter does not match limits.</returns>
         public static int ToDigit(char c)
         {
             if (Char.IsDigit(c))
@@ -47,17 +41,15 @@ namespace net.NataliVol4ica.BignumArithmetics
             }
             return -1;
         }
-        /// <summary>
-        /// Swaps two objects of type T
-        /// </summary>
+        /// <summary>Swaps two objects of type T</summary>
         /// <typeparam name="T">Any type</typeparam>
-        /// <param name="A">First parameter to swap</param>
-        /// <param name="B">Second parameter to swap</param>
-        public static void Swap<T>(ref T A, ref T B)
+        /// <param name="left">First parameter to swap</param>
+        /// <param name="right">Second parameter to swap</param>
+        public static void Swap<T>(ref T left, ref T right)
         {
-            T buf = A;
-            A = B;
-            B = buf;
+            T buf = left;
+            left = right;
+            right = buf;
         }
        
         /* === Public Methods === */
@@ -128,13 +120,6 @@ namespace net.NataliVol4ica.BignumArithmetics
             {
                 _sign = value;
             }
-        }
-        /*
-        /// <summary>The CleanStringRegEx property represents RegEx that is used in input parsing</summary>
-        /// <value> The CleanString property gets the RegEx string</value>
-        protected abstract string CleanStringRegEx
-        {
-            get;
-        }*/
+        }   
     }
 }

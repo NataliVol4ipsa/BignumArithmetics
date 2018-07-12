@@ -4,11 +4,12 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
 
+//todo: add constructor taking numeric types as parameter
+
 namespace net.NataliVol4ica.BignumArithmetics
 {
     public class BigFloat : BigNumber
     {
-        //todo: add constructor taking as parameter numeric types
         public BigFloat()
         {
             CleanString = "0";
@@ -21,7 +22,6 @@ namespace net.NataliVol4ica.BignumArithmetics
             DotPos = from.DotPos;
             Fracial = from.Fracial;
         }
-        //supersafe constructor
         private BigFloat(string str, int sign)
         {
             CleanString = str;
@@ -29,8 +29,10 @@ namespace net.NataliVol4ica.BignumArithmetics
                 SwitchSign();
         }
 
-        /* === Static Methods === */       
-        //factory method
+        /* === Static Methods === */
+        /// <summary>Fabric thar returns an instance of BigFloat created of string</summary>
+        /// <param name="str">String that represents a number</param>
+        /// <returns>An instance of BigFloat. null if parameter is invalid</returns>
         public static BigFloat CreateFromString(string str)
         {
             if (str is null ||
@@ -39,7 +41,6 @@ namespace net.NataliVol4ica.BignumArithmetics
             str = CleanNumericString(str, out int sign);
             return new BigFloat(str, sign);
         }
-        //cleans the string
         private static string CleanNumericString(string RawString, out int sign)
         {
             string substr;
@@ -178,14 +179,6 @@ namespace net.NataliVol4ica.BignumArithmetics
                 _dotPos = value;
             }
         }
-        /*protected override string CleanStringRegEx
-        {
-            get
-            {
-                return cleanStringRegEx;
-            }
-        }
-       */
         public int Integer
         {
             get
