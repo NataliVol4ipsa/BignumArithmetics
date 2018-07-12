@@ -159,7 +159,7 @@ namespace BignumArithmetics
             for (int i = 0; i < left.Count; i++)
                 sum.Add(left[i] + right[i]);
             NormalizeList(sum);
-            ans = CreateFromString(IntListToString(sum, desiredInt));
+            ans = CreateFromString(IntListToString(sum, sum.Count - desiredFrac));
             if (Sign < 0)
                 ans.SwitchSign();
             return ans;
@@ -196,7 +196,7 @@ namespace BignumArithmetics
             for (int i = 0; i < left.Count; i++)
                 dif.Add(left[i] - right[i]);
             NormalizeList(dif);
-            ans = CreateFromString(IntListToString(dif, desiredInt));
+            ans = CreateFromString(IntListToString(dif, dif.Count - desiredFrac));
             if (sign < 0)
                 ans.SwitchSign();
             return ans;

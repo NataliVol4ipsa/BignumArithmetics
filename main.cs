@@ -12,15 +12,15 @@ namespace BignumArithmetics
             BigFloat B = BigFloat.CreateFromString(right);
 
             BigFloat C = A + B;
-           // BigFloat D = A - B;
+            BigFloat D = A - B;
             Console.WriteLine(C);
             Console.WriteLine(sum);
-            //Console.WriteLine(D);
-            //Console.WriteLine(dif);
+            Console.WriteLine(D);
+            Console.WriteLine(dif);
         }
         static void Test()
         {
-            DoTesting("0", "-5", "-5", "5");
+            DoTesting("-5", "6", "1", "-11");
         }
 
         public static int Main(string[] args)
