@@ -13,9 +13,11 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [DONE] 2.0. Implement long sum
 
-<b>[CURRENT]</b> 2.1. Implement long dif. Remember to proceed negative and zero numbers.
+[DONE] 2.1. Implement long dif. Remember to proceed negative and zero numbers.
 
 [DONE] 3.0. Implement basic error management using exception system + advanced input parsing.
+
+<b>[CURRENT]</b> 3.1. Write more tests
 
 [AWAITING] 4.0. Implement long mul. Try these methods: classic, Karatsuba, Schönhage–Strassen, Fürer’s algo
 
