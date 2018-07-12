@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 //todo: force children to overload operators
@@ -61,45 +60,36 @@ namespace net.NataliVol4ica.BignumArithmetics
             B = buf;
         }
        
-        /* === Protected Methods === */
-        protected string CleanNumericString(string RawString, ref int sign)
+        /* === Public Methods === */
+        public void SwitchSign()
         {
-            string substr;
-
-            substr = Regex.Match(RawString, CleanStringRegEx).Value;
-            if (substr == "")
-            {
-                sign = 1;
-                return "0";
-            }
-             sign = RawString.Contains("-") ? -1 : 1;
-             return substr;
+            Sign = -Sign;
         }
 
         /* === Operators === */
-        public static BigNumber operator +(BigNumber A, BigNumber B)
+        public static BigNumber operator +(BigNumber left, BigNumber right)
         {
-            if (A is null || B is null)
+            if (left is null || right is null)
                 return null;
-            return A.Sum(B);
+            return left.Sum(right);
         }
-        public static BigNumber operator -(BigNumber A, BigNumber B)
+        public static BigNumber operator -(BigNumber left, BigNumber right)
         {
-            if (A is null || B is null)
+            if (left is null || right is null)
                 return null;
-            return A.Dif(B);
+            return left.Dif(right);
         }
-        public static BigNumber operator *(BigNumber A, BigNumber B)
+        public static BigNumber operator *(BigNumber left, BigNumber right)
         {
-            if (A is null || B is null)
+            if (left is null || right is null)
                 return null;
-            return A.Mul(B);
+            return left.Mul(right);
         }
-        public static BigNumber operator /(BigNumber A, BigNumber B)
+        public static BigNumber operator /(BigNumber left, BigNumber right)
         {
-            if (A is null || B is null)
+            if (left is null || right is null)
                 return null;
-            return A.Div(B);
+            return left.Div(right);
         }
 
         /* === Overloading === */
@@ -109,8 +99,8 @@ namespace net.NataliVol4ica.BignumArithmetics
         }
 
         /* === Variables === */
-        protected string _cleanString = null;
-        protected int _sign = 1;
+        private string _cleanString = null;
+        private int _sign = 1;
 
         /* === Properties === */
         /// <summary>The CleanString property represents number without spaces, extra zeroes etc</summary>
@@ -134,16 +124,17 @@ namespace net.NataliVol4ica.BignumArithmetics
             {
                 return _sign;
             }
-            set
+            private set
             {
                 _sign = value;
             }
         }
+        /*
         /// <summary>The CleanStringRegEx property represents RegEx that is used in input parsing</summary>
         /// <value> The CleanString property gets the RegEx string</value>
         protected abstract string CleanStringRegEx
         {
             get;
-        }
+        }*/
     }
 }

@@ -8,33 +8,62 @@ namespace net.NataliVol4ica.BignumArithmetics
 {
     public class BigFloat : BigNumber
     {
-        public BigFloat(string str = "0")
+        //todo: add constructor taking as parameter numeric types
+        public BigFloat()
         {
-            if (str is null ||
-                !Regex.IsMatch(str, validStringRegEx, RegexOptions.None))
-                throw new NumberFormatException("Cannot create BigFloat of \"" + str + "\"");
-            CleanString = CleanNumericString(str, ref _sign);
+            CleanString = "0";
         }
         public BigFloat(BigFloat from)
         {
-            _cleanString = from.ToString();
-            _sign = from.Sign;
-            _dotPos = from.DotPos;
-            _fracLen = from.Fracial;
+            CleanString = from.ToString();
+            if (from.Sign < 0)
+                SwitchSign();
+            DotPos = from.DotPos;
+            Fracial = from.Fracial;
+        }
+        //supersafe constructor
+        private BigFloat(string str, int sign)
+        {
+            CleanString = str;
+            if (sign < 0)
+                SwitchSign();
         }
 
-        /* === Static Methods === */
+        /* === Static Methods === */       
+        //factory method
+        public static BigFloat CreateFromString(string str)
+        {
+            if (str is null ||
+                !Regex.IsMatch(str, validStringRegEx, RegexOptions.None))
+                return null;
+            str = CleanNumericString(str, out int sign);
+            return new BigFloat(str, sign);
+        }
+        //cleans the string
+        private static string CleanNumericString(string RawString, out int sign)
+        {
+            string substr;
+
+            substr = Regex.Match(RawString, cleanStringRegEx).Value;
+            if (substr == "")
+            {
+                sign = 1;
+                return "0";
+            }
+            sign = RawString.Contains("-") ? -1 : 1;
+            return substr;
+        }
         //this method returns the list reversed!
         //[UNTESTED]
-        public static List<int> BigFloatToIntList(BigFloat num, int DesiredInt, int DesiredFrac)
+        public static List<int> BigFloatToIntList(BigFloat num, int desiredInt, int desiredFrac)
         {
             List<int> ret = new List<int>();
             int IntZeros, FracZeros;
 
             if (num is null)
                 return ret;
-            IntZeros = Math.Max(num.Integer, DesiredInt) - num.Integer;
-            FracZeros = Math.Max(num.Fracial, DesiredFrac) - num.Fracial;
+            IntZeros = Math.Max(num.Integer, desiredInt) - num.Integer;
+            FracZeros = Math.Max(num.Fracial, desiredFrac) - num.Fracial;
             ret.AddRange(Enumerable.Repeat(0, FracZeros));
             for (int i = num.CleanString.Length - 1; i >= 0; i--)
                 if (num.CleanString[i] != '.')
@@ -62,7 +91,7 @@ namespace net.NataliVol4ica.BignumArithmetics
             }
         }
         //[UNTESTED]
-        public static string IntListToString(List<int> digits, int DotPos)
+        public static string IntListToString(List<int> digits, int dotPos)
         {
             int i;
             int reverseDot;
@@ -70,7 +99,7 @@ namespace net.NataliVol4ica.BignumArithmetics
 
             if (digits is null || digits.Count == 0)
                 return "";
-            reverseDot = digits.Count - DotPos;
+            reverseDot = digits.Count - dotPos;
             for (i = digits.Count - 1; i >= reverseDot; i--)
                 sb.Append(ToChar(digits[i]));
             if (i > 0)
@@ -115,7 +144,7 @@ namespace net.NataliVol4ica.BignumArithmetics
         {
             BigFloat ret = new BigFloat(num);
 
-            ret.Sign = -ret.Sign;
+            ret.SwitchSign();
             return ret;
         }
 
@@ -149,13 +178,14 @@ namespace net.NataliVol4ica.BignumArithmetics
                 _dotPos = value;
             }
         }
-        protected override string CleanStringRegEx
+        /*protected override string CleanStringRegEx
         {
             get
             {
                 return cleanStringRegEx;
             }
         }
+       */
         public int Integer
         {
             get
@@ -175,6 +205,10 @@ namespace net.NataliVol4ica.BignumArithmetics
                             _fracLen--;
                     }
                 return _fracLen;
+            }
+            private set
+            {
+                _fracLen = value;
             }
         }
     }

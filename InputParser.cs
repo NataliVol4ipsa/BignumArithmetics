@@ -17,14 +17,14 @@ namespace net.NataliVol4ica.BignumArithmetics
         {
             if (FileName == null)
             {
-                this.Numbers.Add(new BigFloat(Console.ReadLine()));
-                this.Numbers.Add(new BigFloat(Console.ReadLine()));
+                this.Numbers.Add(BigFloat.CreateFromString(Console.ReadLine()));
+                this.Numbers.Add(BigFloat.CreateFromString(Console.ReadLine()));
             }
             else
             {
                 SR = new StreamReader(FileName);
-                this.Numbers.Add(new BigFloat(SR.ReadLine()));
-                this.Numbers.Add(new BigFloat(SR.ReadLine()));
+                this.Numbers.Add(BigFloat.CreateFromString(SR.ReadLine()));
+                this.Numbers.Add(BigFloat.CreateFromString(SR.ReadLine()));
             }
         }
 
