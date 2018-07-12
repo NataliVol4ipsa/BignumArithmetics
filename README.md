@@ -11,9 +11,9 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [DONE] 1.1. Implement simple reading and storing either from a console and file.
 
-<b>[CURRENT]</b> 2.0. Implement long sum
+[DONE] 2.0. Implement long sum
 
-[AWAITING] 2.1. Implement long dif. Remember to proceed negative and zero numbers.
+<b>[CURRENT]</b> 2.1. Implement long dif. Remember to proceed negative and zero numbers.
 
 [DONE] 3.0. Implement basic error management using exception system + advanced input parsing.
 
