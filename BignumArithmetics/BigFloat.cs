@@ -10,6 +10,7 @@ namespace BignumArithmetics
 {
     public class BigFloat : BigNumber
     {
+        #region Constructors
         public BigFloat()
         {
             CleanString = "0";
@@ -28,33 +29,30 @@ namespace BignumArithmetics
             if (sign < 0)
                 SwitchSign();
         }
+        #endregion
 
-        /* === Static Methods === */
+        #region Static Methods
         /// <summary>Fabric thar returns an instance of BigFloat created of string</summary>
         /// <param name="str">String that represents a number</param>
         /// <returns>An instance of BigFloat. null if parameter is invalid</returns>
         public static BigFloat CreateFromString(string str)
         {
-            if (str is null ||
+            if (string.IsNullOrEmpty(str) ||
                 !Regex.IsMatch(str, validStringRegEx, RegexOptions.None))
                 return new BigFloat();
             str = CleanNumericString(str, out int sign);
             return new BigFloat(str, sign);
         }
-        private static string CleanNumericString(string RawString, out int sign)
+        /// <summary>Fabric thar returns an instance of BigFloat created of number</summary>
+        /// <param name="number">Object of any numeric type</param>
+        /// <returns>An instance of BigFloat. null if parameter is invalid</returns>
+        public static BigFloat CreateFromNumber<T>(T number)
         {
-            string substr;
-
-            substr = Regex.Match(RawString, cleanStringRegEx).Value;
-            if (substr == "")
-            {
-                sign = 1;
-                return "0";
-            }
-            sign = RawString.Contains("-") ? -1 : 1;
-            return substr;
-        }
-
+            string str = number.ToString();
+            string sysDelim = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            str = str.Replace(sysDelim, delimiter);
+            return CreateFromString(str);
+        }       
         /// <summary>Сonverts BigNum into reversed digit list</summary>
         /// <param name="desiredInt">int represening how many digits should integer part contain</param>
         /// <param name="desiredFrac">int represening how many digits should fractional part contain</param>
@@ -123,24 +121,39 @@ namespace BignumArithmetics
                 sb.Append(ToChar(digits[i]));
             if (i >= 0)
             {
-                sb.Append(separator);
+                sb.Append(delimiter);
                 while (i >= 0)
                     sb.Append(ToChar(digits[i--]));
             }
             return sb.ToString();
         }
+        private static string CleanNumericString(string RawString, out int sign)
+        {
+            string substr;
 
-        /* === Private Methods === */
+            substr = Regex.Match(RawString, cleanStringRegEx).Value;
+            if (substr == "")
+            {
+                sign = 1;
+                return "0";
+            }
+            sign = RawString.Contains("-") ? -1 : 1;
+            return substr;
+        }
+        #endregion
+
+        #region Private Methods
         private void FindDotPos()
         {
             if (_dotPos > 0)
                 return;
-            _dotPos = CleanString.IndexOf(separator);
+            _dotPos = CleanString.IndexOf(delimiter);
             if (_dotPos < 0)
                 _dotPos = CleanString.Length;
         }
+        #endregion
 
-        /* === Parent Overrides === */
+        #region Parent Overrides
         public override BigNumber Sum(BigNumber op)
         {
             BigFloat bfLeft = this;
@@ -150,7 +163,7 @@ namespace BignumArithmetics
             //5 + -6 = 5 - -(-6) = 5 - 6
             if (bfLeft.Sign != bfRight.Sign)
                 return bfLeft.Dif(-bfRight);
-            
+
             int desiredInt = Math.Max(bfLeft.Integer, bfRight.Integer);
             int desiredFrac = Math.Max(bfLeft.Fractional, bfRight.Fractional);
             var leftList = BigFloatToIntList(bfLeft, desiredInt, desiredFrac);
@@ -170,7 +183,7 @@ namespace BignumArithmetics
             BigFloat bfLeft = this;
             BigFloat bfRight = (BigFloat)op;
             BigFloat bfAns;
-            
+
             if (bfLeft.Sign > 0 && bfRight.Sign < 0)
                 return bfLeft.Sum(-bfRight);
             if (bfLeft.Sign < 0 && bfRight.Sign > 0)
@@ -207,8 +220,9 @@ namespace BignumArithmetics
         {
             return new BigFloat();
         }
+        #endregion
 
-        /* === Operators === */
+        #region Operators
         public static BigFloat operator -(BigFloat num)
         {
             BigFloat ret = new BigFloat(num);
@@ -262,20 +276,23 @@ namespace BignumArithmetics
                 return true;
             return false;
         }
+        #endregion
 
-        /* === Variables === */
-        private static readonly string separator = ".";
+        #region Variables
+        private static readonly string delimiter = ".";
         private static readonly string validStringRegEx = @"^\s*[+-]?[0-9]+(\.[0-9]+)?\s*$";
         private static readonly string cleanStringRegEx = @"([1-9]+[0-9]*(\.[0-9]*[1-9]+)?|0\.[0-9]*[1-9]+)";
 
         private volatile int _dotPos = 0;
         private volatile int _fracLen = -1;
+        #endregion
 
-        /* === Mutexes === */
+        #region Mutexes
         private readonly Object dotPosMutex = new Object();
         private readonly Object fracLenMutex = new Object();
+        #endregion
 
-        /* === Properties === */
+        #region Properties
         public int DotPos
         {
             get
@@ -306,7 +323,7 @@ namespace BignumArithmetics
             get
             {
                 if (_fracLen < 0)
-                    lock(fracLenMutex)
+                    lock (fracLenMutex)
                     {
                         _fracLen = CleanString.Length - DotPos;
                         if (_fracLen > 0)
@@ -319,5 +336,6 @@ namespace BignumArithmetics
                 _fracLen = value;
             }
         }
+        #endregion
     }
 }

@@ -8,13 +8,14 @@ namespace BignumArithmetics
     /// <summary>Abstract class for big numbers</summary>
     public abstract class BigNumber
     {
-        /* === Abstarct Methods === */
+        #region Private Methods
         public abstract BigNumber Sum(BigNumber op);
         public abstract BigNumber Dif(BigNumber op);
         public abstract BigNumber Mul(BigNumber op);
         public abstract BigNumber Div(BigNumber op);
+        #endregion
 
-        /* === Static Methods === */
+        #region Static Methods
         /// <summary>Converts numbers into matching char symbols</summary>
         /// <param name="digit">Number to be converted. Must be in [0..15] range</param>
         /// <returns>A matching char; '0' if digit does not match limits</returns>
@@ -51,14 +52,16 @@ namespace BignumArithmetics
             left = right;
             right = buf;
         }
-       
-        /* === Public Methods === */
+        #endregion
+
+        #region Public Methods
         public void SwitchSign()
         {
             Sign = -Sign;
         }
+        #endregion
 
-        /* === Operators === */
+        #region Operators
         public static BigNumber operator +(BigNumber left, BigNumber right)
         {
             if (left is null || right is null)
@@ -83,19 +86,22 @@ namespace BignumArithmetics
                 return null;
             return left.Div(right);
         }
+        #endregion
 
-        /* === Overloading === */
+        #region Overloading
         public override string ToString()
         {
             return (Sign > 0 ? CleanString : "-" + CleanString);
         }
+        #endregion
 
-        /* === Properties === */
+        #region Properties
         /// <summary>The CleanString property represents number without spaces, extra zeroes etc</summary>
         /// <value> The CleanString property gets/sets the value of the string field, _cleanString</value>
         public string CleanString { get; protected set; } = "0";
         /// <summary>The Sign property represents sign of the number</summary>
         /// <value> The CleanString property gets/sets the value of the int field, _sign</value>
         public int Sign { get; private set; } = 1;
+        #endregion
     }
 }

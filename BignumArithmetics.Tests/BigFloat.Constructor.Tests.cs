@@ -9,7 +9,7 @@ namespace BignumArithmetics.Tests
         [TestMethod]
         public void NullString_In_Constructor()
         {
-            BigFloat empty = BigFloat.CreateFromString(null);
+            BigFloat empty = BigFloat.CreateFromString((string)null);
 
             Assert.AreEqual("0", empty.ToString());
             Assert.AreEqual(1, empty.Sign);
