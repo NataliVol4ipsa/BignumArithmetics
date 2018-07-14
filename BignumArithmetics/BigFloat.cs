@@ -4,10 +4,9 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
 
-//todo: add constructor taking numeric types as parameter
-
 namespace BignumArithmetics
 {
+    /// <summary>Сlass for big numbers having integer and fractional parts</summary>
     public class BigFloat : BigNumber
     {
         #region Constructors
@@ -52,12 +51,12 @@ namespace BignumArithmetics
             string sysDelim = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator;
             str = str.Replace(sysDelim, delimiter);
             return CreateFromString(str);
-        }       
-        /// <summary>Сonverts BigNum into reversed digit list</summary>
+        }
+        /// <summary>Сonverts BigNum into reversed digit list with padding zeroes</summary>
         /// <param name="desiredInt">int represening how many digits should integer part contain</param>
         /// <param name="desiredFrac">int represening how many digits should fractional part contain</param>
         /// <returns>List of digits</returns>
-        public static List<int> BigFloatToIntList(BigFloat num, int desiredInt, int desiredFrac)
+        public static List<int> BigFloatToIntList(BigFloat num, int desiredInt = 0, int desiredFrac = 0)
         {
             List<int> ret = new List<int>();
             int IntZeros, FracZeros;
@@ -110,12 +109,13 @@ namespace BignumArithmetics
         {
             int i;
             int reverseDot;
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb;
 
             if (digits is null || digits.Count == 0)
                 return "";
             if (dotPos < 0)
                 dotPos = 0;
+            sb = new StringBuilder();
             reverseDot = digits.Count - dotPos;
             for (i = digits.Count - 1; i >= reverseDot; i--)
                 sb.Append(ToChar(digits[i]));
@@ -127,6 +127,7 @@ namespace BignumArithmetics
             }
             return sb.ToString();
         }
+
         private static string CleanNumericString(string RawString, out int sign)
         {
             string substr;
@@ -151,6 +152,58 @@ namespace BignumArithmetics
             if (_dotPos < 0)
                 _dotPos = CleanString.Length;
         }
+        private List<int> SumTwoLists(List<int> leftList, List<int> rightList)
+        {
+            if (leftList.Count <= 0 || rightList.Count <= 0)
+                return new List<int>();
+            int diff = Math.Max(leftList.Count, rightList.Count);
+            leftList.AddRange(Enumerable.Repeat(0, diff - leftList.Count));
+            rightList.AddRange(Enumerable.Repeat(0, diff - rightList.Count));
+            var resultList = new List<int>(leftList.Count);
+            for (int i = 0; i < diff; i++)
+                resultList.Add(leftList[i] + rightList[i]);
+            NormalizeList(resultList);
+            return resultList;
+        }
+        private List<int> DifTwoLists(List<int> leftList, List<int> rightList)
+        {
+            int until = Math.Min(leftList.Count, rightList.Count);
+            if (until <= 0)
+                return new List<int>();
+            var resultList = new List<int>(until);
+            for (int i = 0; i < until; i++)
+                resultList.Add(leftList[i] - rightList[i]);
+            NormalizeList(resultList);
+            return resultList;
+        }
+        private List<int> MulTwoLists(List<int> leftList, List<int> rightList)
+        {
+            var resultList = new List<int>();
+            var tempList = new List<int>();
+            resultList = MulListAndDigit(leftList, rightList[0], false);
+            for (int i = 1; i < rightList.Count; i++)
+            {
+                if (rightList[i] == 0)
+                    continue;
+                tempList = MulListAndDigit(leftList, rightList[i], false, i);
+                resultList = SumTwoLists(resultList, tempList);
+            }
+            NormalizeList(resultList);
+            return resultList;
+        }
+
+        private List<int> MulListAndDigit(List<int> leftList, int digit, bool toNorm = false, int padding = 0)
+        {
+            if (digit == 0)
+                return new List<int> { 0 };
+            var resultList = new List<int>(leftList.Count);
+            resultList.AddRange(Enumerable.Repeat(0, padding));
+            for (int i = 0; i < leftList.Count; i++)
+                resultList.Add(leftList[i] * digit);
+            if (toNorm)
+                NormalizeList(resultList);
+            return resultList;
+        }
         #endregion
 
         #region Parent Overrides
@@ -158,9 +211,7 @@ namespace BignumArithmetics
         {
             BigFloat bfLeft = this;
             BigFloat bfRight = (BigFloat)op;
-            BigFloat bfAns;
 
-            //5 + -6 = 5 - -(-6) = 5 - 6
             if (bfLeft.Sign != bfRight.Sign)
                 return bfLeft.Dif(-bfRight);
 
@@ -168,12 +219,9 @@ namespace BignumArithmetics
             int desiredFrac = Math.Max(bfLeft.Fractional, bfRight.Fractional);
             var leftList = BigFloatToIntList(bfLeft, desiredInt, desiredFrac);
             var rightList = BigFloatToIntList(bfRight, desiredInt, desiredFrac);
-            var resultList = new List<int>(leftList.Count);
+            var resultList = SumTwoLists(leftList, rightList);
 
-            for (int i = 0; i < leftList.Count; i++)
-                resultList.Add(leftList[i] + rightList[i]);
-            NormalizeList(resultList);
-            bfAns = CreateFromString(IntListToString(resultList, resultList.Count - desiredFrac));
+            BigFloat bfAns = CreateFromString(IntListToString(resultList, resultList.Count - desiredFrac));
             if (Sign < 0)
                 bfAns.SwitchSign();
             return bfAns;
@@ -182,7 +230,6 @@ namespace BignumArithmetics
         {
             BigFloat bfLeft = this;
             BigFloat bfRight = (BigFloat)op;
-            BigFloat bfAns;
 
             if (bfLeft.Sign > 0 && bfRight.Sign < 0)
                 return bfLeft.Sum(-bfRight);
@@ -202,19 +249,34 @@ namespace BignumArithmetics
             int desiredFrac = Math.Max(bfLeft.Fractional, bfRight.Fractional);
             var leftList = BigFloatToIntList(bfLeft, desiredInt, desiredFrac);
             var rightList = BigFloatToIntList(bfRight, desiredInt, desiredFrac);
-            var resultList = new List<int>(leftList.Count);
-
-            for (int i = 0; i < leftList.Count; i++)
-                resultList.Add(leftList[i] - rightList[i]);
-            NormalizeList(resultList);
-            bfAns = CreateFromString(IntListToString(resultList, resultList.Count - desiredFrac));
+            var resultList = DifTwoLists(leftList, rightList);
+        
+            BigFloat bfAns = CreateFromString(IntListToString(resultList, resultList.Count - desiredFrac));
             if (sign < 0)
                 bfAns.SwitchSign();
             return bfAns;
         }
         public override BigNumber Mul(BigNumber op)
         {
-            return new BigFloat();
+            //12.4 = 1256  \ (10^1)
+            //0.25 = 025 \ (10^2)
+            //12.4 * 0.25 = 124 * 25 \ (10^3) = (2500 + 500 + 100) \ (10^3) = 3100 \ 1000 = 3.1
+
+            BigFloat bfLeft = this;
+            BigFloat bfRight = (BigFloat)op;
+
+            //mul bigger number with smaller digits
+            if (bfLeft.Integer + bfLeft.Fractional < bfRight.Integer + bfRight.Fractional)
+                Swap(ref bfLeft, ref bfRight);
+            int newDot = bfLeft.Fractional + bfRight.Fractional;
+            var leftList = BigFloatToIntList(bfLeft);
+            var rightList = BigFloatToIntList(bfRight);
+            var resultList = MulTwoLists(leftList, rightList);
+
+            BigFloat bfAns = CreateFromString(IntListToString(resultList, resultList.Count - newDot));
+            if (bfLeft.Sign * bfRight.Sign < 0)
+                bfAns.SwitchSign();
+            return bfAns;
         }
         public override BigNumber Div(BigNumber op)
         {

@@ -57,7 +57,10 @@ namespace BignumArithmetics
         #region Public Methods
         public void SwitchSign()
         {
-            Sign = -Sign;
+            if (String.Compare(CleanString, "0") != 0)
+                Sign = -Sign;
+            else
+                Sign = 1;
         }
         #endregion
 

@@ -6,6 +6,7 @@ namespace BignumArithmetics
 {
     public static class BignumArithmetics
     {
+        /*
         static int errors = 0;
         static void DoTesting(string left, string right, string sum, string dif)
         {
@@ -14,12 +15,12 @@ namespace BignumArithmetics
 
             BigFloat C = A + B;
             BigFloat D = A - B;
-            /*Console.WriteLine("   {0}\n + {1}", left, right);
-            Console.WriteLine(C);
-            Console.WriteLine(sum);
-            Console.WriteLine("   {0}\n - {1}", left, right);
-            Console.WriteLine(D);
-            Console.WriteLine(dif);*/
+            //Console.WriteLine("   {0}\n + {1}", left, right);
+            //Console.WriteLine(C);
+            //Console.WriteLine(sum);
+            //Console.WriteLine("   {0}\n - {1}", left, right);
+            //Console.WriteLine(D);
+            //Console.WriteLine(dif);
             if (string.Compare(C.ToString(), sum) != 0)
                 errors++;
             if (string.Compare(D.ToString(), dif) != 0)
@@ -43,20 +44,29 @@ namespace BignumArithmetics
                 B.ToString().Replace(",", "."),
                 C.ToString().Replace(",", "."),
                 D.ToString().Replace(",", "."));
+        }*/
+
+        static void Test()
+        {
+            BigFloat A = BigFloat.CreateFromNumber(12.4f);
+            BigFloat B = BigFloat.CreateFromNumber(0.25f);
+            BigFloat C = A * B;
+            Console.WriteLine(A);
+            Console.WriteLine(B);
+            Console.WriteLine(C);
         }
 
         public static int Main(string[] args)
         {
             try
             {
-                for (int i = 0; i < 100; i++)
                 Test();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
-            Console.WriteLine("Fails : " + errors);
+            //Console.WriteLine("Fails : " + errors);
             Console.Read();
             return 0;
         }
