@@ -17,9 +17,9 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [DONE] 3.0. Implement basic error management using exception system + advanced input parsing.
 
-<b>[CURRENT]</b> 3.1. Write more tests
+[DONE] 3.1. Write more tests
 
-[AWAITING] 4.0. Implement long mul. Try these methods: classic, Karatsuba, Schönhage–Strassen, Fürer’s algo
+[CURRENT] 4.0. Implement long mul. Try these methods: classic, Karatsuba, Schönhage–Strassen, Fürer’s algo
 
 [AWAITING] 4.1. Implement pow
 
@@ -29,11 +29,11 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [AWAITING] 6.0. Implement mod. Remember to create exception. fmod?
 
-[AWAITING] 7.0. Implement 2-6 for fixed point
+[AWAITING] 7.0. Implement 2-6 for integer.
 
-[AWAITING] 7.1. Implement 2-6 for fractional. Remember about reduction of fractions(solution is factorization...)
+[AWAITING] 7.1. Implement 2-6 for different base
 
-[AWAITING] 7.2. Implement 2-6 for different base
+[AWAITING] 7.2. Implement 2-6 for fractional. Remember about reduction of fractions(factorization...)
 
 [AWAITING] 7.3. Create a config file to configure current parameters of testing. Create endless looped menu of reading input, like a local console.
 
@@ -45,9 +45,9 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [MAYBE] 9.0. Try to implement multithreading. It can be used with low-level operations, parsing etc.
 
-[MAYBE] 10.0. Learn how to use LINQ. Create DB with tests, that contain different test parameters. Implement some choice criterias (speed, length, errors) and write sql queries to add and get them from db, run and display results. //. Maybe I should sleep more :D
+[MAYBE] 10.0. Cryptography? (triple des, rsa). Simplicity?
 
-[MAYBE] 11.0. I need to learn more about ASP.NET, so... try to involve it somehow. Maybe add some cryptography for this (triple des, rsa)
+[MAYBE] 11.0. LINQ? ASP.NET?
 
 YET INVOLVED: delegates+events, parallel computing, async prog
 
