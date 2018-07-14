@@ -19,7 +19,7 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [DONE] 3.1. Write more tests
 
-[CURRENT] 4.0. Implement long mul. Try these methods: classic, Karatsuba, Schönhage–Strassen, Fürer’s algo
+<b>[CURRENT]</b> 4.0. Implement long mul. Try these methods: classic, Karatsuba, Schönhage–Strassen, Fürer’s algo
 
 [AWAITING] 4.1. Implement pow
 
