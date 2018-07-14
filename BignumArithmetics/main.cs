@@ -3,7 +3,6 @@ using System.Text;
 using System.Linq;
 using System.Collections.Generic;
 
-//totest: 29! = 8841761993739701954543616000000
 namespace BignumArithmetics
 {
     public static class BignumArithmetics

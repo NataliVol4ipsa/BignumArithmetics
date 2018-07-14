@@ -19,13 +19,9 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [DONE] 3.1. Write more tests
 
-[DONE] 4.0. Implement long mul
+[DONE] 4.0. Implement long mul. //rejected pow and factorial because not so useful
 
-<b>[CURRENT]</b> 4.1. Implement pow
-
-[AWAITING] 4.2. Implement factorial
-
-[AWAITING] 6.0. Implement mod. Remember to create exception. fmod?
+<b>[CURRENT]</b> 4.1. Implement mod. Remember to create exception. fmod?
 
 [AWAITING] 5.0. Implement div
 
