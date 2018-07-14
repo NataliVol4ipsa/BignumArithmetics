@@ -52,5 +52,25 @@ namespace BignumArithmetics.Tests
         {
             DoTesting("-10.005", "-3.1", "-13.105", "-6.905");
         }
+        [TestMethod]
+        public void random_100_tests()
+        {
+            Random rnd = new Random();
+            int a = rnd.Next(0, Int32.MaxValue);
+            int b = rnd.Next(0, Int32.MaxValue);
+            a -= Int32.MaxValue / 2;
+            b -= Int32.MaxValue / 2;
+            decimal A = a;
+            decimal B = b;
+            A /= 10000;
+            B /= 100000;
+            decimal C = A + B;
+            decimal D = A - B;
+
+            DoTesting(A.ToString().Replace(",", "."),
+                B.ToString().Replace(",", "."),
+                C.ToString().Replace(",", "."),
+                D.ToString().Replace(",", "."));
+        }
     }
 }

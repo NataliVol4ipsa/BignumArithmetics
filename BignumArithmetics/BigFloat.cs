@@ -123,7 +123,7 @@ namespace BignumArithmetics
                 sb.Append(ToChar(digits[i]));
             if (i >= 0)
             {
-                sb.Append(".");
+                sb.Append(separator);
                 while (i >= 0)
                     sb.Append(ToChar(digits[i--]));
             }
@@ -135,13 +135,12 @@ namespace BignumArithmetics
         {
             if (_dotPos > 0)
                 return;
-            _dotPos = CleanString.IndexOf(".");
+            _dotPos = CleanString.IndexOf(separator);
             if (_dotPos < 0)
                 _dotPos = CleanString.Length;
         }
 
         /* === Parent Overrides === */
-        //no sign support
         public override BigNumber Sum(BigNumber op)
         {
             BigFloat bfLeft = this;
@@ -152,9 +151,9 @@ namespace BignumArithmetics
             if (bfLeft.Sign != bfRight.Sign)
                 return bfLeft.Dif(-bfRight);
             
-            int desiredInt = Math.Max(Integer, bfRight.Integer);
-            int desiredFrac = Math.Max(Fractional, bfRight.Fractional);
-            var leftList = BigFloatToIntList(this, desiredInt, desiredFrac);
+            int desiredInt = Math.Max(bfLeft.Integer, bfRight.Integer);
+            int desiredFrac = Math.Max(bfLeft.Fractional, bfRight.Fractional);
+            var leftList = BigFloatToIntList(bfLeft, desiredInt, desiredFrac);
             var rightList = BigFloatToIntList(bfRight, desiredInt, desiredFrac);
             var resultList = new List<int>(leftList.Count);
 
@@ -265,6 +264,7 @@ namespace BignumArithmetics
         }
 
         /* === Variables === */
+        private static readonly string separator = ".";
         private static readonly string validStringRegEx = @"^\s*[+-]?[0-9]+(\.[0-9]+)?\s*$";
         private static readonly string cleanStringRegEx = @"([1-9]+[0-9]*(\.[0-9]*[1-9]+)?|0\.[0-9]*[1-9]+)";
 

@@ -92,9 +92,9 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bignum-Arithmetics.csproj">
-      <Project>{475d2ae5-caaa-489e-82e2-a543352158a3}</Project>
-      <Name>Bignum-Arithmetics</Name>
+    <ProjectReference Include="..\BignumArithmetics\BignumArithmetics.csproj">
+      <Project>{2a5c6589-aa7b-4d17-876e-8731445535fd}</Project>
+      <Name>BignumArithmetics</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

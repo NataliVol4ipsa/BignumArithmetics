@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bignum-Arithmetics", "Bignum-Arithmetics.csproj", "{475D2AE5-CAAA-489E-82E2-A543352158A3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BignumArithmetics.Tests", "BignumArithmetics.Tests\BignumArithmetics.Tests.csproj", "{11ACD228-4CFF-4A21-A8B9-E00932D6E01B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BignumArithmetics", "BignumArithmetics\BignumArithmetics.csproj", "{2A5C6589-AA7B-4D17-876E-8731445535FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,16 +17,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Debug|x64.ActiveCfg = Debug|x86
-		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Debug|x64.Build.0 = Debug|x86
-		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Debug|x86.ActiveCfg = Debug|x86
-		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Debug|x86.Build.0 = Debug|x86
-		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Release|Any CPU.ActiveCfg = Release|x86
-		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Release|x64.ActiveCfg = Release|x64
-		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Release|x64.Build.0 = Release|x64
-		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Release|x86.ActiveCfg = Release|x86
-		{475D2AE5-CAAA-489E-82E2-A543352158A3}.Release|x86.Build.0 = Release|x86
 		{11ACD228-4CFF-4A21-A8B9-E00932D6E01B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{11ACD228-4CFF-4A21-A8B9-E00932D6E01B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11ACD228-4CFF-4A21-A8B9-E00932D6E01B}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -39,6 +29,18 @@ Global
 		{11ACD228-4CFF-4A21-A8B9-E00932D6E01B}.Release|x64.Build.0 = Release|Any CPU
 		{11ACD228-4CFF-4A21-A8B9-E00932D6E01B}.Release|x86.ActiveCfg = Release|x86
 		{11ACD228-4CFF-4A21-A8B9-E00932D6E01B}.Release|x86.Build.0 = Release|x86
+		{2A5C6589-AA7B-4D17-876E-8731445535FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A5C6589-AA7B-4D17-876E-8731445535FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A5C6589-AA7B-4D17-876E-8731445535FD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2A5C6589-AA7B-4D17-876E-8731445535FD}.Debug|x64.Build.0 = Debug|Any CPU
+		{2A5C6589-AA7B-4D17-876E-8731445535FD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2A5C6589-AA7B-4D17-876E-8731445535FD}.Debug|x86.Build.0 = Debug|Any CPU
+		{2A5C6589-AA7B-4D17-876E-8731445535FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A5C6589-AA7B-4D17-876E-8731445535FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A5C6589-AA7B-4D17-876E-8731445535FD}.Release|x64.ActiveCfg = Release|Any CPU
+		{2A5C6589-AA7B-4D17-876E-8731445535FD}.Release|x64.Build.0 = Release|Any CPU
+		{2A5C6589-AA7B-4D17-876E-8731445535FD}.Release|x86.ActiveCfg = Release|Any CPU
+		{2A5C6589-AA7B-4D17-876E-8731445535FD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
