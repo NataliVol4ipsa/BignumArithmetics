@@ -152,7 +152,7 @@ namespace BignumArithmetics
             if (_dotPos < 0)
                 _dotPos = CleanString.Length;
         }
-        private List<int> SumTwoLists(List<int> leftList, List<int> rightList)
+        private List<int> SumTwoLists(List<int> leftList, List<int> rightList, bool toNorm = true)
         {
             if (leftList.Count <= 0 || rightList.Count <= 0)
                 return new List<int>();
@@ -162,10 +162,11 @@ namespace BignumArithmetics
             var resultList = new List<int>(leftList.Count);
             for (int i = 0; i < diff; i++)
                 resultList.Add(leftList[i] + rightList[i]);
-            NormalizeList(resultList);
+            if (toNorm)
+                NormalizeList(resultList);
             return resultList;
         }
-        private List<int> DifTwoLists(List<int> leftList, List<int> rightList)
+        private List<int> DifTwoLists(List<int> leftList, List<int> rightList, bool toNorm = true)
         {
             int until = Math.Min(leftList.Count, rightList.Count);
             if (until <= 0)
@@ -173,7 +174,8 @@ namespace BignumArithmetics
             var resultList = new List<int>(until);
             for (int i = 0; i < until; i++)
                 resultList.Add(leftList[i] - rightList[i]);
-            NormalizeList(resultList);
+            if (toNorm)
+                NormalizeList(resultList);
             return resultList;
         }
         private List<int> MulTwoLists(List<int> leftList, List<int> rightList)
@@ -186,13 +188,12 @@ namespace BignumArithmetics
                 if (rightList[i] == 0)
                     continue;
                 tempList = MulListAndDigit(leftList, rightList[i], false, i);
-                resultList = SumTwoLists(resultList, tempList);
+                resultList = SumTwoLists(resultList, tempList, false);
             }
             NormalizeList(resultList);
             return resultList;
         }
-
-        private List<int> MulListAndDigit(List<int> leftList, int digit, bool toNorm = false, int padding = 0)
+        private List<int> MulListAndDigit(List<int> leftList, int digit, bool toNorm = true, int padding = 0)
         {
             if (digit == 0)
                 return new List<int> { 0 };
