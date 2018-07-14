@@ -19,15 +19,15 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [DONE] 3.1. Write more tests
 
-<b>[CURRENT]</b> 4.0. Implement long mul. Try these methods: classic, Karatsuba, Schönhage–Strassen, Fürer’s algo
+[DONE] 4.0. Implement long mul
 
-[AWAITING] 4.1. Implement pow
+<b>[CURRENT]</b> 4.1. Implement pow
 
 [AWAITING] 4.2. Implement factorial
 
-[AWAITING] 5.0. Implement div
-
 [AWAITING] 6.0. Implement mod. Remember to create exception. fmod?
+
+[AWAITING] 5.0. Implement div
 
 [AWAITING] 7.0. Implement 2-6 for integer.
 
