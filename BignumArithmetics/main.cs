@@ -16,8 +16,7 @@ namespace BignumArithmetics
 
             BigFloat C = A + B;
             BigFloat D = A - B;
-            BigFloat E = A * B;
-            
+            BigFloat E = A * B;            
            
             if (string.Compare(C.ToString(), sum) != 0)
             {
@@ -26,7 +25,6 @@ namespace BignumArithmetics
                 Console.WriteLine("Orig {0}", sum);
                 errors++;
             }
-
             if (string.Compare(D.ToString(), dif) != 0)
             {
                 Console.WriteLine("   {0}\n - {1}", left, right);
@@ -34,7 +32,6 @@ namespace BignumArithmetics
                 Console.WriteLine("Orig {0}", dif);
                 errors++;
             }
-
             if (string.Compare(E.ToString(), mul) != 0)
             {
                 Console.WriteLine("   {0}\n * {1}", left, right);
@@ -42,7 +39,6 @@ namespace BignumArithmetics
                 Console.WriteLine("Orig {0}", mul);
                 errors++;
             }
-
         }
 
         static string DecimalToString(decimal number)
@@ -79,36 +75,65 @@ namespace BignumArithmetics
                     DecimalToString(D),
                     DecimalToString(E));
         }
-
-        static void Test1()
+        static void DoDivTesting(string left, string right, string div)
         {
-            decimal a = 20.1m, b = 0.05m, c = a / b;
+            BigFloat A = BigFloat.CreateFromString(left);
+            BigFloat B = BigFloat.CreateFromString(right);
 
-            BigFloat A = BigFloat.CreateFromNumber(DecimalToString(a));
-            BigFloat B = BigFloat.CreateFromNumber(DecimalToString(b));
             BigFloat C = A / B;
 
-            Console.WriteLine(A);
-            Console.WriteLine(B);
-            Console.WriteLine(C);
-            Console.WriteLine();
-            Console.WriteLine(DecimalToString(a));
-            Console.WriteLine(DecimalToString(b));
-            Console.WriteLine(DecimalToString(c));
+            if (string.Compare(C.ToString(), div) != 0)
+            {
+                Console.WriteLine("   {0}\n / {1}", left, right);
+                Console.WriteLine("My   {0}", C);
+                Console.WriteLine("Orig {0}", div);
+                errors++;
+            }
+        }
+        static void Test1()
+        {
+            int a = rnd.Next(0, Int32.MaxValue);
+            int b = rnd.Next(0, Int32.MaxValue);
+            a -= Int32.MaxValue / 2;
+            b -= Int32.MaxValue / 2;
+            decimal A = a;
+            decimal B = b;
+            A /= 10000;
+            B /= 100000;
+            decimal C = A * B;
+
+
+            DoDivTesting(DecimalToString(C),
+                    DecimalToString(B),
+                    DecimalToString(A));
+        }
+        static void ConcreteTest1()
+        {
+            int a = rnd.Next(0, Int32.MaxValue);
+            int b = rnd.Next(0, Int32.MaxValue);
+            a -= Int32.MaxValue / 2;
+            b -= Int32.MaxValue / 2;
+            decimal C = 1849752.341710464m;
+            decimal B = -21.10336m;
+            decimal A = C / B;
+
+            DoDivTesting(DecimalToString(C),
+                    DecimalToString(B),
+                    DecimalToString(A));
         }
         public static int Main(string[] args)
         {
             int i = 0;
             try
             {
-                 //for (i = 0; i < 100000; i++)
-                    Test1();
+                //for (i = 0; i < 100000; i++)
+                ConcreteTest1();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
-            //Console.WriteLine("Fails : {0} | {1}", errors, i);
+            Console.WriteLine("Fails : {0} | {1}", errors, i);
             Console.Read();
             return 0;
         }
