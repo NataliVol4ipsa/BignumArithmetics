@@ -21,9 +21,9 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [DONE] 4.0. Implement long mul. //rejected pow and factorial because not so useful
 
-<b>[CURRENT]</b> 4.1. Implement mod. Remember to create exception. fmod?
+[AWAITING] 4.1. Implement mod. Remember to create exception. fmod?
 
-[AWAITING] 5.0. Implement div
+<b>[CURRENT]</b> 5.0. Implement div
 
 [AWAITING] 7.0. Implement 2-6 for integer.
 
