@@ -207,6 +207,26 @@ namespace BignumArithmetics
                 NormalizeList(resultList);
             return resultList;
         }
+        private void RemoveTailingZeros(List<int> list)
+        {
+            while (list.Last() == 0 && list.Count > 1)
+                list.RemoveAt(list.Count - 1);
+        }
+        private void AddTailingZeros(List<int> list, uint amount)
+        {
+            list.AddRange(Enumerable.Repeat(0, (int)amount));
+        }
+        private int CompareLists(List<int> left, List<int> right)
+        {
+            if (left.Count != right.Count)
+                return left.Count - right.Count;
+            int i = 0;
+            while (i < left.Count && left[i] == right[i])
+                i++;
+            if (i == left.Count)
+                return 0;
+            return left[i] - right[i];
+        }
         #endregion
 
         #region Parent Overrides
@@ -278,15 +298,67 @@ namespace BignumArithmetics
         }
         public override BigNumber Divide(BigNumber op)
         {
-            /*if (op.CleanString == "0")
+            if (op.CleanString == "0")
                 throw new DivideByZeroException();
             BigFloat bfLeft = this;
             BigFloat bfRight = (BigFloat)op;
-            
+
+            int multiplier = Math.Max(bfLeft.Fractional, bfRight.Fractional);
             var leftList = BigNumberToIntList(bfLeft);
             var rightList = BigNumberToIntList(bfRight);
-            var resultList = MulTwoLists(leftList, rightList);
-            int newDot = 0;
+            var resultList = new List<int>();
+            RemoveTailingZeros(leftList);
+            RemoveTailingZeros(rightList);
+            //todo: remove unnecessary reverses!!
+            leftList.Reverse();
+            rightList.Reverse();
+            if (CompareLists(leftList, rightList) >= 0)
+            {
+                int sum;
+                uint dif;
+                int toAdd = rightList.Count;
+                var subList = new List<int>();
+                for (int i = 0; i < rightList.Count; i++)
+                    subList.Add(leftList[i]);
+                do
+                {
+                    sum = 0;
+                    while (CompareLists(subList, rightList) >= 0)
+                    {
+                        dif = (uint)(subList.Count - rightList.Count);
+                        subList.Reverse();
+                        rightList.Reverse();
+                        AddTailingZeros(rightList, dif);
+                        subList = DifTwoLists(subList, rightList);
+                        if (dif > 0)
+                            rightList.RemoveAt(rightList.Count - 1);
+                        while (subList.Count > 1 && subList.Last() == 0)
+                            subList.RemoveAt(subList.Count - 1);
+                        subList.Reverse();
+                        rightList.Reverse();
+                        sum++;
+                    }
+                    resultList.Add(sum);
+                    subList.Add(leftList[toAdd++]);
+                } while (toAdd < leftList.Count);
+                int stop = 0;
+                //create a sublist of len |list2| from list1 digits
+                //int unadded = rightList.Count;
+                //while (unadded < leftList.Count)
+                //if (sublist < rightList)
+                //{
+                //  if unadded = leftList.Count break;
+                //  sublist.Add(leftlist[unadded++]);
+                //}
+                //
+            }
+
+
+            int dotSize = 0;
+            while (leftList.Count > rightList.Count)
+            {
+
+            }
             //mul with 10 until both are ints. this costs nothing
             //for unreversed lists!!!
             //int toCompare = B.Count
@@ -304,8 +376,7 @@ namespace BignumArithmetics
             /*BigFloat bfAns = CreateFromString(IntListToString(resultList, resultList.Count - newDot));
             if (bfLeft.Sign * bfRight.Sign < 0)
                 bfAns.SwitchSign();
-            return bfAns;
-        }*/
+            return bfAns;*/
             return new BigFloat();
         }
         public override BigNumber Mod(BigNumber op)

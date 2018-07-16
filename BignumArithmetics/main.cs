@@ -82,11 +82,11 @@ namespace BignumArithmetics
 
         static void Test1()
         {
-            decimal a = 36077.2455m, b = 8336.23744m, c = a * b;
+            decimal a = 20.1m, b = 0.05m, c = a / b;
 
             BigFloat A = BigFloat.CreateFromNumber(DecimalToString(a));
             BigFloat B = BigFloat.CreateFromNumber(DecimalToString(b));
-            BigFloat C = A * B;
+            BigFloat C = A / B;
 
             Console.WriteLine(A);
             Console.WriteLine(B);
@@ -101,14 +101,14 @@ namespace BignumArithmetics
             int i = 0;
             try
             {
-                 for (i = 0; i < 100000; i++)
-                    Test();
+                 //for (i = 0; i < 100000; i++)
+                    Test1();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
-            Console.WriteLine("Fails : {0} | {1}", errors, i);
+            //Console.WriteLine("Fails : {0} | {1}", errors, i);
             Console.Read();
             return 0;
         }
