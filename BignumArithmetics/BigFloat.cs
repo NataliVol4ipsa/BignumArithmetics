@@ -196,25 +196,30 @@ namespace BignumArithmetics
             return resultList;
         }
         //todo: remove unnecessary reverses!!
-        private static List<int> DivTwoLists(List<int> leftList, List<int> rightList, out List<int> remainder)
+        private static List<int> DivTwoLists(List<int> leftList, List<int> rightList, out List<int> remainder, bool isAfterInt = false)
         {
+            int addedDigitsInARow = 0;
             var resultList = new List<int>();
             remainder = new List<int>();
             if (CompareLists(leftList, rightList) >= 0)
             {
-                bool unnormed;
-                int sum;
-                uint dif;
-                int toAdd = rightList.Count;
-                for (int i = 0; i < rightList.Count; i++)
+                bool unnormed = true;
+                int sum, dif;
+                int toAdd = rightList.Count + (isAfterInt ? 1 : 0);
+                for (int i = 0; i < toAdd; i++)
                     remainder.Add(leftList[i]);
+                addedDigitsInARow = 0;
                 do
                 {
+                    if (unnormed)
+                        while (remainder.Count > 0 && remainder[0] == 0)
+                            remainder.RemoveAt(0);
                     unnormed = true;
                     sum = 0;
+                    addedDigitsInARow++;
                     while (CompareLists(remainder, rightList) >= 0)
                     {
-                        dif = (uint)(remainder.Count - rightList.Count);
+                        dif = remainder.Count - rightList.Count;
                         remainder.Reverse();
                         rightList.Reverse();
                         AddTailingZeros(rightList, dif);
@@ -227,12 +232,9 @@ namespace BignumArithmetics
                         rightList.Reverse();
                         sum++;
                         unnormed = false;
+                        addedDigitsInARow = 0;
                     }
-                    if (unnormed)
-                        while (remainder.Count > 0 && remainder[0] == 0)
-                            remainder.RemoveAt(0);
-                    if (toAdd < leftList.Count || (toAdd == leftList.Count && sum > 0))
-                        resultList.Add(sum);
+                    resultList.Add(sum);
                     if (toAdd < leftList.Count)
                         remainder.Add(leftList[toAdd]);
                     toAdd++;
@@ -240,6 +242,8 @@ namespace BignumArithmetics
             }
             if (resultList.Count == 0)
                 resultList.Add(0);
+            //else if (addedDigitsInARow > 1)
+            //    AddTailingZeros(remainder, (uint)(addedDigitsInARow - 1));
             return resultList;
         }
         private static List<int> MulListAndDigit(List<int> leftList, int digit, bool toNorm = true, int padding = 0)
@@ -259,9 +263,11 @@ namespace BignumArithmetics
             while (list.Last() == 0 && list.Count > 1)
                 list.RemoveAt(list.Count - 1);
         }
-        private static void AddTailingZeros(List<int> list, uint amount)
+        private static void AddTailingZeros(List<int> list, int amount)
         {
-            list.AddRange(Enumerable.Repeat(0, (int)amount));
+            if (amount < 0)
+                return;
+            list.AddRange(Enumerable.Repeat(0, amount));
         }
         private static int CompareLists(List<int> left, List<int> right)
         {
@@ -361,7 +367,7 @@ namespace BignumArithmetics
             List<int> resultList = DivTwoLists(leftList, rightList, out List<int> subList);
             int dotPos = resultList.Count;
             AddTailingZeros(subList, FracPrecision);
-            resultList.AddRange(DivTwoLists(subList, rightList, out List<int> garbage));
+            resultList.AddRange(DivTwoLists(subList, rightList, out List<int> garbage, true));
             resultList.Reverse();
 
             BigFloat bfAns = CreateFromString(IntListToString(resultList, dotPos));
@@ -440,7 +446,7 @@ namespace BignumArithmetics
         #endregion
 
         #region Variables
-        public static uint FracPrecision = 20; //add get and set
+        public static int FracPrecision = 20; //add get and set
         private static readonly string delimiter = ".";
         private static readonly string validStringRegEx = @"^\s*[+-]?[0-9]+(\.[0-9]+)?\s*$";
         private static readonly string cleanStringRegEx = @"([1-9]+[0-9]*(\.[0-9]*[1-9]+)?|0\.[0-9]*[1-9]+)";
