@@ -278,7 +278,7 @@ namespace BignumArithmetics
         }
         public override BigNumber Divide(BigNumber op)
         {
-            if (op.CleanString == "0")
+            /*if (op.CleanString == "0")
                 throw new DivideByZeroException();
             BigFloat bfLeft = this;
             BigFloat bfRight = (BigFloat)op;
@@ -306,6 +306,8 @@ namespace BignumArithmetics
                 bfAns.SwitchSign();
             return bfAns;
         }*/
+            return new BigFloat();
+        }
         public override BigNumber Mod(BigNumber op)
         {
             if (op.CleanString == "0")
