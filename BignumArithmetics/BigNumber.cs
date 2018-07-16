@@ -9,10 +9,11 @@ namespace BignumArithmetics
     public abstract class BigNumber
     {
         #region Private Methods
-        public abstract BigNumber Sum(BigNumber op);
-        public abstract BigNumber Dif(BigNumber op);
-        public abstract BigNumber Mul(BigNumber op);
-        public abstract BigNumber Div(BigNumber op);
+        public abstract BigNumber Add(BigNumber op);
+        public abstract BigNumber Substract(BigNumber op);
+        public abstract BigNumber Multiply(BigNumber op);
+        public abstract BigNumber Divide(BigNumber op);
+        public abstract BigNumber Mod(BigNumber op);
         #endregion
 
         #region Static Methods
@@ -69,25 +70,31 @@ namespace BignumArithmetics
         {
             if (left is null || right is null)
                 return null;
-            return left.Sum(right);
+            return left.Add(right);
         }
         public static BigNumber operator -(BigNumber left, BigNumber right)
         {
             if (left is null || right is null)
                 return null;
-            return left.Dif(right);
+            return left.Substract(right);
         }
         public static BigNumber operator *(BigNumber left, BigNumber right)
         {
             if (left is null || right is null)
                 return null;
-            return left.Mul(right);
+            return left.Multiply(right);
         }
         public static BigNumber operator /(BigNumber left, BigNumber right)
         {
             if (left is null || right is null)
                 return null;
-            return left.Div(right);
+            return left.Divide(right);
+        }
+        public static BigNumber operator %(BigNumber left, BigNumber right)
+        {
+            if (left is null || right is null)
+                return null;
+            return left.Mod(right);
         }
         #endregion
 

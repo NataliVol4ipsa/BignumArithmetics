@@ -16,7 +16,7 @@ namespace BignumArithmetics.Tests
         [TestMethod]
         public void NullTest()
         {
-            List<int> actual = BigFloat.BigFloatToIntList(null, 0, 0);
+            List<int> actual = BigFloat.BigNumberToIntList(null, 0, 0);
             Assert.IsNull(actual);
         }
 
@@ -24,7 +24,7 @@ namespace BignumArithmetics.Tests
         public void Zero_Test()
         {
             var bf = BigFloat.CreateFromString("0");
-            List<int> actual = BigFloat.BigFloatToIntList(bf, 0, 0);
+            List<int> actual = BigFloat.BigNumberToIntList(bf, 0, 0);
             List<int> expected = new List<int> { 0 };
             CompareLists(expected, actual);
         }
@@ -32,7 +32,7 @@ namespace BignumArithmetics.Tests
         public void Zero23_Test()
         {
             var bf = BigFloat.CreateFromString("0");
-            List<int> actual = BigFloat.BigFloatToIntList(bf, 2, 3);
+            List<int> actual = BigFloat.BigNumberToIntList(bf, 2, 3);
             List<int> expected = new List<int> { 0, 0, 0, 0, 0 };
             CompareLists(expected, actual);
         }
@@ -41,7 +41,7 @@ namespace BignumArithmetics.Tests
         public void Digit23_Test()
         {
             var bf = BigFloat.CreateFromString("5");
-            List<int> actual = BigFloat.BigFloatToIntList(bf, 2, 3);
+            List<int> actual = BigFloat.BigNumberToIntList(bf, 2, 3);
             List<int> expected = new List<int> { 0, 0, 0, 5, 0 };
             CompareLists(expected, actual);
         }
@@ -50,7 +50,7 @@ namespace BignumArithmetics.Tests
         public void Digits32_Test()
         {
             var bf = BigFloat.CreateFromString("65.1");
-            List<int> actual = BigFloat.BigFloatToIntList(bf, 3, 2);
+            List<int> actual = BigFloat.BigNumberToIntList(bf, 3, 2);
             List<int> expected = new List<int> { 0, 1, 5, 6, 0 };
             CompareLists(expected, actual);
         }
@@ -59,7 +59,7 @@ namespace BignumArithmetics.Tests
         public void Digits13_Test()
         {
             var bf = BigFloat.CreateFromString("65.1");
-            List<int> actual = BigFloat.BigFloatToIntList(bf, 1, 3);
+            List<int> actual = BigFloat.BigNumberToIntList(bf, 1, 3);
             List<int> expected = new List<int> { 0, 0, 1, 5, 6 };
             CompareLists(expected, actual);
         }
