@@ -154,7 +154,7 @@ namespace BignumArithmetics
             if (_dotPos < 0)
                 _dotPos = CleanString.Length;
         }
-        private List<int> SumTwoLists(List<int> leftList, List<int> rightList, bool toNorm = true)
+        private static List<int> SumTwoLists(List<int> leftList, List<int> rightList, bool toNorm = true)
         {
             if (leftList.Count <= 0 || rightList.Count <= 0)
                 return new List<int>();
@@ -168,7 +168,7 @@ namespace BignumArithmetics
                 NormalizeList(resultList);
             return resultList;
         }
-        private List<int> DifTwoLists(List<int> leftList, List<int> rightList, bool toNorm = true)
+        private static List<int> DifTwoLists(List<int> leftList, List<int> rightList, bool toNorm = true)
         {
             int until = Math.Min(leftList.Count, rightList.Count);
             if (until <= 0)
@@ -180,7 +180,7 @@ namespace BignumArithmetics
                 NormalizeList(resultList);
             return resultList;
         }
-        private List<int> MulTwoLists(List<int> leftList, List<int> rightList)
+        private static List<int> MulTwoLists(List<int> leftList, List<int> rightList)
         {
             var resultList = new List<int>();
             var tempList = new List<int>();
@@ -195,7 +195,54 @@ namespace BignumArithmetics
             NormalizeList(resultList);
             return resultList;
         }
-        private List<int> MulListAndDigit(List<int> leftList, int digit, bool toNorm = true, int padding = 0)
+        //todo: remove unnecessary reverses!!
+        private static List<int> DivTwoLists(List<int> leftList, List<int> rightList, out List<int> remainder)
+        {
+            var resultList = new List<int>();
+            remainder = new List<int>();
+            if (CompareLists(leftList, rightList) >= 0)
+            {
+                bool unnormed;
+                int sum;
+                uint dif;
+                int toAdd = rightList.Count;
+                for (int i = 0; i < rightList.Count; i++)
+                    remainder.Add(leftList[i]);
+                do
+                {
+                    unnormed = true;
+                    sum = 0;
+                    while (CompareLists(remainder, rightList) >= 0)
+                    {
+                        dif = (uint)(remainder.Count - rightList.Count);
+                        remainder.Reverse();
+                        rightList.Reverse();
+                        AddTailingZeros(rightList, dif);
+                        remainder = DifTwoLists(remainder, rightList);
+                        if (dif > 0)
+                            rightList.RemoveAt(rightList.Count - 1);
+                        while (remainder.Count > 0 && remainder.Last() == 0)
+                            remainder.RemoveAt(remainder.Count - 1);
+                        remainder.Reverse();
+                        rightList.Reverse();
+                        sum++;
+                        unnormed = false;
+                    }
+                    if (unnormed)
+                        while (remainder.Count > 0 && remainder[0] == 0)
+                            remainder.RemoveAt(0);
+                    if (toAdd < leftList.Count || (toAdd == leftList.Count && sum > 0))
+                        resultList.Add(sum);
+                    if (toAdd < leftList.Count)
+                        remainder.Add(leftList[toAdd]);
+                    toAdd++;
+                } while (toAdd <= leftList.Count);
+            }
+            if (resultList.Count == 0)
+                resultList.Add(0);
+            return resultList;
+        }
+        private static List<int> MulListAndDigit(List<int> leftList, int digit, bool toNorm = true, int padding = 0)
         {
             if (digit == 0)
                 return new List<int> { 0 };
@@ -207,16 +254,16 @@ namespace BignumArithmetics
                 NormalizeList(resultList);
             return resultList;
         }
-        private void RemoveTailingZeros(List<int> list)
+        private static void RemoveTailingZeros(List<int> list)
         {
             while (list.Last() == 0 && list.Count > 1)
                 list.RemoveAt(list.Count - 1);
         }
-        private void AddTailingZeros(List<int> list, uint amount)
+        private static void AddTailingZeros(List<int> list, uint amount)
         {
             list.AddRange(Enumerable.Repeat(0, (int)amount));
         }
-        private int CompareLists(List<int> left, List<int> right)
+        private static int CompareLists(List<int> left, List<int> right)
         {
             if (left.Count != right.Count)
                 return left.Count - right.Count;
@@ -304,80 +351,23 @@ namespace BignumArithmetics
             BigFloat bfRight = (BigFloat)op;
 
             int multiplier = Math.Max(bfLeft.Fractional, bfRight.Fractional);
-            var leftList = BigNumberToIntList(bfLeft);
-            var rightList = BigNumberToIntList(bfRight);
-            var resultList = new List<int>();
+            var leftList = BigNumberToIntList(bfLeft, 0, multiplier);
+            var rightList = BigNumberToIntList(bfRight, 0, multiplier);
             RemoveTailingZeros(leftList);
             RemoveTailingZeros(rightList);
-            //todo: remove unnecessary reverses!!
             leftList.Reverse();
             rightList.Reverse();
-            if (CompareLists(leftList, rightList) >= 0)
-            {
-                int sum;
-                uint dif;
-                int toAdd = rightList.Count;
-                var subList = new List<int>();
-                for (int i = 0; i < rightList.Count; i++)
-                    subList.Add(leftList[i]);
-                do
-                {
-                    sum = 0;
-                    while (CompareLists(subList, rightList) >= 0)
-                    {
-                        dif = (uint)(subList.Count - rightList.Count);
-                        subList.Reverse();
-                        rightList.Reverse();
-                        AddTailingZeros(rightList, dif);
-                        subList = DifTwoLists(subList, rightList);
-                        if (dif > 0)
-                            rightList.RemoveAt(rightList.Count - 1);
-                        while (subList.Count > 1 && subList.Last() == 0)
-                            subList.RemoveAt(subList.Count - 1);
-                        subList.Reverse();
-                        rightList.Reverse();
-                        sum++;
-                    }
-                    resultList.Add(sum);
-                    subList.Add(leftList[toAdd++]);
-                } while (toAdd < leftList.Count);
-                int stop = 0;
-                //create a sublist of len |list2| from list1 digits
-                //int unadded = rightList.Count;
-                //while (unadded < leftList.Count)
-                //if (sublist < rightList)
-                //{
-                //  if unadded = leftList.Count break;
-                //  sublist.Add(leftlist[unadded++]);
-                //}
-                //
-            }
 
+            List<int> resultList = DivTwoLists(leftList, rightList, out List<int> subList);
+            int dotPos = resultList.Count;
+            AddTailingZeros(subList, FracPrecision);
+            resultList.AddRange(DivTwoLists(subList, rightList, out List<int> garbage));
+            resultList.Reverse();
 
-            int dotSize = 0;
-            while (leftList.Count > rightList.Count)
-            {
-
-            }
-            //mul with 10 until both are ints. this costs nothing
-            //for unreversed lists!!!
-            //int toCompare = B.Count
-            //int sumFrom = -1;
-            //int nonzero = 0;
-            //while A.Count > toCompare
-            //  sumfrom++;
-            //  insert zero to ans; 
-            //  if (Compare first B.len elems ; A is < B)
-            //      insert zero; insert zero bef
-            //  while A[0] != 0
-            //      A = A - B padded; last ans digit ++;
-            //
-
-            /*BigFloat bfAns = CreateFromString(IntListToString(resultList, resultList.Count - newDot));
+            BigFloat bfAns = CreateFromString(IntListToString(resultList, dotPos));
             if (bfLeft.Sign * bfRight.Sign < 0)
                 bfAns.SwitchSign();
-            return bfAns;*/
-            return new BigFloat();
+            return bfAns;
         }
         public override BigNumber Mod(BigNumber op)
         {
