@@ -196,7 +196,7 @@ namespace BignumArithmetics
             return resultList;
         }
         //todo: remove unnecessary reverses!!
-        private static List<int> DivTwoLists(List<int> leftList, List<int> rightList, out List<int> remainder, bool isAfterInt = false)
+        private static List<int> DivTwoLists(List<int> leftList, List<int> rightList, out List<int> remainder)
         {
             int addedDigitsInARow = 0;
             var resultList = new List<int>();
@@ -205,7 +205,7 @@ namespace BignumArithmetics
             {
                 bool unnormed = true;
                 int sum, dif;
-                int toAdd = rightList.Count + (isAfterInt ? 1 : 0);
+                int toAdd = rightList.Count;
                 for (int i = 0; i < toAdd; i++)
                     remainder.Add(leftList[i]);
                 addedDigitsInARow = 0;
@@ -242,8 +242,6 @@ namespace BignumArithmetics
             }
             if (resultList.Count == 0)
                 resultList.Add(0);
-            //else if (addedDigitsInARow > 1)
-            //    AddTailingZeros(remainder, (uint)(addedDigitsInARow - 1));
             return resultList;
         }
         private static List<int> MulListAndDigit(List<int> leftList, int digit, bool toNorm = true, int padding = 0)
@@ -364,10 +362,9 @@ namespace BignumArithmetics
             leftList.Reverse();
             rightList.Reverse();
 
+            AddTailingZeros(leftList, FracPrecision);
             List<int> resultList = DivTwoLists(leftList, rightList, out List<int> subList);
-            int dotPos = resultList.Count;
-            AddTailingZeros(subList, FracPrecision);
-            resultList.AddRange(DivTwoLists(subList, rightList, out List<int> garbage, true));
+            int dotPos = resultList.Count - FracPrecision;           
             resultList.Reverse();
 
             BigFloat bfAns = CreateFromString(IntListToString(resultList, dotPos));

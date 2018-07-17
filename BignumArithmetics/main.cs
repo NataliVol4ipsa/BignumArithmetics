@@ -116,7 +116,7 @@ namespace BignumArithmetics
             decimal C = 1849752.341710464m;
             decimal B = -21.10336m;
             decimal A = C / B;
-
+            
             DoDivTesting(DecimalToString(C),
                     DecimalToString(B),
                     DecimalToString(A));
@@ -126,8 +126,8 @@ namespace BignumArithmetics
             int i = 0;
             try
             {
-                //for (i = 0; i < 100000; i++)
-                ConcreteTest1();
+                for (i = 0; i < 10000; i++)
+                Test1();
             }
             catch (Exception e)
             {
