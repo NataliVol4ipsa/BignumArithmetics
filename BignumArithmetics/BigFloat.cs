@@ -117,7 +117,7 @@ namespace BignumArithmetics
                 i++;
             }
         }
-        /// <summary>Converts digit list to string</summary>
+        /// <summary>IntListToString method converts digit list to string</summary>
         /// <param name="digits">List of digits</param>
         /// <param name="dotPos">Integer representing position of dot in string</param>
         /// <returns>A string representing a number; null in case of invalid arguments</returns>
@@ -144,6 +144,11 @@ namespace BignumArithmetics
             return sb.ToString();
         }
 
+        //todo: ADD NULL PROTECTION
+        /// <summary>CleanNumericString method cleans digit string with <see cref="cleanStringRegEx"/></summary>
+        /// <param name="RawString">String representing of digits</param>
+        /// <param name="sign">Integer representing position of dot in cleaned string</param>
+        /// <returns>A clean string; "0" in case of invalid arguments</returns>
         private static string CleanNumericString(string RawString, out int sign)
         {
             string substr;
@@ -482,23 +487,36 @@ namespace BignumArithmetics
         /// <summary>delimiter represents a symbol or string that splits number
         /// into integer and fractional parts </summary>
         private static readonly string delimiter = ".";
-        /// <summary>validStringRegEx is a string representing RegEx used to validate input string in fabric method CreateFromString
+        /// <summary>validStringRegEx is a string representing RegEx
+        /// used to validate input string in fabric method <see cref="CreateFromString"/>
         /// into integer and fractional parts </summary>
         private static readonly string validStringRegEx = @"^\s*[+-]?[0-9]+(\.[0-9]+)?\s*$";
+        /// <summary>cleanStringRegEx is a string representing RegEx
+        /// used to clean valid input string in fabric method <see cref="CreateFromString"/></summary>
         private static readonly string cleanStringRegEx = @"([1-9]+[0-9]*(\.[0-9]*[1-9]+)?|0\.[0-9]*[1-9]+)";
+        /// <summary>The _fracPrecision local field represents 
+        /// a number of fractional digits counted while division for BigFloat instances.</summary>
         private static volatile int _fracPrecision = 20;
 
+        /// <summary>The _dotPos local field represents a delimiter position 
+        /// of BigFloat instance in string format.</summary>
         private volatile int _dotPos = 0;
+        /// <summary>The _fracLen local field represents a number of digits 
+        /// in the fractional part of BigFloat instance.</summary>
         private volatile int _fracLen = -1;
         #endregion
 
         #region Mutexes
+        ///<summary>Random variable used for thread-safe <see cref="DotPos"/>
+        ///property first calculation </summary>
         private readonly Object dotPosMutex = new Object();
+        ///<summary>Random variable used for thread-safe <see cref="Fractional"/>
+        ///property first calculation </summary>
         private readonly Object fracLenMutex = new Object();
         #endregion
 
         #region Properties
-        /// <summary>The DotPos property represents a position of delimiter in BigFloat in string format.</summary>
+        /// <summary>The DotPos property represents a delimiter position of BigFloat instance in string format.</summary>
         /// <value>The DotPos property gets/private sets the value of the int field, <see cref="_dotPos"/></value>
         public int DotPos
         {
