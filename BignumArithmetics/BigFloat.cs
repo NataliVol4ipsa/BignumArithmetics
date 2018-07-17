@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace BignumArithmetics
 {
-    /// <summary>Сlass for big numbers having integer and fractional parts</summary>
+    /// <summary>Сlass for fixed point big numbers</summary>
     public class BigFloat : BigNumber
     {
         #region Constructors
@@ -31,7 +31,7 @@ namespace BignumArithmetics
         #endregion
 
         #region Static Methods
-        /// <summary>Fabric thar returns an instance of BigFloat created of string</summary>
+        /// <summary>Fabric thar returns an instance of BigFloat constructed from a string</summary>
         /// <param name="str">String that represents a number</param>
         /// <returns>An instance of BigFloat. null if parameter is invalid</returns>
         public static BigFloat CreateFromString(string str)
@@ -42,7 +42,7 @@ namespace BignumArithmetics
             str = CleanNumericString(str, out int sign);
             return new BigFloat(str, sign);
         }
-        /// <summary>Fabric thar returns an instance of BigFloat created of number</summary>
+        /// <summary>Fabric thar returns an instance of BigFloat constructed from a number</summary>
         /// <param name="number">Object of any numeric type</param>
         /// <returns>An instance of BigFloat. null if parameter is invalid</returns>
         public static BigFloat CreateFromNumber<T>(T number)
@@ -281,8 +281,14 @@ namespace BignumArithmetics
         #endregion
 
         #region Parent Overrides
+        //todo: CHECK IF PARAMETERS ARE REALLY BIGFLOATS
+        /// <summary>Method that is calculating (this + op) for BigFLoat objects.
+        /// Overrided from parent</summary>
+        /// <param name="op">Second operand</param>
+        /// <returns>BigFloat equal to (this + op)  upcasted to BigNumber</returns>
         public override BigNumber Add(BigNumber op)
         {
+            
             BigFloat bfLeft = this;
             BigFloat bfRight = (BigFloat)op;
 
@@ -300,6 +306,10 @@ namespace BignumArithmetics
                 bfAns.SwitchSign();
             return bfAns;
         }
+        /// <summary>Method that is calculating (this - op) for BigFLoat objects.
+        /// Overrided from parent</summary>
+        /// <param name="op">Second operand</param>
+        /// <returns>BigFloat equal to (this - op)  upcasted to BigNumber</returns>
         public override BigNumber Substract(BigNumber op)
         {
             BigFloat bfLeft = this;
@@ -330,6 +340,10 @@ namespace BignumArithmetics
                 bfAns.SwitchSign();
             return bfAns;
         }
+        /// <summary>Method that is calculating (this * op) for BigFLoat objects.
+        /// Overrided from parent</summary>
+        /// <param name="op">Second operand</param>
+        /// <returns>BigFloat equal to (this * op)  upcasted to BigNumber</returns>
         public override BigNumber Multiply(BigNumber op)
         {
             BigFloat bfLeft = this;
@@ -347,6 +361,10 @@ namespace BignumArithmetics
                 bfAns.SwitchSign();
             return bfAns;
         }
+        /// <summary>Method that is calculating (this / op) for BigFLoat objects.
+        /// Overrided from parent</summary>
+        /// <param name="op">Second operand</param>
+        /// <returns>BigFloat equal to (this / op)  upcasted to BigNumber</returns>
         public override BigNumber Divide(BigNumber op)
         {
             if (op.CleanString == "0")
@@ -372,6 +390,10 @@ namespace BignumArithmetics
                 bfAns.SwitchSign();
             return bfAns;
         }
+        /// <summary>Method that is calculating (this % op) for BigFLoat objects.
+        /// Overrided from parent</summary>
+        /// <param name="op">Second operand</param>
+        /// <returns>BigFloat equal to (this % op)  upcasted to BigNumber</returns>
         public override BigNumber Mod(BigNumber op)
         {
             if (op.CleanString == "0")
@@ -443,10 +465,10 @@ namespace BignumArithmetics
         #endregion
 
         #region Variables
-        public static int FracPrecision = 20; //add get and set
         private static readonly string delimiter = ".";
         private static readonly string validStringRegEx = @"^\s*[+-]?[0-9]+(\.[0-9]+)?\s*$";
         private static readonly string cleanStringRegEx = @"([1-9]+[0-9]*(\.[0-9]*[1-9]+)?|0\.[0-9]*[1-9]+)";
+        private static volatile int _fracPrecision = 20;
 
         private volatile int _dotPos = 0;
         private volatile int _fracLen = -1;
@@ -458,6 +480,7 @@ namespace BignumArithmetics
         #endregion
 
         #region Properties
+        /// <summary>DotPos represents a position of delimiter in BigFloat in string format</summary>
         public int DotPos
         {
             get
@@ -476,6 +499,7 @@ namespace BignumArithmetics
                 _dotPos = value;
             }
         }
+        /// <summary>Integer represents a number of digits in the integer part of BigFloat</summary>
         public int Integer
         {
             get
@@ -483,6 +507,7 @@ namespace BignumArithmetics
                 return DotPos;
             }
         }
+        /// <summary>Fractional represents a number of digits in the fractional part of BigFloat</summary>
         public int Fractional
         {
             get
@@ -499,6 +524,21 @@ namespace BignumArithmetics
             private set
             {
                 _fracLen = value;
+            }
+        }
+        /// <summary>FracPrecision represents a number of fractional digits counted while division for BigFloat objects</summary>
+        public static int FracPrecision
+        {
+            get
+            {
+                return _fracPrecision;
+            }
+            private set
+            {
+                if (value < 0)
+                    _fracPrecision = 0;
+                else
+                    _fracPrecision = value;
             }
         }
         #endregion

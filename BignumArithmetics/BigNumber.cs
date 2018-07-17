@@ -9,10 +9,30 @@ namespace BignumArithmetics
     public abstract class BigNumber
     {
         #region Private Methods
+        /// <summary>Abstract method that is calculating (this + op).
+        /// Has to be overrided by children</summary>
+        /// <param name="op">Second operand</param>
+        /// <returns>BigNumber equal to (this + op)</returns>
         public abstract BigNumber Add(BigNumber op);
+        /// <summary>Abstract method that is calculating (this - op).
+        /// Has to be overrided by children</summary>
+        /// <param name="op">Second operand</param>
+        /// <returns>BigNumber equal to (this - op)</returns>
         public abstract BigNumber Substract(BigNumber op);
+        /// <summary>Abstract method that is calculating (this * op).
+        /// Has to be overrided by children</summary>
+        /// <param name="op">Second operand</param>
+        /// <returns>BigNumber equal to (this * op)</returns>
         public abstract BigNumber Multiply(BigNumber op);
+        /// <summary>Abstract method that is calculating (this / op).
+        /// Has to be overrided by children</summary>
+        /// <param name="op">Second operand</param>
+        /// <returns>BigNumber equal to (this / op)</returns>
         public abstract BigNumber Divide(BigNumber op);
+        /// <summary>Abstract method that is calculating (this % op).
+        /// Has to be overrided by children</summary>
+        /// <param name="op">Second operand</param>
+        /// <returns>BigNumber equal to (this % op)</returns>
         public abstract BigNumber Mod(BigNumber op);
         #endregion
 

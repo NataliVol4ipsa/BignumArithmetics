@@ -25,6 +25,8 @@ This is a small self-educational project I decided to start in order to refresh 
 
 <b>[CURRENT]</b> 5.0. Implement div
 
+[AWAITING] 6.0. Implement more useful methods (copy etc)
+
 [AWAITING] 7.0. Implement 2-6 for integer.
 
 [AWAITING] 7.1. Implement 2-6 for different base
