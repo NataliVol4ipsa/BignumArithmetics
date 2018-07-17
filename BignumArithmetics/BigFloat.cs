@@ -10,10 +10,16 @@ namespace BignumArithmetics
     public class BigFloat : BigNumber
     {
         #region Constructors
+        /// <summary>Constructor creates a BigFLoat equal to 0</summary>
+        /// <returns>An instance of BigFloat</returns>
         public BigFloat()
         {
             CleanString = "0";
         }
+        //todo: REMAKE IT TO CALL COPY()  ?
+        /// <summary>Constructor creates a BigFloat equal to parameter</summary>
+        /// <param name="from">any BigFloat</param>
+        /// <returns>An instance of BigFloat equal to parameter</returns>
         public BigFloat(BigFloat from)
         {
             CleanString = from.CleanString;
@@ -22,6 +28,12 @@ namespace BignumArithmetics
             DotPos = from.DotPos;
             Fractional = from.Fractional;
         }
+        /// <summary>Private constructor creates a BigFloat from a valid string 
+        /// that is matching <see cref="validStringRegEx"/> 
+        /// and is cut with <see cref="cleanStringRegEx"/></summary>
+        /// <param name="str">string representing number digits and delimiter</param>
+        /// <param name="sign">integer representing number sign</param>
+        /// <returns>An instance of BigFloat</returns>
         private BigFloat(string str, int sign)
         {
             CleanString = str;
@@ -31,7 +43,9 @@ namespace BignumArithmetics
         #endregion
 
         #region Static Methods
-        /// <summary>Fabric thar returns an instance of BigFloat constructed from a string</summary>
+        /// <summary>Fabric thar returns an instance of BigFloat constructed from a string
+        /// that is matching <see cref="validStringRegEx"/> 
+        /// and is cut with <see cref="cleanStringRegEx"/></summary>
         /// <param name="str">String that represents a number</param>
         /// <returns>An instance of BigFloat. null if parameter is invalid</returns>
         public static BigFloat CreateFromString(string str)
@@ -465,7 +479,11 @@ namespace BignumArithmetics
         #endregion
 
         #region Variables
+        /// <summary>delimiter represents a symbol or string that splits number
+        /// into integer and fractional parts </summary>
         private static readonly string delimiter = ".";
+        /// <summary>validStringRegEx is a string representing RegEx used to validate input string in fabric method CreateFromString
+        /// into integer and fractional parts </summary>
         private static readonly string validStringRegEx = @"^\s*[+-]?[0-9]+(\.[0-9]+)?\s*$";
         private static readonly string cleanStringRegEx = @"([1-9]+[0-9]*(\.[0-9]*[1-9]+)?|0\.[0-9]*[1-9]+)";
         private static volatile int _fracPrecision = 20;
@@ -480,7 +498,8 @@ namespace BignumArithmetics
         #endregion
 
         #region Properties
-        /// <summary>DotPos represents a position of delimiter in BigFloat in string format</summary>
+        /// <summary>The DotPos property represents a position of delimiter in BigFloat in string format.</summary>
+        /// <value>The DotPos property gets/private sets the value of the int field, <see cref="_dotPos"/></value>
         public int DotPos
         {
             get
@@ -499,7 +518,9 @@ namespace BignumArithmetics
                 _dotPos = value;
             }
         }
-        /// <summary>Integer represents a number of digits in the integer part of BigFloat</summary>
+        /// <summary>The Integer property represents a number of digits 
+        /// in the integer part of BigFloat instance.</summary>
+        /// <value>The Integer property gets the value of the int property, <see cref="DotPos"/></value>
         public int Integer
         {
             get
@@ -507,7 +528,9 @@ namespace BignumArithmetics
                 return DotPos;
             }
         }
-        /// <summary>Fractional represents a number of digits in the fractional part of BigFloat</summary>
+        /// <summary>The Fractional property represents a number of digits 
+        /// in the fractional part of BigFloat instance.</summary>
+        /// <value>The Fractional property gets/private sets the value of the int property, <see cref="_fracLen"/></value>
         public int Fractional
         {
             get
@@ -526,14 +549,16 @@ namespace BignumArithmetics
                 _fracLen = value;
             }
         }
-        /// <summary>FracPrecision represents a number of fractional digits counted while division for BigFloat objects</summary>
+        /// <summary>The FracPrecision property represents 
+        /// a number of fractional digits counted while division for BigFloat instances.</summary>
+        /// <value>The FracPrecision property gets/sets the value of the int property, <see cref="_fracPrecision"/></value>
         public static int FracPrecision
         {
             get
             {
                 return _fracPrecision;
             }
-            private set
+            set
             {
                 if (value < 0)
                     _fracPrecision = 0;
