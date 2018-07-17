@@ -13,7 +13,9 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [DONE] 2.0. Implement long sum
 
-[DONE] 2.1. Implement long dif. Remember to proceed negative and zero numbers.
+[DONE] 2.1. Start creating documentation
+
+[DONE] 2.2. Implement long dif. Remember to proceed negative and zero numbers.
 
 [DONE] 3.0. Implement basic error management using exception system + advanced input parsing.
 
@@ -23,9 +25,13 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [AWAITING] 4.1. Implement mod. Remember to create exception. fmod?
 
-<b>[CURRENT]</b> 5.0. Implement div
+[DONE] 5.0. Implement div
+
+<b>[CURRENT]</b> 5.1. Test Div
 
 [AWAITING] 6.0. Implement more useful methods (copy etc)
+
+[AWAITING] 6.1. Append documentation
 
 [AWAITING] 7.0. Implement 2-6 for integer.
 
@@ -34,8 +40,6 @@ This is a small self-educational project I decided to start in order to refresh 
 [AWAITING] 7.2. Implement 2-6 for fractional. Remember about reduction of fractions(factorization...)
 
 [AWAITING] 7.3. Create a config file to configure current parameters of testing. Create endless looped menu of reading input, like a local console.
-
-[DONE] 7.4. Start creating documentation
 
 [AWAITING] 8.0. Try to implement a normal calculator, with brackets support. Look at stack-like collections. Regex? RPN? Class Expression. What if mul overflow?
 
