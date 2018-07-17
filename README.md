@@ -39,8 +39,6 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [AWAITING] 7.2. Implement 2-6 for fractional. Remember about reduction of fractions(factorization...)
 
-[AWAITING] 7.3. Create a config file to configure current parameters of testing. Create endless looped menu of reading input, like a local console.
-
 [AWAITING] 8.0. Try to implement a normal calculator, with brackets support. Look at stack-like collections. Regex? RPN? Class Expression. What if mul overflow?
 
 [AWAITING] 8.1. Improve input error management
