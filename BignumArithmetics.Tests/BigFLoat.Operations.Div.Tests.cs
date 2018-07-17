@@ -2,41 +2,18 @@
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-
 namespace BignumArithmetics.Tests
 {
     [TestClass]
-    public class BigFLoatOperationsTests
+    public class BigFLoatOperationsDivTests
     {
-        public enum Operation { sum, sub, mul, div, mod }
-        public static Random rnd = new Random((int)DateTime.Now.Ticks);
-        public static void DoOperationTesting(string left, string right, string result, Operation op)
+        static Random rnd = new Random((int)DateTime.Now.Ticks);
+        static void DoTesting(string left, string right, string result)
         {
             BigFloat A = BigFloat.CreateFromString(left);
             BigFloat B = BigFloat.CreateFromString(right);
 
-            BigFloat C;
-            switch (op)
-            {
-                case Operation.sum:
-                    C = A + B;
-                    break;
-                case Operation.sub:
-                    C = A + B;
-                    break;
-                case Operation.mul:
-                    C = A + B;
-                    break;
-                case Operation.div:
-                    C = A + B;
-                    break;
-                case Operation.mod:
-                    C = A + B;
-                    break;
-                default:
-                    C = new BigFloat();
-                    break;
-            }
+            BigFloat C = A / B;
             Assert.AreEqual(C.ToString(), result);
         }
         public static string DecimalToString(decimal number)
@@ -52,38 +29,34 @@ namespace BignumArithmetics.Tests
                 sb.Remove(sb.Length - 1, 1);
             return sb.ToString();
         }
-        /*static void Test()
+        static void RandomTest()
         {
-            int a = BFTestingTools.rnd.Next(0, Int32.MaxValue);
-            int b = BFTestingTools.rnd.Next(0, Int32.MaxValue);
+            int a = rnd.Next(0, Int32.MaxValue);
+            int b = rnd.Next(0, Int32.MaxValue);
             a -= Int32.MaxValue / 2;
             b -= Int32.MaxValue / 2;
             decimal A = a;
-            decimal B = b;
-            A /= 10000;
-            B /= 100000;
-            decimal C = A + B;
-            decimal D = A - B;
-            decimal E = A * B;
+            decimal B = b;           
+            decimal C = A / B;
 
-            DoTesting(DecimalToString(A),
+            DoTesting(DecimalToString(C),
                     DecimalToString(B),
-                    DecimalToString(C),
-                    DecimalToString(D),
-                    DecimalToString(E));
+                    DecimalToString(A));
         }
 
         [TestMethod]
+        [ExpectedException(typeof(DivideByZeroException))]
         public void Zero_Zero()
         {
-            DoTesting("0", "0", "0", "0", "0");
+            DoTesting("0", "0", "0");
         }
-        [TestMethod]
+
+        /*[TestMethod]
         public void Zero_m5()
         {
             DoTesting("0", "-5", "-5", "5", "0");
         }
-        [TestMethod]
+        /*[TestMethod]
         public void m5_zero()
         {
             DoTesting("-5", "0", "-5", "-5", "0");
