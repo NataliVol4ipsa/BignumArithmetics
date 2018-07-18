@@ -6,7 +6,8 @@ using System.Linq;
 
 namespace BignumArithmetics
 {
-    /// <summary>Сlass for fixed point big numbers</summary>
+    /// <summary>Сlass for fixed point 
+    /// big numbers</summary>
     public class BigFloat : BigNumber
     {
         #region Constructors
@@ -66,7 +67,7 @@ namespace BignumArithmetics
             str = str.Replace(sysDelim, delimiter);
             return CreateFromString(str);
         }
-        //TODO: make these virtual\override
+        //TODO: make these virtual\override ?
         /// <summary>Сonverts BigFloat into reversed digit list with padding zeroes</summary>
         /// <param name="desiredInt">int represening how many digits should integer part contain</param>
         /// <param name="desiredFrac">int represening how many digits should fractional part contain</param>
@@ -119,7 +120,7 @@ namespace BignumArithmetics
         }
         /// <summary>IntListToString method converts digit list to string</summary>
         /// <param name="digits">List of digits</param>
-        /// <param name="dotPos">Integer representing position of dot in string</param>
+        /// <param name="dotPos">Integer representing reversed position of dot in string</param>
         /// <returns>A string representing a number; null in case of invalid arguments</returns>
         public static string IntListToString(List<int> digits, int dotPos = 0)
         {
@@ -169,7 +170,8 @@ namespace BignumArithmetics
         #endregion
 
         #region Private Methods
-        /// <summary>Calculates a position of delimiter in <see cref="CleanString"/></summary>
+        /// <summary>Calculates a position of delimiter
+        /// in <see cref="CleanString"/></summary>
         private void FindDotPos()
         {
             if (_dotPos > 0)
@@ -331,14 +333,15 @@ namespace BignumArithmetics
         #endregion
 
         #region Parent Overrides
-        //todo: CHECK IF PARAMETERS ARE REALLY BIGFLOATS
         /// <summary>Method that is calculating (this + op) for BigFLoat objects.
         /// Overrided from parent</summary>
         /// <param name="op">Second operand</param>
         /// <returns>BigFloat equal to (this + op)  upcasted to BigNumber</returns>
         public override BigNumber Add(BigNumber op)
         {
-            
+            if (!(op is BigFloat))
+                throw new ArgumentException("Cannot Add BigFloat and " + op.GetType());
+
             BigFloat bfLeft = this;
             BigFloat bfRight = (BigFloat)op;
 
@@ -362,6 +365,9 @@ namespace BignumArithmetics
         /// <returns>BigFloat equal to (this - op)  upcasted to BigNumber</returns>
         public override BigNumber Substract(BigNumber op)
         {
+            if (!(op is BigFloat))
+                throw new ArgumentException("Cannot Add BigFloat and " + op.GetType());
+
             BigFloat bfLeft = this;
             BigFloat bfRight = (BigFloat)op;
 
@@ -396,6 +402,9 @@ namespace BignumArithmetics
         /// <returns>BigFloat equal to (this * op)  upcasted to BigNumber</returns>
         public override BigNumber Multiply(BigNumber op)
         {
+            if (!(op is BigFloat))
+                throw new ArgumentException("Cannot Add BigFloat and " + op.GetType());
+
             BigFloat bfLeft = this;
             BigFloat bfRight = (BigFloat)op;
             
@@ -417,6 +426,9 @@ namespace BignumArithmetics
         /// <returns>BigFloat equal to (this / op)  upcasted to BigNumber</returns>
         public override BigNumber Divide(BigNumber op)
         {
+            if (!(op is BigFloat))
+                throw new ArgumentException("Cannot Add BigFloat and " + op.GetType());
+
             if (op.CleanString == "0")
                 throw new DivideByZeroException();
             BigFloat bfLeft = this;
@@ -442,10 +454,20 @@ namespace BignumArithmetics
         /// <returns>BigFloat equal to (this % op)  upcasted to BigNumber</returns>
         public override BigNumber Mod(BigNumber op)
         {
+            if (!(op is BigFloat))
+                throw new ArgumentException("Cannot Add BigFloat and " + op.GetType());
+
             if (op.CleanString == "0")
                 throw new ArgumentException("Cannot calculate BigFloat % 0");
-            //div this by op until this >= op; return this;
-            return new BigFloat();
+            BigFloat bfLeft = this;
+            BigFloat bfRight = (BigFloat)op;
+
+            int temp = FracPrecision;
+            FracPrecision = 0;
+            BigFloat bfDiv = bfLeft / bfRight;
+            FracPrecision = temp;
+            BigFloat bfAns = bfLeft - bfDiv * bfRight;
+            return bfAns;
         }
         #endregion
 
@@ -490,23 +512,43 @@ namespace BignumArithmetics
         }
         public static bool operator >(BigFloat left, BigFloat right)
         {
-            if (left.Integer > right.Integer)
-                return true;
-            if (left.Integer < right.Integer)
+            if (left.Sign > 0)
+            {
+                if (right.Sign < 0)
+                    return true;
+                if (left.Integer > right.Integer)
+                    return true;
+                if (left.Integer < right.Integer)
+                    return false;
+                if (string.Compare(left.CleanString, right.CleanString) > 0)
+                    return true;
                 return false;
-            if (string.Compare(left.CleanString, right.CleanString) > 0)
+            }
+            if (right.Sign > 0)
+                return false;
+            if (left.Integer > right.Integer)
+                return false;
+            if (left.Integer < right.Integer)
                 return true;
-            return false;
+            if (string.Compare(left.CleanString, right.CleanString) > 0)
+                return false;
+            return true;
         }
         public static bool operator <(BigFloat left, BigFloat right)
         {
-            if (left.Integer > right.Integer)
+            return (!(left > right));
+        }
+        public static bool operator ==(BigFloat left, BigFloat right)
+        {
+            if (string.Compare(left.ToString(), right.ToString()) != 0)
                 return false;
-            if (left.Integer < right.Integer)
-                return true;
-            if (string.Compare(left.CleanString, right.CleanString) < 0)
-                return true;
-            return false;
+            return true;
+        }
+        public static bool operator !=(BigFloat left, BigFloat right)
+        {
+            if (string.Compare(left.ToString(), right.ToString()) != 0)
+                return false;
+            return true;
         }
         #endregion
 
