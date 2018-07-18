@@ -37,6 +37,8 @@ namespace BignumArithmetics.Tests
             b -= Int32.MaxValue / 2;
             decimal A = a;
             decimal B = b;
+            A /= 10000;
+            B /= 100000;
             decimal C = A * B;
 
             DoTesting(DecimalToString(A),

@@ -2,13 +2,12 @@
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-//TODO: LOG FAILS TO FILE
-
 namespace BignumArithmetics.Tests
 {
     [TestClass]
     public class BigFLoatOperationsDivTests
     {
+        static int i = 0;
         static Random rnd = new Random((int)DateTime.Now.Ticks);
         static void DoTesting(string left, string right, string result)
         {
@@ -38,8 +37,10 @@ namespace BignumArithmetics.Tests
             a -= Int32.MaxValue / 2;
             b -= Int32.MaxValue / 2;
             decimal A = a;
-            decimal B = b;           
-            decimal C = A / B;
+            decimal B = b;
+            A /= 10000;
+            B /= 100000;
+            decimal C = A * B;
 
             DoTesting(DecimalToString(C),
                     DecimalToString(B),
@@ -87,7 +88,7 @@ namespace BignumArithmetics.Tests
         [TestMethod]
         public void random_10000_tests()
         {
-            for (int i = 0; i < 10000; i++)
+            for (i = 0; i < 10000; i++)
                 RandomTest();
         }
     }
