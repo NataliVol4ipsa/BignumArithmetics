@@ -215,6 +215,7 @@ namespace BignumArithmetics
             return resultList;
         }
         //todo: remove unnecessary reverses!!
+        //todo: make it take precision as argument?
         private static List<int> DivTwoLists(List<int> leftList, List<int> rightList, out List<int> remainder)
         {
             int addedDigitsInARow = 0;

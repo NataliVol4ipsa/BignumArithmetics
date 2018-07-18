@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BignumArithmetics.Tests
+namespace BignumArithmetics.BigNumberTests
 {
     [TestClass]
     public class BigNumberTests

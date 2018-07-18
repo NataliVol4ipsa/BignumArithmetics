@@ -2,10 +2,10 @@
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BignumArithmetics.Tests
+namespace BignumArithmetics.BigFloatTests
 {
     [TestClass]
-    public class BigFLoatOperationsMulTests
+    public class BigFLoatOperationsSubTests
     {
         static Random rnd = new Random((int)DateTime.Now.Ticks);
         static void DoTesting(string left, string right, string result)
@@ -13,7 +13,7 @@ namespace BignumArithmetics.Tests
             BigFloat A = BigFloat.CreateFromString(left);
             BigFloat B = BigFloat.CreateFromString(right);
 
-            BigFloat C = A * B;
+            BigFloat C = A - B;
             Assert.AreEqual(C.ToString(), result);
         }
         public static string DecimalToString(decimal number)
@@ -39,7 +39,7 @@ namespace BignumArithmetics.Tests
             decimal B = b;
             A /= 10000;
             B /= 100000;
-            decimal C = A * B;
+            decimal C = A - B;
 
             DoTesting(DecimalToString(A),
                     DecimalToString(B),
@@ -55,37 +55,37 @@ namespace BignumArithmetics.Tests
         [TestMethod]
         public void Zero_m5()
         {
-            DoTesting("0", "-5", "0");
+            DoTesting("0", "-5", "5");
         }
 
         [TestMethod]
         public void m5_zero()
         {
-            DoTesting("-5", "0","0");
+            DoTesting("-5", "0", "-5");
         }
 
         [TestMethod]
         public void m5_p6()
         {
-            DoTesting("-5", "6", "-30");
+            DoTesting("-5", "6", "-11");
         }
 
         [TestMethod]
         public void p123D45_p45D678()
         {
-            DoTesting("123.45", "45.678", "5638.9491");
+            DoTesting("123.45", "45.678", "77.772");
         }
 
         [TestMethod]
         public void m3D1_p10D005()
         {
-            DoTesting("-3.1", "10.005", "-31.0155");
+            DoTesting("-3.1", "10.005", "-13.105");
         }
 
         [TestMethod]
         public void m10D005_m3D1()
         {
-            DoTesting("-10.005", "-3.1", "31.0155");
+            DoTesting("-10.005", "-3.1", "-6.905");
         }
 
         [TestMethod]

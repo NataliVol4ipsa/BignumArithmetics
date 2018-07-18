@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BignumArithmetics.Tests
+namespace BignumArithmetics.BigFloatTests
 {
     [TestClass]
     public class BigFloatIntFracTests
