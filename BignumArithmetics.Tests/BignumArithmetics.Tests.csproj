@@ -69,20 +69,20 @@
   <ItemGroup>
     <Compile Include="BigNumber.Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BigFloat.Constructor.Tests.cs" />
-    <Compile Include="BigFloat.IntAndFrac.Tests.cs" />
-    <Compile Include="BigFloat.BigFloatToIntList.Test.cs" />
-    <Compile Include="BigFloat.NormalizeList.Tests.cs" />
+    <Compile Include="BigFloatTests\BigFloat.Constructor.Tests.cs" />
+    <Compile Include="BigFloatTests\BigFloat.IntAndFrac.Tests.cs" />
+    <Compile Include="BigFloatTests\BigFloat.BigFloatToIntList.Test.cs" />
+    <Compile Include="BigFloatTests\BigFloat.NormalizeList.Tests.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="BigFloat.IntListToString.Tests.cs" />
-    <Compile Include="BigFLoat.Operations.Div.Tests.cs" />
-    <Compile Include="BigFloat.Operations.Add.Tests.cs" />
-    <Compile Include="BigFloat.Operations.Sub.Tests.cs" />
-    <Compile Include="BigFloat.Operations.Mul.Tests.cs" />
+    <Compile Include="BigFloatTests\BigFloat.IntListToString.Tests.cs" />
+    <Compile Include="BigFloatTests\BigFLoat.Operations.Div.Tests.cs" />
+    <Compile Include="BigFloatTests\BigFloat.Operations.Add.Tests.cs" />
+    <Compile Include="BigFloatTests\BigFloat.Operations.Sub.Tests.cs" />
+    <Compile Include="BigFloatTests\BigFloat.Operations.Mul.Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

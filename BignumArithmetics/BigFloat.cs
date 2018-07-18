@@ -56,7 +56,7 @@ namespace BignumArithmetics
             str = CleanNumericString(str, out int sign);
             return new BigFloat(str, sign);
         }
-        /// <summary>Fabric thar returns an instance of BigFloat constructed from a number</summary>
+             /// <summary>Fabric thar returns an instance of BigFloat constructed from a number</summary>
         /// <param name="number">Object of any numeric type</param>
         /// <returns>An instance of BigFloat. null if parameter is invalid</returns>
         public static BigFloat CreateFromNumber<T>(T number)
@@ -144,7 +144,6 @@ namespace BignumArithmetics
             return sb.ToString();
         }
 
-        //todo: ADD NULL PROTECTION
         /// <summary>CleanNumericString method cleans digit string with <see cref="cleanStringRegEx"/></summary>
         /// <param name="RawString">String representing of digits</param>
         /// <param name="sign">Integer representing position of dot in cleaned string</param>
@@ -153,6 +152,11 @@ namespace BignumArithmetics
         {
             string substr;
 
+            if (RawString is null)
+            {
+                sign = 1;
+                return "0";
+            }
             substr = Regex.Match(RawString, cleanStringRegEx).Value;
             if (substr == "")
             {
@@ -165,6 +169,7 @@ namespace BignumArithmetics
         #endregion
 
         #region Private Methods
+        /// <summary>Calculates a position of delimiter in <see cref="CleanString"/></summary>
         private void FindDotPos()
         {
             if (_dotPos > 0)
@@ -173,33 +178,53 @@ namespace BignumArithmetics
             if (_dotPos < 0)
                 _dotPos = CleanString.Length;
         }
+        /// <summary> Generates a list representing sum of two reversed digit lists</summary>
+        /// <param name="leftList">First operand</param>
+        /// <param name="rightList">Second operand</param>
+        /// <param name="toNorm">Shows if the <see cref="NormalizeList(List{int})"/>
+        /// should be called for result</param>
+        /// <returns>Sum of two lists in same reversed form</returns>
         private static List<int> SumTwoLists(List<int> leftList, List<int> rightList, bool toNorm = true)
         {
             if (leftList.Count <= 0 || rightList.Count <= 0)
                 return new List<int>();
-            int diff = Math.Max(leftList.Count, rightList.Count);
-            leftList.AddRange(Enumerable.Repeat(0, diff - leftList.Count));
-            rightList.AddRange(Enumerable.Repeat(0, diff - rightList.Count));
+            int maxlen = Math.Max(leftList.Count, rightList.Count);
+            leftList.AddRange(Enumerable.Repeat(0, maxlen - leftList.Count));
+            rightList.AddRange(Enumerable.Repeat(0, maxlen - rightList.Count));
             var resultList = new List<int>(leftList.Count);
-            for (int i = 0; i < diff; i++)
+            for (int i = 0; i < maxlen; i++)
                 resultList.Add(leftList[i] + rightList[i]);
             if (toNorm)
                 NormalizeList(resultList);
             return resultList;
         }
+        /// <summary> Generates a list representing substraction of two reversed digit lists.</summary>
+        /// <param name="leftList">First list.
+        /// Number represented by leftList has to be bigger than the one by rightList!</param>
+        /// <param name="rightList">Second list.</param>
+        /// <param name="toNorm">Shows if the <see cref="NormalizeList(List{int})"/>
+        /// should be called for result</param>
+        /// <returns>Substraction of two lists in same reversed form</returns>
+        /// <exception cref="ArgumentException">Exception thrown if leftList < rightList</exception>
         private static List<int> DifTwoLists(List<int> leftList, List<int> rightList, bool toNorm = true)
         {
-            int until = Math.Min(leftList.Count, rightList.Count);
-            if (until <= 0)
-                return new List<int>();
-            var resultList = new List<int>(until);
-            for (int i = 0; i < until; i++)
+            if (CompareLists(leftList, rightList) < 0)
+                throw new ArgumentException("leftList cannot be bigger than rightList!");
+            rightList.AddRange(Enumerable.Repeat(0, leftList.Count - rightList.Count));            
+            var resultList = new List<int>();
+            for (int i = 0; i < leftList.Count; i++)
                 resultList.Add(leftList[i] - rightList[i]);
             if (toNorm)
                 NormalizeList(resultList);
             return resultList;
         }
-        private static List<int> MulTwoLists(List<int> leftList, List<int> rightList)
+        /// <summary> Generates a list representing multiplication of two reversed digit lists.</summary>
+        /// <param name="leftList">First list.</param>
+        /// <param name="rightList">Second list.</param>
+        /// <param name="toNorm">Shows if the <see cref="NormalizeList(List{int})"/>
+        /// should be called for result</param>
+        /// <returns>Multiplication of two lists in same reversed form</returns>
+        private static List<int> MulTwoLists(List<int> leftList, List<int> rightList, bool toNorm = false)
         {
             var resultList = new List<int>();
             var tempList = new List<int>();
@@ -211,7 +236,8 @@ namespace BignumArithmetics
                 tempList = MulListAndDigit(leftList, rightList[i], false, i);
                 resultList = SumTwoLists(resultList, tempList, false);
             }
-            NormalizeList(resultList);
+            if (toNorm)
+                NormalizeList(resultList);
             return resultList;
         }
         //todo: remove unnecessary reverses!!
@@ -287,14 +313,19 @@ namespace BignumArithmetics
                 return;
             list.AddRange(Enumerable.Repeat(0, amount));
         }
+        /// <summary> Compares two reversed list of digits 
+        /// and returns an int representing their order when sorted </summary>
+        /// <param name="left">First list to compare</param>
+        /// <param name="right">Second list to compare</param>
+        /// <returns>An int representing list order when sorted</returns>
         private static int CompareLists(List<int> left, List<int> right)
         {
             if (left.Count != right.Count)
                 return left.Count - right.Count;
-            int i = 0;
-            while (i < left.Count && left[i] == right[i])
+            int i = left.Count - 1;
+            while (i >= 0 && left[i] == right[i])
                 i++;
-            if (i == left.Count)
+            if (i == -1)
                 return 0;
             return left[i] - right[i];
         }
