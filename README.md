@@ -25,9 +25,9 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [DONE] 5.0. Implement div
 
-<b>[CURRENT]</b> 5.1. Test Div
+[DONE] 5.1. Test Div
 
-[AWAITING] 5.2. Implement mod. Remember to create exception. fmod?
+<b>[CURRENT]</b> 5.2. Implement mod. Remember to create exception. fmod?
 
 [AWAITING] 6.0. Implement more useful methods (copy etc)
 

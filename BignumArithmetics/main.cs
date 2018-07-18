@@ -7,6 +7,12 @@ namespace BignumArithmetics
 {
     public static class BignumArithmetics
     {
+        public static int Main(string[] args)
+        {            
+            Console.Read();
+            return 0;
+        }
+        /*
         static Random rnd = new Random((int)DateTime.Now.Ticks);
         static int errors = 0;
         static void DoTesting(string left, string right, string sum, string dif, string mul)
@@ -127,7 +133,7 @@ namespace BignumArithmetics
             try
             {
                 for (i = 0; i < 10000; i++)
-                Test1();
+                    Test1();
             }
             catch (Exception e)
             {
@@ -136,6 +142,6 @@ namespace BignumArithmetics
             Console.WriteLine("Fails : {0} | {1}", errors, i);
             Console.Read();
             return 0;
-        }
+        }*/
     }
 }
