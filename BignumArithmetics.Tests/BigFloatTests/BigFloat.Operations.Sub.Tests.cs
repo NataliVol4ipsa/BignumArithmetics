@@ -14,7 +14,7 @@ namespace BignumArithmetics.BigFloatTests
             BigFloat B = BigFloat.CreateFromString(right);
 
             BigFloat C = A - B;
-            Assert.AreEqual(C.ToString(), result);
+            Assert.AreEqual(result, C.ToString());
         }
         public static string DecimalToString(decimal number)
         {

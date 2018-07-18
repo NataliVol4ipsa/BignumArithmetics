@@ -183,7 +183,7 @@ namespace BignumArithmetics
         /// <param name="rightList">Second operand</param>
         /// <param name="toNorm">Shows if the <see cref="NormalizeList(List{int})"/>
         /// should be called for result</param>
-        /// <returns>Sum of two lists in same reversed form</returns>
+        /// <returns>List representing sum of two lists in same reversed form</returns>
         private static List<int> SumTwoLists(List<int> leftList, List<int> rightList, bool toNorm = true)
         {
             if (leftList.Count <= 0 || rightList.Count <= 0)
@@ -204,7 +204,7 @@ namespace BignumArithmetics
         /// <param name="rightList">Second list.</param>
         /// <param name="toNorm">Shows if the <see cref="NormalizeList(List{int})"/>
         /// should be called for result</param>
-        /// <returns>Substraction of two lists in same reversed form</returns>
+        /// <returns>List representing substraction of two lists in same reversed form</returns>
         /// <exception cref="ArgumentException">Exception thrown if leftList < rightList</exception>
         private static List<int> DifTwoLists(List<int> leftList, List<int> rightList, bool toNorm = true)
         {
@@ -223,7 +223,7 @@ namespace BignumArithmetics
         /// <param name="rightList">Second list.</param>
         /// <param name="toNorm">Shows if the <see cref="NormalizeList(List{int})"/>
         /// should be called for result</param>
-        /// <returns>Multiplication of two lists in same reversed form</returns>
+        /// <returns>List representing multiplication of two lists in same reversed form</returns>
         private static List<int> MulTwoLists(List<int> leftList, List<int> rightList, bool toNorm = false)
         {
             var resultList = new List<int>();
@@ -240,56 +240,59 @@ namespace BignumArithmetics
                 NormalizeList(resultList);
             return resultList;
         }
-        //todo: remove unnecessary reverses!!
-        //todo: make it take precision as argument?
+        /// <summary> Generates a list representing division of two reversed digit lists.</summary>
+        /// <param name="leftList">First list.</param>
+        /// <param name="rightList">Second list.</param>
+        /// <param name="remainder">A list equal to leftList mod rightList"/>
+        /// <returns>List representing division of two lists in same reversed form</returns>
         private static List<int> DivTwoLists(List<int> leftList, List<int> rightList, out List<int> remainder)
         {
-            int addedDigitsInARow = 0;
             var resultList = new List<int>();
             remainder = new List<int>();
             if (CompareLists(leftList, rightList) >= 0)
             {
                 bool unnormed = true;
                 int sum, dif;
-                int toAdd = rightList.Count;
-                for (int i = 0; i < toAdd; i++)
-                    remainder.Add(leftList[i]);
-                addedDigitsInARow = 0;
+                int indexToAdd = leftList.Count - rightList.Count - 1;
+                remainder.AddRange(leftList.GetRange(indexToAdd + 1, rightList.Count));
                 do
                 {
                     if (unnormed)
-                        while (remainder.Count > 0 && remainder[0] == 0)
-                            remainder.RemoveAt(0);
+                        while (remainder.Count > 0 && remainder.Last() == 0)
+                            remainder.RemoveAt(remainder.Count - 1);
                     unnormed = true;
                     sum = 0;
-                    addedDigitsInARow++;
                     while (CompareLists(remainder, rightList) >= 0)
                     {
                         dif = remainder.Count - rightList.Count;
-                        remainder.Reverse();
-                        rightList.Reverse();
-                        AddTailingZeros(rightList, dif);
+                        rightList.AddRange(Enumerable.Repeat(0, dif));
                         remainder = DifTwoLists(remainder, rightList);
                         if (dif > 0)
                             rightList.RemoveAt(rightList.Count - 1);
                         while (remainder.Count > 0 && remainder.Last() == 0)
                             remainder.RemoveAt(remainder.Count - 1);
-                        remainder.Reverse();
-                        rightList.Reverse();
                         sum++;
                         unnormed = false;
-                        addedDigitsInARow = 0;
                     }
                     resultList.Add(sum);
-                    if (toAdd < leftList.Count)
-                        remainder.Add(leftList[toAdd]);
-                    toAdd++;
-                } while (toAdd <= leftList.Count);
+                    if (indexToAdd < leftList.Count)
+                        remainder.Insert(0, leftList[indexToAdd]);
+                    indexToAdd--;
+                } while (indexToAdd >=-1);
             }
             if (resultList.Count == 0)
                 resultList.Add(0);
+            resultList.Reverse();
             return resultList;
         }
+        /// <summary> Generates a list representing multiplication of reversed digit lists and digit</summary>
+        /// <param name="leftList">A list to be multiplicated</param>
+        /// <param name="digit">A digit to be multiplicated</param>
+        /// <param name="toNorm">Shows if the <see cref="NormalizeList(List{int})"/>
+        /// should be called for result</param>
+        /// <param name="padding">Optional parameter representing
+        /// number of zeroes to be padded at the beginning of result list</param>
+        /// <returns>List representing multiplication of reversed digit lists and digit</returns>
         private static List<int> MulListAndDigit(List<int> leftList, int digit, bool toNorm = true, int padding = 0)
         {
             if (digit == 0)
@@ -302,17 +305,6 @@ namespace BignumArithmetics
                 NormalizeList(resultList);
             return resultList;
         }
-        private static void RemoveTailingZeros(List<int> list)
-        {
-            while (list.Last() == 0 && list.Count > 1)
-                list.RemoveAt(list.Count - 1);
-        }
-        private static void AddTailingZeros(List<int> list, int amount)
-        {
-            if (amount < 0)
-                return;
-            list.AddRange(Enumerable.Repeat(0, amount));
-        }
         /// <summary> Compares two reversed list of digits 
         /// and returns an int representing their order when sorted </summary>
         /// <param name="left">First list to compare</param>
@@ -324,7 +316,7 @@ namespace BignumArithmetics
                 return left.Count - right.Count;
             int i = left.Count - 1;
             while (i >= 0 && left[i] == right[i])
-                i++;
+                i--;
             if (i == -1)
                 return 0;
             return left[i] - right[i];
@@ -405,7 +397,7 @@ namespace BignumArithmetics
             int newDot = bfLeft.Fractional + bfRight.Fractional;
             var leftList = BigNumberToIntList(bfLeft);
             var rightList = BigNumberToIntList(bfRight);
-            var resultList = MulTwoLists(leftList, rightList);
+            var resultList = MulTwoLists(leftList, rightList, true);
 
             BigFloat bfAns = CreateFromString(IntListToString(resultList, resultList.Count - newDot));
             if (bfLeft.Sign * bfRight.Sign < 0)
@@ -424,17 +416,11 @@ namespace BignumArithmetics
             BigFloat bfRight = (BigFloat)op;
 
             int multiplier = Math.Max(bfLeft.Fractional, bfRight.Fractional);
-            var leftList = BigNumberToIntList(bfLeft, 0, multiplier);
+            var leftList = BigNumberToIntList(bfLeft, 0, multiplier + FracPrecision);
             var rightList = BigNumberToIntList(bfRight, 0, multiplier);
-            RemoveTailingZeros(leftList);
-            RemoveTailingZeros(rightList);
-            leftList.Reverse();
-            rightList.Reverse();
 
-            AddTailingZeros(leftList, FracPrecision);
             List<int> resultList = DivTwoLists(leftList, rightList, out List<int> subList);
-            int dotPos = resultList.Count - FracPrecision;           
-            resultList.Reverse();
+            int dotPos = resultList.Count - FracPrecision;
 
             BigFloat bfAns = CreateFromString(IntListToString(resultList, dotPos));
             if (bfLeft.Sign * bfRight.Sign < 0)
