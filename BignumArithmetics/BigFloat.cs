@@ -275,7 +275,7 @@ namespace BignumArithmetics
                         unnormed = false;
                     }
                     resultList.Add(sum);
-                    if (indexToAdd < leftList.Count)
+                    if (indexToAdd >= 0)
                         remainder.Insert(0, leftList[indexToAdd]);
                     indexToAdd--;
                 } while (indexToAdd >=-1);
@@ -320,6 +320,13 @@ namespace BignumArithmetics
             if (i == -1)
                 return 0;
             return left[i] - right[i];
+        }
+        /// <summary>Removes extra tailing zeroes from digit list</summary>
+        /// <param name="list">List to be cleaned</param>
+        private static void RemoveTailingZeros(List<int> list)
+        {
+            while (list.Last() == 0 && list.Count > 1)
+                list.RemoveAt(list.Count - 1);
         }
         #endregion
 
@@ -418,6 +425,8 @@ namespace BignumArithmetics
             int multiplier = Math.Max(bfLeft.Fractional, bfRight.Fractional);
             var leftList = BigNumberToIntList(bfLeft, 0, multiplier + FracPrecision);
             var rightList = BigNumberToIntList(bfRight, 0, multiplier);
+            RemoveTailingZeros(leftList);
+            RemoveTailingZeros(rightList);
 
             List<int> resultList = DivTwoLists(leftList, rightList, out List<int> subList);
             int dotPos = resultList.Count - FracPrecision;
