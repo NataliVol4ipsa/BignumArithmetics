@@ -80,7 +80,10 @@
     </Compile>
     <Compile Include="BigFloat.IntListToString.Tests.cs" />
     <Compile Include="BigFloat.Operations.Tests.cs" />
-    <Compile Include="BigFLoat.Operations.Division.Tests.cs" />
+    <Compile Include="BigFLoat.Operations.Div.Tests.cs" />
+    <Compile Include="BigFloat.Operations.Add.Tests.cs" />
+    <Compile Include="BigFloat.Operations.Sub.Tests.cs" />
+    <Compile Include="BigFloat.Operations.Mul.Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

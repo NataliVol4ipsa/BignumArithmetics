@@ -2,6 +2,8 @@
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+//TODO: LOG FAILS TO FILE
+
 namespace BignumArithmetics.Tests
 {
     [TestClass]
@@ -51,41 +53,42 @@ namespace BignumArithmetics.Tests
             DoTesting("0", "0", "0");
         }
 
-        /*[TestMethod]
+        [TestMethod]
         public void Zero_m5()
         {
-            DoTesting("0", "-5", "-5", "5", "0");
+            DoTesting("0", "-5", "0");
         }
-        /*[TestMethod]
+
+        [TestMethod]
+        [ExpectedException(typeof(DivideByZeroException))]
         public void m5_zero()
         {
-            DoTesting("-5", "0", "-5", "-5", "0");
+            DoTesting("-5", "0", "0");
         }
+
         [TestMethod]
-        public void m5_p6()
+        public void m6_p5()
         {
-            DoTesting("-5", "6", "1", "-11", "-30");
+            DoTesting("-6", "5", "-1.2");
         }
+
         [TestMethod]
-        public void p123D45_p45D678()
+        public void p20D1_p0D05()
         {
-            DoTesting("123.45", "45.678", "169.128", "77.772", "5638.9491");
+            DoTesting("20.1", "0.05", "402");
         }
+        
         [TestMethod]
-        public void m3D1_p10D005()
+        public void p20D1_p5()
         {
-            DoTesting("-3.1", "10.005", "6.905", "-13.105", "-31.0155");
+            DoTesting("20.1", "5", "4.02");
         }
-        [TestMethod]
-        public void m10D005_m3D1()
-        {
-            DoTesting("-10.005", "-3.1", "-13.105", "-6.905", "31.0155");
-        }
+
         [TestMethod]
         public void random_10000_tests()
         {
             for (int i = 0; i < 10000; i++)
-                Test();
-        }*/
+                RandomTest();
+        }
     }
 }
