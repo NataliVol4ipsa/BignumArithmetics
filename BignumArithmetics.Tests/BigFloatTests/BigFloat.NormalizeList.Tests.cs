@@ -16,7 +16,7 @@ namespace BignumArithmetics.BigFloatTests
         [TestMethod]
         public void NullTest()
         {
-            BigFloat.NormalizeList(null);
+            new BigFloat().NormalizeList(null);
         }
 
         [TestMethod]
@@ -24,7 +24,7 @@ namespace BignumArithmetics.BigFloatTests
         {
             var actual = new List<int> { 5 };
             var expected = new List<int> { 5 };
-            BigFloat.NormalizeList(actual);
+            new BigFloat().NormalizeList(actual);
             CompareLists(expected, actual);
         }
 
@@ -33,7 +33,7 @@ namespace BignumArithmetics.BigFloatTests
         {
             var actual = new List<int> { 15 };
             var expected = new List<int> { 5, 1 };
-            BigFloat.NormalizeList(actual);
+            new BigFloat().NormalizeList(actual);
             CompareLists(expected, actual);
         }
 
@@ -42,7 +42,7 @@ namespace BignumArithmetics.BigFloatTests
         {
             var actual = new List<int> { 135673 };
             var expected = new List<int> { 3, 7, 6, 5, 3, 1 };
-            BigFloat.NormalizeList(actual);
+            new BigFloat().NormalizeList(actual);
             CompareLists(expected, actual);
         }
 
@@ -51,7 +51,7 @@ namespace BignumArithmetics.BigFloatTests
         {
             var actual = new List<int> { 1, 11, 9 };
             var expected = new List<int> { 1, 1, 0, 1 };
-            BigFloat.NormalizeList(actual);
+            new BigFloat().NormalizeList(actual);
             CompareLists(expected, actual);
         }
     }

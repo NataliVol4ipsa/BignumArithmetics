@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BigFloat.cs" />
+    <Compile Include="BigInteger.cs" />
     <Compile Include="BigNumber.cs" />
     <Compile Include="InputParser.cs" />
     <Compile Include="main.cs" />
