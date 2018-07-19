@@ -68,6 +68,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BigFloatTests\BigFLoat.Operations.Mod.Tests.cs" />
+    <Compile Include="BigIntegerTests\BigInteger.Constructor.Tests.cs" />
+    <Compile Include="BigIntegerTests\BigInteger.Operations.Add.Tests.cs" />
+    <Compile Include="BigIntegerTests\BigInteger.Operations.Div.Tests.cs" />
+    <Compile Include="BigIntegerTests\BigInteger.Operations.Mod.Tests.cs" />
+    <Compile Include="BigIntegerTests\BigInteger.Operations.Mul.Tests.cs" />
+    <Compile Include="BigIntegerTests\BigInteger.Operations.Sub.Tests.cs" />
     <Compile Include="BigNumber.Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BigFloatTests\BigFloat.Constructor.Tests.cs" />

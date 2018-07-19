@@ -33,9 +33,9 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [DONE] 6.1. Append documentation
 
-<b>[CURRENT]</b> 7.0. Implement 2-6 for integer.
+[DONE] 7.0. Implement 2-6 for integer.
 
-[AWAITING] 7.1. Implement 2-6 for different base
+<b>[CURRENT]</b> 7.1. Implement 2-6 for different base
 
 [AWAITING] 7.2. Implement 2-6 for fractional. Remember about reduction of fractions(factorization...)
 

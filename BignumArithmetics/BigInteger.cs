@@ -397,7 +397,7 @@ namespace BignumArithmetics
         private static readonly string validStringRegEx = @"^\s*[+-]?[0-9]+\s*$";
         /// <summary>cleanStringRegEx is a string representing RegEx
         /// used to clean valid input string in fabric method <see cref="CreateFromString"/></summary>
-        private static readonly string cleanStringRegEx = @"[1-9]+[0-9]*)";
+        private static readonly string cleanStringRegEx = @"[1-9]+[0-9]*";
         #endregion
     }
 }
