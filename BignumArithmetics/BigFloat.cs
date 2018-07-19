@@ -17,7 +17,6 @@ namespace BignumArithmetics
         {
             CleanString = "0";
         }
-        //todo: REMAKE IT TO CALL COPY()  ?
         /// <summary>Constructor creates a BigFloat equal to parameter</summary>
         /// <param name="from">any BigFloat</param>
         /// <returns>An instance of BigFloat equal to parameter</returns>
@@ -25,7 +24,7 @@ namespace BignumArithmetics
         {
             CleanString = from.CleanString;
             if (from.Sign < 0)
-                SwitchSign();
+                Negate();
             DotPos = from.DotPos;
             Fractional = from.Fractional;
         }
@@ -39,7 +38,7 @@ namespace BignumArithmetics
         {
             CleanString = str;
             if (sign < 0)
-                SwitchSign();
+                Negate();
         }
         #endregion
 
@@ -57,7 +56,7 @@ namespace BignumArithmetics
             str = CleanNumericString(str, out int sign);
             return new BigFloat(str, sign);
         }
-             /// <summary>Fabric thar returns an instance of BigFloat constructed from a number</summary>
+        /// <summary>Fabric thar returns an instance of BigFloat constructed from a number</summary>
         /// <param name="number">Object of any numeric type</param>
         /// <returns>An instance of BigFloat. null if parameter is invalid</returns>
         public static BigFloat CreateFromNumber<T>(T number)
@@ -144,7 +143,16 @@ namespace BignumArithmetics
             }
             return sb.ToString();
         }
-
+        /// <summary> Returns |BigFloat| </summary>
+        /// <param name="bf">BigFloat parameter</param>
+        /// <returns>|BigFloat|</returns>
+        public static BigFloat Abs(BigFloat bf)
+        {
+            BigFloat ret = new BigFloat(bf);
+            if (bf.Sign < 0)
+                bf.Negate();
+            return bf;
+        }
         /// <summary>CleanNumericString method cleans digit string with <see cref="cleanStringRegEx"/></summary>
         /// <param name="RawString">String representing of digits</param>
         /// <param name="sign">Integer representing position of dot in cleaned string</param>
@@ -169,6 +177,23 @@ namespace BignumArithmetics
         }
         #endregion
 
+        #region Public tools
+        /// <summary>Returns a copy of BigFloat instance </summary>
+        /// <returns>Copy of BigFloat instance</returns>
+        public BigFloat Copy()
+        {
+            return new BigFloat(this);
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+        public override bool Equals(object obj)
+        {
+            return (this == obj as BigFloat);
+        }
+        #endregion
+     
         #region Private Methods
         /// <summary>Calculates a position of delimiter
         /// in <see cref="CleanString"/></summary>
@@ -356,7 +381,7 @@ namespace BignumArithmetics
 
             BigFloat bfAns = CreateFromString(IntListToString(resultList, resultList.Count - desiredFrac));
             if (Sign < 0)
-                bfAns.SwitchSign();
+                bfAns.Negate();
             return bfAns;
         }
         /// <summary>Method that is calculating (this - op) for BigFLoat objects.
@@ -393,7 +418,7 @@ namespace BignumArithmetics
         
             BigFloat bfAns = CreateFromString(IntListToString(resultList, resultList.Count - desiredFrac));
             if (sign < 0)
-                bfAns.SwitchSign();
+                bfAns.Negate();
             return bfAns;
         }
         /// <summary>Method that is calculating (this * op) for BigFLoat objects.
@@ -417,7 +442,7 @@ namespace BignumArithmetics
 
             BigFloat bfAns = CreateFromString(IntListToString(resultList, resultList.Count - newDot));
             if (bfLeft.Sign * bfRight.Sign < 0)
-                bfAns.SwitchSign();
+                bfAns.Negate();
             return bfAns;
         }
         /// <summary>Method that is calculating (this / op) for BigFLoat objects.
@@ -445,7 +470,7 @@ namespace BignumArithmetics
 
             BigFloat bfAns = CreateFromString(IntListToString(resultList, dotPos));
             if (bfLeft.Sign * bfRight.Sign < 0)
-                bfAns.SwitchSign();
+                bfAns.Negate();
             return bfAns;
         }
         /// <summary>Method that is calculating (this % op) for BigFLoat objects.
@@ -470,13 +495,13 @@ namespace BignumArithmetics
             return bfAns;
         }
         #endregion
-
+        
         #region Operators
         public static BigFloat operator -(BigFloat num)
         {
             BigFloat ret = new BigFloat(num);
 
-            ret.SwitchSign();
+            ret.Negate();
             return ret;
         }
 

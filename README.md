@@ -27,13 +27,13 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [DONE] 5.1. Test Div
 
-<b>[CURRENT]</b> 5.2. Implement mod. Remember to create exception. fmod?
+[DONE] 5.2. Implement mod
 
-[AWAITING] 6.0. Implement more useful methods (copy etc)
+[DONE] 6.0. Implement more useful methods (copy etc)
 
-[AWAITING] 6.1. Append documentation
+[DONE] 6.1. Append documentation
 
-[AWAITING] 7.0. Implement 2-6 for integer.
+<b>[CURRENT]</b> 7.0. Implement 2-6 for integer.
 
 [AWAITING] 7.1. Implement 2-6 for different base
 

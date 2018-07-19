@@ -76,7 +76,7 @@ namespace BignumArithmetics
         #endregion
 
         #region Public Methods
-        public void SwitchSign()
+        public void Negate()
         {
             if (String.Compare(CleanString, "0") != 0)
                 Sign = -Sign;
