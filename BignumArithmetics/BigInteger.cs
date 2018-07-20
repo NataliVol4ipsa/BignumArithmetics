@@ -348,6 +348,7 @@ namespace BignumArithmetics
                 return null;
             return (BigInteger)left.Mod(right);
         }
+
         public static bool operator >(BigInteger left, BigInteger right)
         {
             if (left.Sign > 0)
@@ -387,6 +388,16 @@ namespace BignumArithmetics
             if (string.Compare(left.ToString(), right.ToString()) != 0)
                 return false;
             return true;
+        }
+
+        public int this[int index]
+        {
+            get
+            {
+                if (index < 0 || index >= CleanString.Length)
+                    return -1;
+                return ToDigit(CleanString[index]);
+            }
         }
         #endregion
 
