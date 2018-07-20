@@ -234,12 +234,25 @@ namespace BignumArithmetics
         #endregion
 
         #region Public Methods
+        /// <summary> Negate is switching <see cref="Sign"/> to the opposite one </summary>
         public void Negate()
         {
             if (String.Compare(CleanString, "0") != 0)
                 Sign = -Sign;
             else
                 Sign = 1;
+        }
+        /// <summary>Indexer allowing to get indexed digit values</summary>
+        /// <param name="index">Integer representing index</param>
+        /// <returns>Integer representing digit</returns>
+        public virtual int this[int index]
+        {
+            get
+            {
+                if (index < 0 || index >= CleanString.Length)
+                    return -1;
+                return ToDigit(CleanString[index]);
+            }
         }
         #endregion
 

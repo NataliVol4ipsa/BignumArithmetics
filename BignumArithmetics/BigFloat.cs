@@ -344,8 +344,21 @@ namespace BignumArithmetics
             BigFloat bfAns = bfLeft - bfDiv * bfRight;
             return bfAns;
         }
+
+        /// <summary>Indexer allowing to get indexed digit values</summary>
+        /// <param name="index">Integer representing index</param>
+        /// <returns>Integer representing digit</returns>
+        public override int this[int index]
+        {
+            get
+            {
+                if (index < 0 || index >= (CleanString.Length - (DotPos == CleanString.Length ? 0 : 1)))
+                    return -1;
+                return ToDigit(CleanString[index - (index >= DotPos ? 1 : 0)]);
+            }
+        }
         #endregion
-        
+
         #region Operators
         public static BigFloat operator -(BigFloat num)
         {
@@ -427,14 +440,10 @@ namespace BignumArithmetics
             return true;
         }
 
-        public int this[int index]
+        public static explicit operator BigInteger(BigFloat bf)
         {
-            get
-            {
-                if (index < 0 || index >= (CleanString.Length - (DotPos == CleanString.Length ? 0 : 1)))
-                    return -1;
-                return ToDigit(CleanString[index - (index >= DotPos ? 1 : 0)]);
-            }
+            string intString = bf.CleanString.Substring(0, bf.DotPos);
+            return BigInteger.CreateFromString(intString);
         }
         #endregion
 

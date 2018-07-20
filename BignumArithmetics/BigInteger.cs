@@ -390,14 +390,9 @@ namespace BignumArithmetics
             return true;
         }
 
-        public int this[int index]
+        public static explicit operator BigFloat(BigInteger bf)
         {
-            get
-            {
-                if (index < 0 || index >= CleanString.Length)
-                    return -1;
-                return ToDigit(CleanString[index]);
-            }
+            return BigFloat.CreateFromString(bf.CleanString);
         }
         #endregion
 
