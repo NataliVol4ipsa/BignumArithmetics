@@ -379,7 +379,8 @@ namespace BignumArithmetics
         }
         public static bool operator ==(BigInteger left, BigInteger right)
         {
-            if (string.Compare(left.ToString(), right.ToString()) != 0)
+            if (string.Compare(left.CleanString, right.CleanString) != 0 
+                || left.Sign != right.Sign)
                 return false;
             return true;
         }
