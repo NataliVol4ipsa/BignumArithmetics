@@ -197,13 +197,18 @@ namespace BignumArithmetics
         #region Static Methods
         /// <summary>Converts numbers into matching char symbols</summary>
         /// <param name="digit">Number to be converted. Must be in [0..15] range</param>
+        /// <param name="toUpper">shows if result should be uppercase</param>
         /// <returns>A matching char; '0' if digit does not match limits</returns>
-        public static char ToChar(int digit)
+        public static char ToChar(int digit, bool toUpper = false)
         {
             if (digit >= 0 && digit < 10)
                 return digit.ToString()[0];
             if (digit > 9 && digit < 16)
-                return Convert.ToChar('a' + digit - 10);
+            {
+                if (!toUpper)
+                    return Convert.ToChar('a' + digit - 10);
+                return Convert.ToChar('A' + digit - 10);
+            }
             return '0';
         }
         /// <summary>Converts characters to matching number</summary>

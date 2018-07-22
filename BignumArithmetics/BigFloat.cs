@@ -13,10 +13,7 @@ namespace BignumArithmetics
         #region Constructors
         /// <summary>Constructor creates a BigFLoat equal to 0</summary>
         /// <returns>An instance of BigFloat</returns>
-        public BigFloat()
-        {
-            CleanString = "0";
-        }
+        public BigFloat() { }
         /// <summary>Constructor creates a BigFloat equal to parameter</summary>
         /// <param name="from">any BigFloat</param>
         /// <returns>An instance of BigFloat equal to parameter</returns>
@@ -190,7 +187,6 @@ namespace BignumArithmetics
             {
                 if (digits[i] < 0)
                 {
-                    //todo: if i + 1 >= Count then error
                     digits[i] += 10;
                     digits[i + 1]--;
                 }
