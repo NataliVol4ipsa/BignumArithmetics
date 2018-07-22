@@ -63,7 +63,7 @@ namespace BignumArithmetics
         /// <param name="desiredInt">int represening how many digits should integer part contain</param>
         /// <param name="desiredFrac">int represening how many digits should fractional part contain</param>
         /// <returns>List of digits</returns>
-        public static List<int> BigNumberToIntList(BigInteger num, int desiredInt = 0)
+        public static List<int> BigIntegerToIntList(BigInteger num, int desiredInt = 0)
         {
             if (num is null)
                 return null;
@@ -73,8 +73,7 @@ namespace BignumArithmetics
 
             IntZeros = Math.Max(num.CleanString.Length, desiredInt) - num.CleanString.Length;
             for (int i = num.CleanString.Length - 1; i >= 0; i--)
-                if (num.CleanString[i] != '.')
-                    ret.Add(ToDigit(num.CleanString[i]));
+                ret.Add(ToDigit(num.CleanString[i]));
             ret.AddRange(Enumerable.Repeat(0, IntZeros));
             return ret;
         }
@@ -94,16 +93,6 @@ namespace BignumArithmetics
             for (i = digits.Count - 1; i >= 0; i--)
                 sb.Append(ToChar(digits[i]));           
             return sb.ToString();
-        }
-        /// <summary> Returns |BigInteger| </summary>
-        /// <param name="bf">BigInteger parameter</param>
-        /// <returns>|BigInteger|</returns>
-        public static BigInteger Abs(BigInteger bf)
-        {
-            BigInteger ret = new BigInteger(bf);
-            if (bf.Sign < 0)
-                bf.Negate();
-            return bf;
         }
         /// <summary>CleanNumericString method cleans digit string with <see cref="cleanStringRegEx"/></summary>
         /// <param name="RawString">String representing of digits</param>
@@ -143,6 +132,16 @@ namespace BignumArithmetics
         public override bool Equals(object obj)
         {
             return (this == obj as BigInteger);
+        }
+        /// <summary> Returns |BigInteger| </summary>
+        /// <param name="bf">BigInteger parameter</param>
+        /// <returns>|BigInteger|</returns>
+        public static BigInteger Abs(BigInteger bf)
+        {
+            BigInteger ret = new BigInteger(bf);
+            if (bf.Sign < 0)
+                bf.Negate();
+            return bf;
         }
         #endregion
 
@@ -192,8 +191,8 @@ namespace BignumArithmetics
                 return bfLeft.Substract(-bfRight);
 
             int desiredInt = Math.Max(bfLeft.CleanString.Length, bfRight.CleanString.Length);
-            var leftList = BigNumberToIntList(bfLeft, desiredInt);
-            var rightList = BigNumberToIntList(bfRight, desiredInt);
+            var leftList = BigIntegerToIntList(bfLeft, desiredInt);
+            var rightList = BigIntegerToIntList(bfRight, desiredInt);
             var resultList = SumTwoLists(leftList, rightList);
 
             BigInteger bfAns = CreateFromString(IntListToString(resultList));
@@ -228,8 +227,8 @@ namespace BignumArithmetics
                 Swap(ref bfLeft, ref bfRight);
             }
             int desiredInt = Math.Max(bfLeft.CleanString.Length, bfRight.CleanString.Length);
-            var leftList = BigNumberToIntList(bfLeft, desiredInt);
-            var rightList = BigNumberToIntList(bfRight, desiredInt);
+            var leftList = BigIntegerToIntList(bfLeft, desiredInt);
+            var rightList = BigIntegerToIntList(bfRight, desiredInt);
             var resultList = DifTwoLists(leftList, rightList);
         
             BigInteger bfAns = CreateFromString(IntListToString(resultList));
@@ -251,8 +250,8 @@ namespace BignumArithmetics
             
             if (bfLeft.CleanString.Length < bfRight.CleanString.Length)
                 Swap(ref bfLeft, ref bfRight);
-            var leftList = BigNumberToIntList(bfLeft);
-            var rightList = BigNumberToIntList(bfRight);
+            var leftList = BigIntegerToIntList(bfLeft);
+            var rightList = BigIntegerToIntList(bfRight);
             var resultList = MulTwoLists(leftList, rightList, true);
 
             BigInteger bfAns = CreateFromString(IntListToString(resultList));
@@ -274,8 +273,8 @@ namespace BignumArithmetics
             BigInteger bfLeft = this;
             BigInteger bfRight = (BigInteger)op;
             
-            var leftList = BigNumberToIntList(bfLeft, 0);
-            var rightList = BigNumberToIntList(bfRight, 0);
+            var leftList = BigIntegerToIntList(bfLeft, 0);
+            var rightList = BigIntegerToIntList(bfRight, 0);
             RemoveTailingZeros(leftList);
             RemoveTailingZeros(rightList);
 

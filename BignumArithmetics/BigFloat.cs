@@ -67,7 +67,7 @@ namespace BignumArithmetics
         /// <param name="desiredInt">int represening how many digits should integer part contain</param>
         /// <param name="desiredFrac">int represening how many digits should fractional part contain</param>
         /// <returns>List of digits</returns>
-        public static List<int> BigNumberToIntList(BigFloat num, int desiredInt = 0, int desiredFrac = 0)
+        public static List<int> BigFloatToIntList(BigFloat num, int desiredInt = 0, int desiredFrac = 0)
         {
             if (num is null)
                 return null;
@@ -110,16 +110,6 @@ namespace BignumArithmetics
             }
             return sb.ToString();
         }
-        /// <summary> Returns |BigFloat| </summary>
-        /// <param name="bf">BigFloat parameter</param>
-        /// <returns>|BigFloat|</returns>
-        public static BigFloat Abs(BigFloat bf)
-        {
-            BigFloat ret = new BigFloat(bf);
-            if (bf.Sign < 0)
-                bf.Negate();
-            return bf;
-        }
         /// <summary>CleanNumericString method cleans digit string with <see cref="cleanStringRegEx"/></summary>
         /// <param name="RawString">String representing of digits</param>
         /// <param name="sign">Integer representing position of dot in cleaned string</param>
@@ -159,8 +149,18 @@ namespace BignumArithmetics
         {
             return (this == obj as BigFloat);
         }
+        /// <summary> Returns |BigFloat| </summary>
+        /// <param name="bf">BigFloat parameter</param>
+        /// <returns>|BigFloat|</returns>
+        public static BigFloat Abs(BigFloat bf)
+        {
+            BigFloat ret = new BigFloat(bf);
+            if (bf.Sign < 0)
+                bf.Negate();
+            return bf;
+        }
         #endregion
-     
+
         #region Private Methods
         /// <summary>Calculates a position of delimiter
         /// in <see cref="CleanString"/></summary>
@@ -221,8 +221,8 @@ namespace BignumArithmetics
 
             int desiredInt = Math.Max(bfLeft.Integer, bfRight.Integer);
             int desiredFrac = Math.Max(bfLeft.Fractional, bfRight.Fractional);
-            var leftList = BigNumberToIntList(bfLeft, desiredInt, desiredFrac);
-            var rightList = BigNumberToIntList(bfRight, desiredInt, desiredFrac);
+            var leftList = BigFloatToIntList(bfLeft, desiredInt, desiredFrac);
+            var rightList = BigFloatToIntList(bfRight, desiredInt, desiredFrac);
             var resultList = SumTwoLists(leftList, rightList);
 
             BigFloat bfAns = CreateFromString(IntListToString(resultList, resultList.Count - desiredFrac));
@@ -258,8 +258,8 @@ namespace BignumArithmetics
             }
             int desiredInt = Math.Max(bfLeft.Integer, bfRight.Integer);
             int desiredFrac = Math.Max(bfLeft.Fractional, bfRight.Fractional);
-            var leftList = BigNumberToIntList(bfLeft, desiredInt, desiredFrac);
-            var rightList = BigNumberToIntList(bfRight, desiredInt, desiredFrac);
+            var leftList = BigFloatToIntList(bfLeft, desiredInt, desiredFrac);
+            var rightList = BigFloatToIntList(bfRight, desiredInt, desiredFrac);
             var resultList = DifTwoLists(leftList, rightList);
         
             BigFloat bfAns = CreateFromString(IntListToString(resultList, resultList.Count - desiredFrac));
@@ -282,8 +282,8 @@ namespace BignumArithmetics
             if (bfLeft.Integer + bfLeft.Fractional < bfRight.Integer + bfRight.Fractional)
                 Swap(ref bfLeft, ref bfRight);
             int newDot = bfLeft.Fractional + bfRight.Fractional;
-            var leftList = BigNumberToIntList(bfLeft);
-            var rightList = BigNumberToIntList(bfRight);
+            var leftList = BigFloatToIntList(bfLeft);
+            var rightList = BigFloatToIntList(bfRight);
             var resultList = MulTwoLists(leftList, rightList, true);
 
             BigFloat bfAns = CreateFromString(IntListToString(resultList, resultList.Count - newDot));
@@ -306,8 +306,8 @@ namespace BignumArithmetics
             BigFloat bfRight = (BigFloat)op;
 
             int multiplier = Math.Max(bfLeft.Fractional, bfRight.Fractional);
-            var leftList = BigNumberToIntList(bfLeft, 0, multiplier + FracPrecision);
-            var rightList = BigNumberToIntList(bfRight, 0, multiplier);
+            var leftList = BigFloatToIntList(bfLeft, 0, multiplier + FracPrecision);
+            var rightList = BigFloatToIntList(bfRight, 0, multiplier);
             RemoveTailingZeros(leftList);
             RemoveTailingZeros(rightList);
 

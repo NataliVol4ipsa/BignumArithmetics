@@ -10,7 +10,6 @@ namespace BignumArithmetics
     /// big numbers</summary>
     public class BigBased : BigNumber
     {
-        //TODO: add different base convertors for operations or not allow to do that. resulting base?
         #region Constructors
         /// <summary>Constructor creates a BigBased equal to 0 in base 10</summary>
         /// <returns>An instance of BigBased</returns>
@@ -117,15 +116,39 @@ namespace BignumArithmetics
             sign = RawString.Contains("-") ? -1 : 1;
             return substr;
         }
-        /// <summary> Returns |BigBased| </summary>
-        /// <param name="bf">BigBased parameter</param>
-        /// <returns>|BigBased|</returns>
-        public static BigBased Abs(BigBased bf)
+        /// <summary>IntListToString method converts digit list to string</summary>
+        /// <param name="digits">List of digits</param>
+        /// <param name="dotPos">Integer representing reversed position of dot in string</param>
+        /// <returns>A string representing a number; null in case of invalid arguments</returns>
+        public static string IntListToString(List<int> digits)
         {
-            BigBased ret = new BigBased(bf);
-            if (bf.Sign < 0)
-                bf.Negate();
-            return bf;
+            int i;
+            StringBuilder sb;
+
+            if (digits is null || digits.Count == 0)
+                return "";
+            sb = new StringBuilder();
+            for (i = digits.Count - 1; i >= 0; i--)
+                sb.Append(ToChar(digits[i]));
+            return sb.ToString();
+        }
+        /// <summary>Сonverts BigBased into reversed digit list with padding zeroes</summary>
+          /// <param name="desiredInt">int represening how many digits should integer part contain</param>
+          /// <param name="desiredFrac">int represening how many digits should fractional part contain</param>
+          /// <returns>List of digits</returns>
+        public static List<int> BigBasedToIntList(BigBased num, int desiredInt = 0)
+        {
+            if (num is null)
+                return null;
+
+            List<int> ret = new List<int>();
+            int IntZeros;
+
+            IntZeros = Math.Max(num.CleanString.Length, desiredInt) - num.CleanString.Length;
+            for (int i = num.CleanString.Length - 1; i >= 0; i--)
+                ret.Add(ToDigit(num.CleanString[i]));
+            ret.AddRange(Enumerable.Repeat(0, IntZeros));
+            return ret;
         }
         #endregion
 
@@ -144,6 +167,16 @@ namespace BignumArithmetics
         {
             return (this == obj as BigBased);
         }
+        /// <summary> Returns |BigBased| </summary>
+        /// <param name="bf">BigBased parameter</param>
+        /// <returns>|BigBased|</returns>
+        public static BigBased Abs(BigBased bf)
+        {
+            BigBased ret = new BigBased(bf);
+            if (bf.Sign < 0)
+                bf.Negate();
+            return bf;
+        }
         #endregion
 
         #region Parent Overrides
@@ -159,19 +192,19 @@ namespace BignumArithmetics
             {
                 if (digits[i] < 0)
                 {
-                    digits[i] += 10;
+                    digits[i] += Base;
                     digits[i + 1]--;
                 }
                 else
                 {
-                    digits[i + 1] += digits[i] / 10;
-                    digits[i] %= 10;
+                    digits[i + 1] += digits[i] / Base;
+                    digits[i] %= Base;
                 }
             }
-            while (digits[i] > 9)
+            while (digits[i] >= Base)
             {
-                digits.Add(digits[i] / 10);
-                digits[i] %= 10;
+                digits.Add(digits[i] / Base);
+                digits[i] %= Base;
                 i++;
             }
         }
@@ -188,15 +221,19 @@ namespace BignumArithmetics
             BigBased bfLeft = this;
             BigBased bfRight = (BigBased)op;
 
+            if (bfLeft.Base != bfRight.Base)
+                throw new NotImplementedException
+                    ("Operations for different-based numbers is not implemented yet");
+
             if (bfLeft.Sign != bfRight.Sign)
                 return bfLeft.Substract(-bfRight);
 
             int desiredInt = Math.Max(bfLeft.CleanString.Length, bfRight.CleanString.Length);
-            var leftList = BigNumberToIntList(bfLeft, desiredInt);
-            var rightList = BigNumberToIntList(bfRight, desiredInt);
+            var leftList = BigBasedToIntList(bfLeft, desiredInt);
+            var rightList = BigBasedToIntList(bfRight, desiredInt);
             var resultList = SumTwoLists(leftList, rightList);
 
-            BigBased bfAns = CreateFromString(IntListToString(resultList));
+            BigBased bfAns = CreateFromString(IntListToString(resultList), bfLeft.Base);
             if (Sign < 0)
                 bfAns.Negate();
             return bfAns;
@@ -213,6 +250,10 @@ namespace BignumArithmetics
             BigBased bfLeft = this;
             BigBased bfRight = (BigBased)op;
 
+            if (bfLeft.Base != bfRight.Base)
+                throw new NotImplementedException
+                    ("Operations for different-based numbers is not implemented yet");
+
             if (bfLeft.Sign > 0 && bfRight.Sign < 0)
                 return bfLeft.Add(-bfRight);
             if (bfLeft.Sign < 0 && bfRight.Sign > 0)
@@ -228,11 +269,11 @@ namespace BignumArithmetics
                 Swap(ref bfLeft, ref bfRight);
             }
             int desiredInt = Math.Max(bfLeft.CleanString.Length, bfRight.CleanString.Length);
-            var leftList = BigNumberToIntList(bfLeft, desiredInt);
-            var rightList = BigNumberToIntList(bfRight, desiredInt);
+            var leftList = BigBasedToIntList(bfLeft, desiredInt);
+            var rightList = BigBasedToIntList(bfRight, desiredInt);
             var resultList = DifTwoLists(leftList, rightList);
         
-            BigBased bfAns = CreateFromString(IntListToString(resultList));
+            BigBased bfAns = CreateFromString(IntListToString(resultList), bfLeft.Base);
             if (sign < 0)
                 bfAns.Negate();
             return bfAns;
@@ -248,14 +289,18 @@ namespace BignumArithmetics
 
             BigBased bfLeft = this;
             BigBased bfRight = (BigBased)op;
-            
+
+            if (bfLeft.Base != bfRight.Base)
+                throw new NotImplementedException
+                    ("Operations for different-based numbers is not implemented yet");
+
             if (bfLeft.CleanString.Length < bfRight.CleanString.Length)
                 Swap(ref bfLeft, ref bfRight);
-            var leftList = BigNumberToIntList(bfLeft);
-            var rightList = BigNumberToIntList(bfRight);
+            var leftList = BigBasedToIntList(bfLeft);
+            var rightList = BigBasedToIntList(bfRight);
             var resultList = MulTwoLists(leftList, rightList, true);
 
-            BigBased bfAns = CreateFromString(IntListToString(resultList));
+            BigBased bfAns = CreateFromString(IntListToString(resultList), bfLeft.Base);
             if (bfLeft.Sign * bfRight.Sign < 0)
                 bfAns.Negate();
             return bfAns;
@@ -273,14 +318,18 @@ namespace BignumArithmetics
                 throw new DivideByZeroException();
             BigBased bfLeft = this;
             BigBased bfRight = (BigBased)op;
-            
-            var leftList = BigNumberToIntList(bfLeft, 0);
-            var rightList = BigNumberToIntList(bfRight, 0);
+
+            if (bfLeft.Base != bfRight.Base)
+                throw new NotImplementedException
+                    ("Operations for different-based numbers is not implemented yet");
+
+            var leftList = BigBasedToIntList(bfLeft, 0);
+            var rightList = BigBasedToIntList(bfRight, 0);
             RemoveTailingZeros(leftList);
             RemoveTailingZeros(rightList);
 
             List<int> resultList = DivTwoLists(leftList, rightList, out List<int> subList);
-            BigBased bfAns = CreateFromString(IntListToString(resultList));
+            BigBased bfAns = CreateFromString(IntListToString(resultList), bfLeft.Base);
             if (bfLeft.Sign * bfRight.Sign < 0)
                 bfAns.Negate();
             return bfAns;
@@ -298,6 +347,10 @@ namespace BignumArithmetics
                 throw new ArgumentException("Cannot calculate BigBased % 0");
             BigBased bfLeft = this;
             BigBased bfRight = (BigBased)op;
+
+            if (bfLeft.Base != bfRight.Base)
+                throw new NotImplementedException
+                    ("Operations for different-based numbers is not implemented yet");
 
             BigBased bfDiv = bfLeft / bfRight;
             BigBased bfAns = bfLeft - bfDiv * bfRight;
@@ -347,6 +400,10 @@ namespace BignumArithmetics
 
         public static bool operator >(BigBased left, BigBased right)
         {
+            if (left.Base != right.Base)
+                throw new NotImplementedException
+                    ("Operations for different-based numbers is not implemented yet");
+
             if (left.Sign > 0)
             {
                 if (right.Sign < 0)
@@ -375,6 +432,10 @@ namespace BignumArithmetics
         }
         public static bool operator ==(BigBased left, BigBased right)
         {
+            if (left.Base != right.Base)
+                throw new NotImplementedException
+                    ("Operations for different-based numbers is not implemented yet");
+
             if (string.Compare(left.CleanString, right.CleanString) != 0 
                 || left.Sign != right.Sign)
                 return false;
@@ -382,14 +443,13 @@ namespace BignumArithmetics
         }
         public static bool operator !=(BigBased left, BigBased right)
         {
+            if (left.Base != right.Base)
+                throw new NotImplementedException
+                    ("Operations for different-based numbers is not implemented yet");
+
             if (string.Compare(left.ToString(), right.ToString()) != 0)
                 return false;
             return true;
-        }
-
-        public static explicit operator BigFloat(BigBased bf)
-        {
-            return BigFloat.CreateFromString(bf.CleanString);
         }
         #endregion
 
