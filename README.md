@@ -35,11 +35,11 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [DONE] 7.0. Implement 2-6 for integer.
 
-<b>[CURRENT]</b> 7.1. Implement 2-6 for different base
+[DONE] 7.1. Implement 2-6 for different base
 
-[AWAITING] 7.2. Implement 2-6 for fractional. Remember about reduction of fractions(factorization...)
+[MAYBE] 7.2. Implement 2-6 for fractional. Remember about reduction of fractions(factorization...)
 
-[AWAITING] 8.0. Try to implement a normal calculator, with brackets support. Look at stack-like collections. Regex? RPN? Class Expression. What if mul overflow?
+<b>[CURRENT]</b> 8.0. Try to implement a normal calculator, with brackets support. Look at stack-like collections. Regex? RPN? Class Expression. What if mul overflow?
 
 [AWAITING] 8.1. Improve input error management
 
