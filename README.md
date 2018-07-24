@@ -3,11 +3,9 @@ Simple calculator for numbers that overflow all numeric types in C#
 
 This is a small self-educational project I decided to start in order to refresh memories of writing in C#. The final result gonna be reached by smaller steps:
 
-[DONE] 0. Learn more about git functionality (branches)
+[DONE] 0. Learn how to use git with Visual Studio 2017 :D
 
-[DONE] 0.1. Learn how to use git with Visual Studio 2017
-
-[DONE] 1.0. Set up project environment. Implement Interface\Abstract class for storing numbers. Create classes with operators overloading that inherit from the interface. These are : fixed point, fractional and 2..16-base numbers.
+[DONE] 1.0. Implement Interface\Abstract class for storing numbers. Child classes will be : integer, fixed point, fractional, 2..16-base and maybe literal numbers.
 
 [DONE] 1.1. Implement simple reading and storing either from a console and file.
 
@@ -41,13 +39,10 @@ This is a small self-educational project I decided to start in order to refresh 
 
 <b>[CURRENT]</b> 8.0. Try to implement a normal calculator, with brackets support. Look at stack-like collections. Regex? RPN? Class Expression. What if mul overflow?
 
-[MAYBE] 9.0. Try to implement multithreading. It can be used with low-level operations, parsing etc.
+[MAYBE] 9.0. Implement second calculator method (lexem tree) with multithreading
 
-[MAYBE] 10.0. Cryptography? (triple des, rsa). Simplicity?
+[MAYBE] 10.0. Simplicity? Pow? Exp? Log?
 
-[MAYBE] 11.0. LINQ? ASP.NET?
-
-YET INVOLVED: delegates+events, parallel computing, async prog
 
 ----------
 

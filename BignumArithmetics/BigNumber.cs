@@ -40,6 +40,7 @@ namespace BignumArithmetics
         public abstract BigNumber Mod(BigNumber op);
         #endregion
 
+        //TODO: MOVE THOSE TO EXTENSION METHODS FOR LIST
         #region Calculations Methods
         /// <summary> Generates a list representing sum of two reversed digit lists</summary>
         /// <param name="leftList">First operand</param>

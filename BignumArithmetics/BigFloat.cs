@@ -4,6 +4,8 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
 
+//TODO: RENAME TO BIGDECIMAL
+
 namespace BignumArithmetics
 {
     /// <summary>Сlass for fixed point 
@@ -48,7 +50,7 @@ namespace BignumArithmetics
         public static BigFloat CreateFromString(string str)
         {
             if (string.IsNullOrEmpty(str) ||
-                !Regex.IsMatch(str, validStringRegEx, RegexOptions.None))
+                string.IsNullOrEmpty(validStringRegEx.Match(str).Value))
                 return new BigFloat();
             str = CleanNumericString(str, out int sign);
             return new BigFloat(str, sign);
@@ -123,7 +125,7 @@ namespace BignumArithmetics
                 sign = 1;
                 return "0";
             }
-            substr = Regex.Match(RawString, cleanStringRegEx).Value;
+            substr = cleanStringRegEx.Match(RawString).Value;
             if (substr == "")
             {
                 sign = 1;
@@ -451,10 +453,12 @@ namespace BignumArithmetics
         /// <summary>validStringRegEx is a string representing RegEx
         /// used to validate input string in fabric method <see cref="CreateFromString"/>
         /// into integer and fractional parts </summary>
-        private static readonly string validStringRegEx = @"^\s*[+-]?[0-9]+(\.[0-9]+)?\s*$";
+        private static readonly Regex validStringRegEx = new
+            Regex(@"^\s*[+-]?\d+(\.\d+)?\s*$", RegexOptions.Compiled);
         /// <summary>cleanStringRegEx is a string representing RegEx
         /// used to clean valid input string in fabric method <see cref="CreateFromString"/></summary>
-        private static readonly string cleanStringRegEx = @"([1-9]+[0-9]*(\.[0-9]*[1-9]+)?|0\.[0-9]*[1-9]+)";
+        private static readonly Regex cleanStringRegEx = 
+            new Regex(@"([1-9]+[0-9]*(\.[0-9]*[1-9]+)?|0\.[0-9]*[1-9]+)", RegexOptions.Compiled);
         /// <summary>The _fracPrecision local field represents 
         /// a number of fractional digits counted while division for BigFloat instances.</summary>
         private static volatile int _fracPrecision = 20;
@@ -467,6 +471,7 @@ namespace BignumArithmetics
         private volatile int _fracLen = -1;
         #endregion
 
+        //hm?
         #region Mutexes
         ///<summary>Random variable used for thread-safe <see cref="DotPos"/>
         ///property first calculation </summary>

@@ -46,7 +46,7 @@ namespace BignumArithmetics
         public static BigInteger CreateFromString(string str)
         {
             if (string.IsNullOrEmpty(str) ||
-                !Regex.IsMatch(str, validStringRegEx, RegexOptions.None))
+                string.IsNullOrEmpty(validStringRegEx.Match(str).Value))
                 return new BigInteger();
             str = CleanNumericString(str, out int sign);
             return new BigInteger(str, sign);
@@ -107,7 +107,7 @@ namespace BignumArithmetics
                 sign = 1;
                 return "0";
             }
-            substr = Regex.Match(RawString, cleanStringRegEx).Value;
+            substr = cleanStringRegEx.Match(RawString).Value;
             if (substr == "")
             {
                 sign = 1;
@@ -396,10 +396,12 @@ namespace BignumArithmetics
         /// <summary>validStringRegEx is a string representing RegEx
         /// used to validate input string in fabric method <see cref="CreateFromString"/>
         /// into integer and fractional parts </summary>
-        private static readonly string validStringRegEx = @"^\s*[+-]?[0-9]+\s*$";
+        private static readonly Regex validStringRegEx = new
+            Regex(@"^\s*[+-]?[0-9]+\s*$", RegexOptions.Compiled);
         /// <summary>cleanStringRegEx is a string representing RegEx
         /// used to clean valid input string in fabric method <see cref="CreateFromString"/></summary>
-        private static readonly string cleanStringRegEx = @"[1-9]+[0-9]*";
+        private static readonly Regex cleanStringRegEx =
+            new Regex(@"[1-9]+[0-9]*", RegexOptions.Compiled);
         #endregion
     }
 }
