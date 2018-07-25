@@ -1,8 +1,10 @@
-﻿/*using System;
+﻿using System;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
+
+//todo: add array of regexes for each base
 
 namespace BignumArithmetics
 {
@@ -231,7 +233,8 @@ namespace BignumArithmetics
             int desiredInt = Math.Max(bfLeft.CleanString.Length, bfRight.CleanString.Length);
             var leftList = BigBasedToIntList(bfLeft, desiredInt);
             var rightList = BigBasedToIntList(bfRight, desiredInt);
-            var resultList = SumTwoLists(leftList, rightList);
+            var resultList = leftList.SumWithList(rightList);
+            NormalizeList(resultList);
 
             BigBased bfAns = CreateFromString(IntListToString(resultList), bfLeft.Base);
             if (Sign < 0)
@@ -271,8 +274,9 @@ namespace BignumArithmetics
             int desiredInt = Math.Max(bfLeft.CleanString.Length, bfRight.CleanString.Length);
             var leftList = BigBasedToIntList(bfLeft, desiredInt);
             var rightList = BigBasedToIntList(bfRight, desiredInt);
-            var resultList = DifTwoLists(leftList, rightList);
-        
+            var resultList = leftList.SubByList(rightList);
+            NormalizeList(resultList);
+
             BigBased bfAns = CreateFromString(IntListToString(resultList), bfLeft.Base);
             if (sign < 0)
                 bfAns.Negate();
@@ -298,7 +302,8 @@ namespace BignumArithmetics
                 Swap(ref bfLeft, ref bfRight);
             var leftList = BigBasedToIntList(bfLeft);
             var rightList = BigBasedToIntList(bfRight);
-            var resultList = MulTwoLists(leftList, rightList, true);
+            var resultList = leftList.MulWithList(rightList);
+            NormalizeList(resultList);
 
             BigBased bfAns = CreateFromString(IntListToString(resultList), bfLeft.Base);
             if (bfLeft.Sign * bfRight.Sign < 0)
@@ -325,10 +330,10 @@ namespace BignumArithmetics
 
             var leftList = BigBasedToIntList(bfLeft, 0);
             var rightList = BigBasedToIntList(bfRight, 0);
-            RemoveTailingZeros(leftList);
-            RemoveTailingZeros(rightList);
+            leftList.RemoveTailingZeros();
+            rightList.RemoveTailingZeros();
 
-            List<int> resultList = DivTwoLists(leftList, rightList, out List<int> subList);
+            List<int> resultList = leftList.DivByList(rightList, out List<int> subList);
             BigBased bfAns = CreateFromString(IntListToString(resultList), bfLeft.Base);
             if (bfLeft.Sign * bfRight.Sign < 0)
                 bfAns.Negate();
@@ -468,4 +473,3 @@ namespace BignumArithmetics
         #endregion
     }
 }
-*/

@@ -193,7 +193,8 @@ namespace BignumArithmetics
             int desiredInt = Math.Max(bfLeft.CleanString.Length, bfRight.CleanString.Length);
             var leftList = BigIntegerToIntList(bfLeft, desiredInt);
             var rightList = BigIntegerToIntList(bfRight, desiredInt);
-            var resultList = SumTwoLists(leftList, rightList);
+            var resultList = leftList.SumWithList(rightList);
+            NormalizeList(resultList);
 
             BigInteger bfAns = CreateFromString(IntListToString(resultList));
             if (Sign < 0)
@@ -229,8 +230,9 @@ namespace BignumArithmetics
             int desiredInt = Math.Max(bfLeft.CleanString.Length, bfRight.CleanString.Length);
             var leftList = BigIntegerToIntList(bfLeft, desiredInt);
             var rightList = BigIntegerToIntList(bfRight, desiredInt);
-            var resultList = DifTwoLists(leftList, rightList);
-        
+            var resultList = leftList.SubByList(rightList);
+            NormalizeList(resultList);
+
             BigInteger bfAns = CreateFromString(IntListToString(resultList));
             if (sign < 0)
                 bfAns.Negate();
@@ -252,7 +254,8 @@ namespace BignumArithmetics
                 Swap(ref bfLeft, ref bfRight);
             var leftList = BigIntegerToIntList(bfLeft);
             var rightList = BigIntegerToIntList(bfRight);
-            var resultList = MulTwoLists(leftList, rightList, true);
+            var resultList = leftList.MulWithList(rightList);
+            NormalizeList(resultList);
 
             BigInteger bfAns = CreateFromString(IntListToString(resultList));
             if (bfLeft.Sign * bfRight.Sign < 0)
@@ -275,10 +278,10 @@ namespace BignumArithmetics
             
             var leftList = BigIntegerToIntList(bfLeft, 0);
             var rightList = BigIntegerToIntList(bfRight, 0);
-            RemoveTailingZeros(leftList);
-            RemoveTailingZeros(rightList);
+            leftList.RemoveTailingZeros();
+            rightList.RemoveTailingZeros();
 
-            List<int> resultList = DivTwoLists(leftList, rightList, out List<int> subList);
+            List<int> resultList = leftList.DivByList(rightList, out List<int> subList);
             BigInteger bfAns = CreateFromString(IntListToString(resultList));
             if (bfLeft.Sign * bfRight.Sign < 0)
                 bfAns.Negate();

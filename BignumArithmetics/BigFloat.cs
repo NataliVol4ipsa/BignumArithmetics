@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 //TODO: RENAME TO BIGDECIMAL
+//TODO: FABRIC => CONSTRUCTOR & EXCEPTION IF INVALID
 
 namespace BignumArithmetics
 {
@@ -120,11 +121,6 @@ namespace BignumArithmetics
         {
             string substr;
 
-            if (RawString is null)
-            {
-                sign = 1;
-                return "0";
-            }
             substr = cleanStringRegEx.Match(RawString).Value;
             if (substr == "")
             {
@@ -225,7 +221,8 @@ namespace BignumArithmetics
             int desiredFrac = Math.Max(bfLeft.Fractional, bfRight.Fractional);
             var leftList = BigFloatToIntList(bfLeft, desiredInt, desiredFrac);
             var rightList = BigFloatToIntList(bfRight, desiredInt, desiredFrac);
-            var resultList = SumTwoLists(leftList, rightList);
+            var resultList = leftList.SumWithList(rightList);
+            NormalizeList(resultList);
 
             BigFloat bfAns = CreateFromString(IntListToString(resultList, resultList.Count - desiredFrac));
             if (Sign < 0)
@@ -262,8 +259,9 @@ namespace BignumArithmetics
             int desiredFrac = Math.Max(bfLeft.Fractional, bfRight.Fractional);
             var leftList = BigFloatToIntList(bfLeft, desiredInt, desiredFrac);
             var rightList = BigFloatToIntList(bfRight, desiredInt, desiredFrac);
-            var resultList = DifTwoLists(leftList, rightList);
-        
+            var resultList = leftList.SubByList(rightList);
+            NormalizeList(resultList);
+
             BigFloat bfAns = CreateFromString(IntListToString(resultList, resultList.Count - desiredFrac));
             if (sign < 0)
                 bfAns.Negate();
@@ -286,7 +284,8 @@ namespace BignumArithmetics
             int newDot = bfLeft.Fractional + bfRight.Fractional;
             var leftList = BigFloatToIntList(bfLeft);
             var rightList = BigFloatToIntList(bfRight);
-            var resultList = MulTwoLists(leftList, rightList, true);
+            var resultList = leftList.MulWithList(rightList);
+            NormalizeList(resultList);
 
             BigFloat bfAns = CreateFromString(IntListToString(resultList, resultList.Count - newDot));
             if (bfLeft.Sign * bfRight.Sign < 0)
@@ -310,10 +309,10 @@ namespace BignumArithmetics
             int multiplier = Math.Max(bfLeft.Fractional, bfRight.Fractional);
             var leftList = BigFloatToIntList(bfLeft, 0, multiplier + FracPrecision);
             var rightList = BigFloatToIntList(bfRight, 0, multiplier);
-            RemoveTailingZeros(leftList);
-            RemoveTailingZeros(rightList);
+            leftList.RemoveTailingZeros();
+            rightList.RemoveTailingZeros();
 
-            List<int> resultList = DivTwoLists(leftList, rightList, out List<int> subList);
+            List<int> resultList = leftList.DivByList(rightList, out List<int> subList);
             int dotPos = resultList.Count - FracPrecision;
 
             BigFloat bfAns = CreateFromString(IntListToString(resultList, dotPos));
