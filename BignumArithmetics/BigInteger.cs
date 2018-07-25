@@ -422,7 +422,7 @@ namespace BignumArithmetics
 
         public static explicit operator BigDecimal(BigInteger bf)
         {
-            return BigDecimal.CreateFromString(bf.CleanString);
+            return new BigDecimal(bf.CleanString);
         }
         #endregion
 

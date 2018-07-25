@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace BignumArithmetics
 {
-    class InputParser : IDisposable
+    public class InputReader : IDisposable
     {
-        public InputParser(out List<BigDecimal> Numbers, string FileName = null)
+        public InputReader(out List<BigDecimal> Numbers, string FileName = null)
         {
             this.FileName = FileName;
             this.Numbers = new List<BigDecimal>();
@@ -17,14 +17,14 @@ namespace BignumArithmetics
         {
             if (FileName == null)
             {
-                this.Numbers.Add(BigDecimal.CreateFromString(Console.ReadLine()));
-                this.Numbers.Add(BigDecimal.CreateFromString(Console.ReadLine()));
+                this.Numbers.Add(new BigDecimal(Console.ReadLine()));
+                this.Numbers.Add(new BigDecimal(Console.ReadLine()));
             }
             else
             {
                 SR = new StreamReader(FileName);
-                this.Numbers.Add(BigDecimal.CreateFromString(SR.ReadLine()));
-                this.Numbers.Add(BigDecimal.CreateFromString(SR.ReadLine()));
+                this.Numbers.Add(new BigDecimal(SR.ReadLine()));
+                this.Numbers.Add(new BigDecimal(SR.ReadLine()));
             }
         }
 

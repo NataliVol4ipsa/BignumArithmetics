@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BignumArithmetics
 {
-    class LexicalParser
+    public abstract class RPNParser<T> where T : BigNumber
     {
     }
 }

@@ -33,11 +33,14 @@ namespace BignumArithmetics
         /// <param name="str">string representing number digits and delimiter</param>
         /// <param name="sign">integer representing number sign</param>
         /// <returns>An instance of BigDecimal</returns>
-        private BigDecimal(string str, int sign)
+        /// <exception cref="ArgumentException">ArgumentException
+        /// thrown in case of invalid input</exception>
+        public BigDecimal(string str)
         {
-            CleanString = str;
-            if (sign < 0)
-                Negate();
+            if (string.IsNullOrEmpty(str) ||
+                string.IsNullOrEmpty(validStringRegEx.Match(str).Value))
+                throw new ArgumentException("Invalid argument \"" + str + "\"");
+            CleanAndSaveNumericString(str);
         }
         #endregion
 
@@ -60,19 +63,6 @@ namespace BignumArithmetics
                 return Convert.ToInt32(c - '0');
             return -1;
         }
-        /// <summary>Fabric thar returns an instance of BigDecimal constructed from a string
-        /// that is matching <see cref="validStringRegEx"/> 
-        /// and is cut with <see cref="cleanStringRegEx"/></summary>
-        /// <param name="str">String that represents a number</param>
-        /// <returns>An instance of BigDecimal. null if parameter is invalid</returns>
-        public static BigDecimal CreateFromString(string str)
-        {
-            if (string.IsNullOrEmpty(str) ||
-                string.IsNullOrEmpty(validStringRegEx.Match(str).Value))
-                return new BigDecimal();
-            str = CleanNumericString(str, out int sign);
-            return new BigDecimal(str, sign);
-        }
         /// <summary>Fabric thar returns an instance of BigDecimal constructed from a number</summary>
         /// <param name="number">Object of any numeric type</param>
         /// <returns>An instance of BigDecimal. null if parameter is invalid</returns>
@@ -81,7 +71,7 @@ namespace BignumArithmetics
             string str = number.ToString();
             string sysDelim = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator;
             str = str.Replace(sysDelim, delimiter);
-            return CreateFromString(str);
+            return new BigDecimal(str);
         }
         /// <summary>Сonverts BigDecimal into reversed digit list with padding zeroes</summary>
         /// <param name="desiredInt">int represening how many digits should integer part contain</param>
@@ -131,21 +121,22 @@ namespace BignumArithmetics
             return sb.ToString();
         }
         /// <summary>CleanNumericString method cleans digit string with <see cref="cleanStringRegEx"/></summary>
-        /// <param name="RawString">String representing of digits</param>
+        /// <param name="rawString">String representing of digits</param>
         /// <param name="sign">Integer representing position of dot in cleaned string</param>
         /// <returns>A clean string; "0" in case of invalid arguments</returns>
-        private static string CleanNumericString(string RawString, out int sign)
+        private void CleanAndSaveNumericString(string rawString)
         {
             string substr;
 
-            substr = cleanStringRegEx.Match(RawString).Value;
+            substr = cleanStringRegEx.Match(rawString).Value;
             if (substr == "")
             {
-                sign = 1;
-                return "0";
+                CleanString = "0";
+                return;
             }
-            sign = RawString.Contains("-") ? -1 : 1;
-            return substr;
+            CleanString = substr;
+            if (rawString.Contains("-"))
+                Negate();
         }
         #endregion
 
@@ -241,7 +232,7 @@ namespace BignumArithmetics
             var resultList = leftList.SumWithList(rightList);
             NormalizeList(resultList);
 
-            BigDecimal bfAns = CreateFromString(IntListToString(resultList, resultList.Count - desiredFrac));
+            BigDecimal bfAns = new BigDecimal(IntListToString(resultList, resultList.Count - desiredFrac));
             if (Sign < 0)
                 bfAns.Negate();
             return bfAns;
@@ -279,7 +270,7 @@ namespace BignumArithmetics
             var resultList = leftList.SubByList(rightList);
             NormalizeList(resultList);
 
-            BigDecimal bfAns = CreateFromString(IntListToString(resultList, resultList.Count - desiredFrac));
+            BigDecimal bfAns = new BigDecimal(IntListToString(resultList, resultList.Count - desiredFrac));
             if (sign < 0)
                 bfAns.Negate();
             return bfAns;
@@ -304,7 +295,7 @@ namespace BignumArithmetics
             var resultList = leftList.MulWithList(rightList);
             NormalizeList(resultList);
 
-            BigDecimal bfAns = CreateFromString(IntListToString(resultList, resultList.Count - newDot));
+            BigDecimal bfAns = new BigDecimal(IntListToString(resultList, resultList.Count - newDot));
             if (bfLeft.Sign * bfRight.Sign < 0)
                 bfAns.Negate();
             return bfAns;
@@ -332,7 +323,7 @@ namespace BignumArithmetics
             List<int> resultList = leftList.DivByList(rightList, NormalizeList, out List<int> subList);
             int dotPos = resultList.Count - FracPrecision;
 
-            BigDecimal bfAns = CreateFromString(IntListToString(resultList, dotPos));
+            BigDecimal bfAns = new BigDecimal(IntListToString(resultList, dotPos));
             if (bfLeft.Sign * bfRight.Sign < 0)
                 bfAns.Negate();
             return bfAns;

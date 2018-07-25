@@ -10,8 +10,8 @@ namespace BignumArithmetics.BigDecimalTests
         static Random rnd = new Random((int)DateTime.Now.Ticks);
         static void DoTesting(string left, string right, string result)
         {
-            BigDecimal A = BigDecimal.CreateFromString(left);
-            BigDecimal B = BigDecimal.CreateFromString(right);
+            BigDecimal A = new BigDecimal(left);
+            BigDecimal B = new BigDecimal(right);
 
             BigDecimal C = A * B;
             Assert.AreEqual(result, C.ToString());

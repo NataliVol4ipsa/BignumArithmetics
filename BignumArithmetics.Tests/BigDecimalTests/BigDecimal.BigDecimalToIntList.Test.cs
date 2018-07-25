@@ -23,7 +23,7 @@ namespace BignumArithmetics.BigDecimalTests
         [TestMethod]
         public void Zero_Test()
         {
-            var bf = BigDecimal.CreateFromString("0");
+            var bf = new BigDecimal("0");
             List<int> actual = BigDecimal.BigDecimalToIntList(bf, 0, 0);
             List<int> expected = new List<int> { 0 };
             CompareLists(expected, actual);
@@ -31,7 +31,7 @@ namespace BignumArithmetics.BigDecimalTests
         [TestMethod]
         public void Zero23_Test()
         {
-            var bf = BigDecimal.CreateFromString("0");
+            var bf = new BigDecimal("0");
             List<int> actual = BigDecimal.BigDecimalToIntList(bf, 2, 3);
             List<int> expected = new List<int> { 0, 0, 0, 0, 0 };
             CompareLists(expected, actual);
@@ -40,7 +40,7 @@ namespace BignumArithmetics.BigDecimalTests
         [TestMethod]
         public void Digit23_Test()
         {
-            var bf = BigDecimal.CreateFromString("5");
+            var bf = new BigDecimal("5");
             List<int> actual = BigDecimal.BigDecimalToIntList(bf, 2, 3);
             List<int> expected = new List<int> { 0, 0, 0, 5, 0 };
             CompareLists(expected, actual);
@@ -49,7 +49,7 @@ namespace BignumArithmetics.BigDecimalTests
         [TestMethod]
         public void Digits32_Test()
         {
-            var bf = BigDecimal.CreateFromString("65.1");
+            var bf = new BigDecimal("65.1");
             List<int> actual = BigDecimal.BigDecimalToIntList(bf, 3, 2);
             List<int> expected = new List<int> { 0, 1, 5, 6, 0 };
             CompareLists(expected, actual);
@@ -58,7 +58,7 @@ namespace BignumArithmetics.BigDecimalTests
         [TestMethod]
         public void Digits13_Test()
         {
-            var bf = BigDecimal.CreateFromString("65.1");
+            var bf = new BigDecimal("65.1");
             List<int> actual = BigDecimal.BigDecimalToIntList(bf, 1, 3);
             List<int> expected = new List<int> { 0, 0, 1, 5, 6 };
             CompareLists(expected, actual);

@@ -49,11 +49,11 @@
     <Compile Include="BigBased.cs" />
     <Compile Include="BigInteger.cs" />
     <Compile Include="BigNumber.cs" />
-    <Compile Include="InputParser.cs" />
-    <Compile Include="LexicalParser.cs" />
+    <Compile Include="InputReader.cs" />
     <Compile Include="ListOperationExtensions.cs" />
     <Compile Include="main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RPNParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
