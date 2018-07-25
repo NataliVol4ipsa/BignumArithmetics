@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//TODO: TESTS?
+
 namespace BignumArithmetics
 {
     static class ListOperationExtensions
     {
-        //todo: normalize lists by hands where there is no toNorm param in method call
+        public delegate void Normalizer(List<int> list);
+
         /// <summary> Generates a list representing sum of two reversed digit lists</summary>
         /// <param name="leftList">First operand</param>
         /// <param name="rightList">Second operand</param>
@@ -65,9 +68,12 @@ namespace BignumArithmetics
         /// <summary> Generates a list representing division of two reversed digit lists.</summary>
         /// <param name="leftList">First list.</param>
         /// <param name="rightList">Second list.</param>
+        /// <param name="normFunc">Delegate <see cref="Normalizer"/>
+        /// of reversed digit list normalization method</param>
         /// <param name="remainder">A list equal to leftList mod rightList"/>
         /// <returns>List representing division of two lists in same reversed form</returns>
-        public static List<int> DivByList(this List<int> leftList, List<int> rightList, out List<int> remainder)
+        public static List<int> DivByList(this List<int> leftList, List<int> rightList, 
+                                            Normalizer NormFunc, out List<int> remainder)
         {
             var resultList = new List<int>();
             remainder = new List<int>();
@@ -89,6 +95,7 @@ namespace BignumArithmetics
                         dif = remainder.Count - rightList.Count;
                         rightList.AddRange(Enumerable.Repeat(0, dif));
                         remainder = remainder.SubByList(rightList);
+                        NormFunc(remainder);
                         if (dif > 0)
                             rightList.RemoveAt(rightList.Count - 1);
                         while (remainder.Count > 0 && remainder.Last() == 0)

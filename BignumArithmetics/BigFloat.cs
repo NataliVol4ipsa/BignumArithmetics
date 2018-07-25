@@ -312,7 +312,7 @@ namespace BignumArithmetics
             leftList.RemoveTailingZeros();
             rightList.RemoveTailingZeros();
 
-            List<int> resultList = leftList.DivByList(rightList, out List<int> subList);
+            List<int> resultList = leftList.DivByList(rightList, NormalizeList, out List<int> subList);
             int dotPos = resultList.Count - FracPrecision;
 
             BigFloat bfAns = CreateFromString(IntListToString(resultList, dotPos));

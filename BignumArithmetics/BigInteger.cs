@@ -281,7 +281,7 @@ namespace BignumArithmetics
             leftList.RemoveTailingZeros();
             rightList.RemoveTailingZeros();
 
-            List<int> resultList = leftList.DivByList(rightList, out List<int> subList);
+            List<int> resultList = leftList.DivByList(rightList, NormalizeList, out List<int> subList);
             BigInteger bfAns = CreateFromString(IntListToString(resultList));
             if (bfLeft.Sign * bfRight.Sign < 0)
                 bfAns.Negate();
