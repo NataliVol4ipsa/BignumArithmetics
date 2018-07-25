@@ -4,7 +4,9 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
 
+//TODO: TEST BIGBASED
 //todo: add array of regexes for each base
+//TODO: FABRIC => CONSTRUCTOR & EXCEPTION IF INVALID
 
 namespace BignumArithmetics
 {
@@ -93,7 +95,6 @@ namespace BignumArithmetics
             //todo: this is incorrect because not converting bases
             string str = number.ToString();
             throw new NotImplementedException("CreateFromNumber<T> not implemented yet");
-            return CreateFromString(str, bigBase);
         }
         /// <summary>CleanNumericString method cleans digit string with <see cref="cleanStringRegEx"/></summary>
         /// <param name="RawString">String representing of digits</param>
@@ -504,11 +505,11 @@ namespace BignumArithmetics
 
         #region Variables
         /// <summary>validRegexFormat is a string representing RegEx format
-        /// used to validate input string in fabric method <see cref="CreateFromString"/>
+        /// used to validate input string in fabric method <see cref="new BigInteger"/>
         /// into integer and fractional parts </summary>
         private static readonly string validRegexFormat = @"^\s*[+-]?[0-{0}]+\s*$";
         /// <summary>cleanRegexFormat is a string representing RegEx format
-        /// used to clean valid input string in fabric method <see cref="CreateFromString"/></summary>
+        /// used to clean valid input string in fabric method <see cref="new BigInteger"/></summary>
         private static readonly string cleanRegexFormat = @"[1-{0}]+[0-{0}]*";
         #endregion
 

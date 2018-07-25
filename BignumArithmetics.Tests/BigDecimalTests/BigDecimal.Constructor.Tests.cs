@@ -11,9 +11,6 @@ namespace BignumArithmetics.BigDecimalTests
         public void NullString_In_Constructor()
         {
             BigDecimal empty = new BigDecimal((string)null);
-
-            Assert.AreEqual("0", empty.ToString());
-            Assert.AreEqual(1, empty.Sign);
         }
 
         [TestMethod]
@@ -21,9 +18,6 @@ namespace BignumArithmetics.BigDecimalTests
         public void NumberWithoutInteger_In_Constructor()
         {
             BigDecimal actual = new BigDecimal(" +.5");
-
-            Assert.AreEqual("0", actual.ToString());
-            Assert.AreEqual(1, actual.Sign);
         }
 
         [TestMethod]
@@ -31,9 +25,6 @@ namespace BignumArithmetics.BigDecimalTests
         public void NumberWithDotWithoutFrac_In_Constructor()
         {
             BigDecimal actual = new BigDecimal("1234.");
-
-            Assert.AreEqual("0", actual.ToString());
-            Assert.AreEqual(1, actual.Sign);
         }
 
         [TestMethod]
@@ -41,9 +32,6 @@ namespace BignumArithmetics.BigDecimalTests
         public void NumWithTwoDots_In_Constructor()
         {
             BigDecimal actual = new BigDecimal("1.14.5");
-
-            Assert.AreEqual("0", actual.ToString());
-            Assert.AreEqual(1, actual.Sign);
         }
 
         [TestMethod]
@@ -51,9 +39,6 @@ namespace BignumArithmetics.BigDecimalTests
         public void NumberWithAlpha_In_Constructor()
         {
             BigDecimal actual = new BigDecimal("  1a12.3 ");
-
-            Assert.AreEqual("0", actual.ToString());
-            Assert.AreEqual(1, actual.Sign);
         }
 
         [TestMethod]

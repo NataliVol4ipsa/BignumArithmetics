@@ -10,8 +10,8 @@ namespace BignumArithmetics.BigIntegerTests
         static Random rnd = new Random((int)DateTime.Now.Ticks);
         static void DoTesting(string left, string right, string result)
         {
-            BigInteger A = BigInteger.CreateFromString(left);
-            BigInteger B = BigInteger.CreateFromString(right);
+            BigInteger A = new BigInteger(left);
+            BigInteger B = new BigInteger(right);
 
             BigInteger C = A + B;
             Assert.AreEqual(result, C.ToString());

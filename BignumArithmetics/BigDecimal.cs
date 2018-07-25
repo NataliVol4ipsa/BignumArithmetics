@@ -4,12 +4,9 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
 
-//TODO: FABRIC => CONSTRUCTOR & EXCEPTION IF INVALID
-
 namespace BignumArithmetics
 {
-    /// <summary>Сlass for fixed point 
-    /// big numbers</summary>
+    /// <summary>Сlass for decimal big numbers</summary>
     public class BigDecimal : BigNumber
     {
         #region Constructors
@@ -27,12 +24,8 @@ namespace BignumArithmetics
             DotPos = from.DotPos;
             Fractional = from.Fractional;
         }
-        /// <summary>Private constructor creates a BigDecimal from a valid string 
-        /// that is matching <see cref="validStringRegEx"/> 
-        /// and is cut with <see cref="cleanStringRegEx"/></summary>
+        /// <summary>Private constructor creates a BigDecimal from a valid string </summary>
         /// <param name="str">string representing number digits and delimiter</param>
-        /// <param name="sign">integer representing number sign</param>
-        /// <returns>An instance of BigDecimal</returns>
         /// <exception cref="ArgumentException">ArgumentException
         /// thrown in case of invalid input</exception>
         public BigDecimal(string str)
@@ -41,6 +34,21 @@ namespace BignumArithmetics
                 string.IsNullOrEmpty(validStringRegEx.Match(str).Value))
                 throw new ArgumentException("Invalid argument \"" + str + "\"");
             CleanAndSaveNumericString(str);
+        }
+        /// <summary>Private constructor creates a BigDecimal from a decimal number</summary>
+        /// <param name="number">A decimal number</param>
+        public BigDecimal(decimal number)
+        {
+            string str = number.ToString();
+            string sysDelim = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            str = str.Replace(sysDelim, delimiter);           
+            if (str[0] == '-')
+            {
+                CleanString = str.Substring(1);
+                Negate();
+            }
+            else
+                CleanString = str;
         }
         #endregion
 
@@ -66,13 +74,7 @@ namespace BignumArithmetics
         /// <summary>Fabric thar returns an instance of BigDecimal constructed from a number</summary>
         /// <param name="number">Object of any numeric type</param>
         /// <returns>An instance of BigDecimal. null if parameter is invalid</returns>
-        public static BigDecimal CreateFromNumber<T>(T number)
-        {
-            string str = number.ToString();
-            string sysDelim = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-            str = str.Replace(sysDelim, delimiter);
-            return new BigDecimal(str);
-        }
+ 
         /// <summary>Сonverts BigDecimal into reversed digit list with padding zeroes</summary>
         /// <param name="desiredInt">int represening how many digits should integer part contain</param>
         /// <param name="desiredFrac">int represening how many digits should fractional part contain</param>
@@ -107,7 +109,7 @@ namespace BignumArithmetics
             if (digits is null || digits.Count == 0)
                 return "";
             if (dotPos < 0)
-                dotPos = 0;
+                dotPos = 1;
             sb = new StringBuilder();
             reverseDot = digits.Count - dotPos;
             for (i = digits.Count - 1; i >= reverseDot; i--)
@@ -120,11 +122,12 @@ namespace BignumArithmetics
             }
             return sb.ToString();
         }
+
         /// <summary>CleanNumericString method cleans digit string with <see cref="cleanStringRegEx"/></summary>
         /// <param name="rawString">String representing of digits</param>
         /// <param name="sign">Integer representing position of dot in cleaned string</param>
         /// <returns>A clean string; "0" in case of invalid arguments</returns>
-        private void CleanAndSaveNumericString(string rawString)
+        protected void CleanAndSaveNumericString(string rawString)
         {
             string substr;
 
@@ -449,7 +452,7 @@ namespace BignumArithmetics
         public static explicit operator BigInteger(BigDecimal bf)
         {
             string intString = bf.CleanString.Substring(0, bf.DotPos);
-            return BigInteger.CreateFromString(intString);
+            return new BigInteger(intString);
         }
         #endregion
 
@@ -458,14 +461,14 @@ namespace BignumArithmetics
         /// into integer and fractional parts </summary>
         private static readonly string delimiter = ".";
         /// <summary>validStringRegEx is a string representing RegEx
-        /// used to validate input string in fabric method <see cref="CreateFromString"/>
+        /// used to validate input string in fabric method <see cref="new BigInteger"/>
         /// into integer and fractional parts </summary>
         private static readonly Regex validStringRegEx = new
             Regex(@"^\s*[+-]?\d+(\.\d+)?\s*$", RegexOptions.Compiled);
         /// <summary>cleanStringRegEx is a string representing RegEx
-        /// used to clean valid input string in fabric method <see cref="CreateFromString"/></summary>
+        /// used to clean valid input string in fabric method <see cref="new BigInteger"/></summary>
         private static readonly Regex cleanStringRegEx = 
-            new Regex(@"([1-9]+[0-9]*(\.[0-9]*[1-9]+)?|0\.[0-9]*[1-9]+)", RegexOptions.Compiled);
+            new Regex(@"[1-9]+[0-9]*(\.[0-9]*[1-9]+)?|0\.[0-9]*[1-9]+", RegexOptions.Compiled);
         /// <summary>The _fracPrecision local field represents 
         /// a number of fractional digits counted while division for BigDecimal instances.</summary>
         private static volatile int _fracPrecision = 20;

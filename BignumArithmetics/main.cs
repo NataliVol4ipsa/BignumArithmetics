@@ -3,8 +3,6 @@ using System.Text;
 using System.Linq;
 using System.Collections.Generic;
 
-//TODO: TEST BIGBASED
-
 namespace BignumArithmetics
 {
     public static class BignumArithmetics

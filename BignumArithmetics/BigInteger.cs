@@ -23,17 +23,29 @@ namespace BignumArithmetics
             if (from.Sign < 0)
                 Negate();
         }
-        /// <summary>Private constructor creates a BigInteger from a valid string 
-        /// that is matching <see cref="validStringRegEx"/> 
-        /// and is cut with <see cref="cleanStringRegEx"/></summary>
+        /// <summary>Private constructor creates a BigInteger from a valid string </summary>
         /// <param name="str">string representing number digits and delimiter</param>
-        /// <param name="sign">integer representing number sign</param>
-        /// <returns>An instance of BigInteger</returns>
-        private BigInteger(string str, int sign)
+        /// <exception cref="ArgumentException">ArgumentException
+        /// thrown in case of invalid input</exception>
+        public BigInteger(string str)
         {
-            CleanString = str;
-            if (sign < 0)
+            if (string.IsNullOrEmpty(str) ||
+                string.IsNullOrEmpty(validStringRegEx.Match(str).Value))
+                throw new ArgumentException("Invalid argument \"" + str + "\"");
+            CleanAndSaveNumericString(str);
+        }
+        /// <summary>Private constructor creates a BigInteger from an integer number</summary>
+        /// <param name="number">A decimal number</param>
+        public BigInteger(int number)
+        {
+            string str = number.ToString();
+            if (str[0] == '-')
+            {
+                CleanString = str.Substring(1);
                 Negate();
+            }
+            else
+                CleanString = str;
         }
         #endregion
 
@@ -57,27 +69,6 @@ namespace BignumArithmetics
             return -1;
         }
 
-        /// <summary>Fabric thar returns an instance of BigInteger constructed from a string
-        /// that is matching <see cref="validStringRegEx"/> 
-        /// and is cut with <see cref="cleanStringRegEx"/></summary>
-        /// <param name="str">String that represents a number</param>
-        /// <returns>An instance of BigInteger. null if parameter is invalid</returns>
-        public static BigInteger CreateFromString(string str)
-        {
-            if (string.IsNullOrEmpty(str) ||
-                string.IsNullOrEmpty(validStringRegEx.Match(str).Value))
-                return new BigInteger();
-            str = CleanNumericString(str, out int sign);
-            return new BigInteger(str, sign);
-        }
-        /// <summary>Fabric thar returns an instance of BigInteger constructed from a number</summary>
-        /// <param name="number">Object of any numeric type</param>
-        /// <returns>An instance of BigInteger. null if parameter is invalid</returns>
-        public static BigInteger CreateFromNumber<T>(T number)
-        {
-            string str = number.ToString();
-            return CreateFromString(str);
-        }
         /// <summary>Сonverts BigInteger into reversed digit list with padding zeroes</summary>
         /// <param name="desiredInt">int represening how many digits should integer part contain</param>
         /// <param name="desiredFrac">int represening how many digits should fractional part contain</param>
@@ -114,26 +105,21 @@ namespace BignumArithmetics
             return sb.ToString();
         }
         /// <summary>CleanNumericString method cleans digit string with <see cref="cleanStringRegEx"/></summary>
-        /// <param name="RawString">String representing of digits</param>
-        /// <param name="sign">Integer representing position of dot in cleaned string</param>
+        /// <param name="rawString">String representing of digits</param>
         /// <returns>A clean string; "0" in case of invalid arguments</returns>
-        protected static string CleanNumericString(string RawString, out int sign)
+        protected void CleanAndSaveNumericString(string rawString)
         {
             string substr;
 
-            if (RawString is null)
-            {
-                sign = 1;
-                return "0";
-            }
-            substr = cleanStringRegEx.Match(RawString).Value;
+            substr = cleanStringRegEx.Match(rawString).Value;
             if (substr == "")
             {
-                sign = 1;
-                return "0";
+                CleanString = "0";
+                return;
             }
-            sign = RawString.Contains("-") ? -1 : 1;
-            return substr;
+            CleanString = substr;
+            if (rawString.Contains("-"))
+                Negate();
         }
         #endregion
 
@@ -215,7 +201,7 @@ namespace BignumArithmetics
             var resultList = leftList.SumWithList(rightList);
             NormalizeList(resultList);
 
-            BigInteger bfAns = CreateFromString(IntListToString(resultList));
+            BigInteger bfAns = new BigInteger(IntListToString(resultList));
             if (Sign < 0)
                 bfAns.Negate();
             return bfAns;
@@ -252,7 +238,7 @@ namespace BignumArithmetics
             var resultList = leftList.SubByList(rightList);
             NormalizeList(resultList);
 
-            BigInteger bfAns = CreateFromString(IntListToString(resultList));
+            BigInteger bfAns = new BigInteger(IntListToString(resultList));
             if (sign < 0)
                 bfAns.Negate();
             return bfAns;
@@ -276,7 +262,7 @@ namespace BignumArithmetics
             var resultList = leftList.MulWithList(rightList);
             NormalizeList(resultList);
 
-            BigInteger bfAns = CreateFromString(IntListToString(resultList));
+            BigInteger bfAns = new BigInteger(IntListToString(resultList));
             if (bfLeft.Sign * bfRight.Sign < 0)
                 bfAns.Negate();
             return bfAns;
@@ -301,7 +287,7 @@ namespace BignumArithmetics
             rightList.RemoveTailingZeros();
 
             List<int> resultList = leftList.DivByList(rightList, NormalizeList, out List<int> subList);
-            BigInteger bfAns = CreateFromString(IntListToString(resultList));
+            BigInteger bfAns = new BigInteger(IntListToString(resultList));
             if (bfLeft.Sign * bfRight.Sign < 0)
                 bfAns.Negate();
             return bfAns;
@@ -428,12 +414,12 @@ namespace BignumArithmetics
 
         #region Variables
         /// <summary>validStringRegEx is a string representing RegEx
-        /// used to validate input string in fabric method <see cref="CreateFromString"/>
+        /// used to validate input string in fabric method <see cref="new BigInteger"/>
         /// into integer and fractional parts </summary>
         private static readonly Regex validStringRegEx = new
             Regex(@"^\s*[+-]?[0-9]+\s*$", RegexOptions.Compiled);
         /// <summary>cleanStringRegEx is a string representing RegEx
-        /// used to clean valid input string in fabric method <see cref="CreateFromString"/></summary>
+        /// used to clean valid input string in fabric method <see cref="new BigInteger"/></summary>
         private static readonly Regex cleanStringRegEx =
             new Regex(@"[1-9]+[0-9]*", RegexOptions.Compiled);
         #endregion
