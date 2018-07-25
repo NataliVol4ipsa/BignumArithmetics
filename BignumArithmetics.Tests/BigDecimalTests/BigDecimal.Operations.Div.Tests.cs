@@ -2,18 +2,19 @@
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BignumArithmetics.BigFloatTests
+namespace BignumArithmetics.BigDecimalTests
 {
     [TestClass]
-    public class BigFLoatOperationsMulTests
+    public class BigDecimalOperationsDivTests
     {
+        static int i = 0;
         static Random rnd = new Random((int)DateTime.Now.Ticks);
         static void DoTesting(string left, string right, string result)
         {
-            BigFloat A = BigFloat.CreateFromString(left);
-            BigFloat B = BigFloat.CreateFromString(right);
+            BigDecimal A = BigDecimal.CreateFromString(left);
+            BigDecimal B = BigDecimal.CreateFromString(right);
 
-            BigFloat C = A * B;
+            BigDecimal C = A / B;
             Assert.AreEqual(result, C.ToString());
         }
         public static string DecimalToString(decimal number)
@@ -41,12 +42,13 @@ namespace BignumArithmetics.BigFloatTests
             B /= 100000;
             decimal C = A * B;
 
-            DoTesting(DecimalToString(A),
+            DoTesting(DecimalToString(C),
                     DecimalToString(B),
-                    DecimalToString(C));
+                    DecimalToString(A));
         }
 
         [TestMethod]
+        [ExpectedException(typeof(DivideByZeroException))]
         public void Zero_Zero()
         {
             DoTesting("0", "0", "0");
@@ -59,39 +61,34 @@ namespace BignumArithmetics.BigFloatTests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(DivideByZeroException))]
         public void m5_zero()
         {
-            DoTesting("-5", "0","0");
+            DoTesting("-5", "0", "0");
         }
 
         [TestMethod]
-        public void m5_p6()
+        public void m6_p5()
         {
-            DoTesting("-5", "6", "-30");
+            DoTesting("-6", "5", "-1.2");
         }
 
         [TestMethod]
-        public void p123D45_p45D678()
+        public void p20D1_p0D05()
         {
-            DoTesting("123.45", "45.678", "5638.9491");
+            DoTesting("20.1", "0.05", "402");
         }
-
+        
         [TestMethod]
-        public void m3D1_p10D005()
+        public void p20D1_p5()
         {
-            DoTesting("-3.1", "10.005", "-31.0155");
-        }
-
-        [TestMethod]
-        public void m10D005_m3D1()
-        {
-            DoTesting("-10.005", "-3.1", "31.0155");
+            DoTesting("20.1", "5", "4.02");
         }
 
         [TestMethod]
         public void random_10000_tests()
         {
-            for (int i = 0; i < 10000; i++)
+            for (i = 0; i < 10000; i++)
                 RandomTest();
         }
     }

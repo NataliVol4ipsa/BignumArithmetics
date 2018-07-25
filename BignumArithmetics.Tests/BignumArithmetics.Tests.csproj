@@ -67,7 +67,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BigFloatTests\BigFLoat.Operations.Mod.Tests.cs" />
+    <Compile Include="BigDecimalTests\BigDecimal.Operations.Mod.Tests.cs" />
     <Compile Include="BigIntegerTests\BigInteger.Constructor.Tests.cs" />
     <Compile Include="BigIntegerTests\BigInteger.Operations.Add.Tests.cs" />
     <Compile Include="BigIntegerTests\BigInteger.Operations.Div.Tests.cs" />
@@ -75,20 +75,20 @@
     <Compile Include="BigIntegerTests\BigInteger.Operations.Mul.Tests.cs" />
     <Compile Include="BigIntegerTests\BigInteger.Operations.Sub.Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BigFloatTests\BigFloat.Constructor.Tests.cs" />
-    <Compile Include="BigFloatTests\BigFloat.IntAndFrac.Tests.cs" />
-    <Compile Include="BigFloatTests\BigFloat.BigFloatToIntList.Test.cs" />
-    <Compile Include="BigFloatTests\BigFloat.NormalizeList.Tests.cs" />
+    <Compile Include="BigDecimalTests\BigDecimal.Constructor.Tests.cs" />
+    <Compile Include="BigDecimalTests\BigDecimal.IntAndFrac.Tests.cs" />
+    <Compile Include="BigDecimalTests\BigDecimal.BigDecimalToIntList.Test.cs" />
+    <Compile Include="BigDecimalTests\BigDecimal.NormalizeList.Tests.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="BigFloatTests\BigFloat.IntListToString.Tests.cs" />
-    <Compile Include="BigFloatTests\BigFLoat.Operations.Div.Tests.cs" />
-    <Compile Include="BigFloatTests\BigFloat.Operations.Add.Tests.cs" />
-    <Compile Include="BigFloatTests\BigFloat.Operations.Sub.Tests.cs" />
-    <Compile Include="BigFloatTests\BigFloat.Operations.Mul.Tests.cs" />
+    <Compile Include="BigDecimalTests\BigDecimal.IntListToString.Tests.cs" />
+    <Compile Include="BigDecimalTests\BigDecimal.Operations.Div.Tests.cs" />
+    <Compile Include="BigDecimalTests\BigDecimal.Operations.Add.Tests.cs" />
+    <Compile Include="BigDecimalTests\BigDecimal.Operations.Sub.Tests.cs" />
+    <Compile Include="BigDecimalTests\BigDecimal.Operations.Mul.Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

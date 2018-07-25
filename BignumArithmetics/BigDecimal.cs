@@ -4,23 +4,22 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
 
-//TODO: RENAME TO BIGDECIMAL
 //TODO: FABRIC => CONSTRUCTOR & EXCEPTION IF INVALID
 
 namespace BignumArithmetics
 {
     /// <summary>Сlass for fixed point 
     /// big numbers</summary>
-    public class BigFloat : BigNumber
+    public class BigDecimal : BigNumber
     {
         #region Constructors
-        /// <summary>Constructor creates a BigFLoat equal to 0</summary>
-        /// <returns>An instance of BigFloat</returns>
-        public BigFloat() { }
-        /// <summary>Constructor creates a BigFloat equal to parameter</summary>
-        /// <param name="from">any BigFloat</param>
-        /// <returns>An instance of BigFloat equal to parameter</returns>
-        public BigFloat(BigFloat from)
+        /// <summary>Constructor creates a BigDecimal equal to 0</summary>
+        /// <returns>An instance of BigDecimal</returns>
+        public BigDecimal() { }
+        /// <summary>Constructor creates a BigDecimal equal to parameter</summary>
+        /// <param name="from">any BigDecimal</param>
+        /// <returns>An instance of BigDecimal equal to parameter</returns>
+        public BigDecimal(BigDecimal from)
         {
             CleanString = from.CleanString;
             if (from.Sign < 0)
@@ -28,13 +27,13 @@ namespace BignumArithmetics
             DotPos = from.DotPos;
             Fractional = from.Fractional;
         }
-        /// <summary>Private constructor creates a BigFloat from a valid string 
+        /// <summary>Private constructor creates a BigDecimal from a valid string 
         /// that is matching <see cref="validStringRegEx"/> 
         /// and is cut with <see cref="cleanStringRegEx"/></summary>
         /// <param name="str">string representing number digits and delimiter</param>
         /// <param name="sign">integer representing number sign</param>
-        /// <returns>An instance of BigFloat</returns>
-        private BigFloat(string str, int sign)
+        /// <returns>An instance of BigDecimal</returns>
+        private BigDecimal(string str, int sign)
         {
             CleanString = str;
             if (sign < 0)
@@ -61,34 +60,34 @@ namespace BignumArithmetics
                 return Convert.ToInt32(c - '0');
             return -1;
         }
-        /// <summary>Fabric thar returns an instance of BigFloat constructed from a string
+        /// <summary>Fabric thar returns an instance of BigDecimal constructed from a string
         /// that is matching <see cref="validStringRegEx"/> 
         /// and is cut with <see cref="cleanStringRegEx"/></summary>
         /// <param name="str">String that represents a number</param>
-        /// <returns>An instance of BigFloat. null if parameter is invalid</returns>
-        public static BigFloat CreateFromString(string str)
+        /// <returns>An instance of BigDecimal. null if parameter is invalid</returns>
+        public static BigDecimal CreateFromString(string str)
         {
             if (string.IsNullOrEmpty(str) ||
                 string.IsNullOrEmpty(validStringRegEx.Match(str).Value))
-                return new BigFloat();
+                return new BigDecimal();
             str = CleanNumericString(str, out int sign);
-            return new BigFloat(str, sign);
+            return new BigDecimal(str, sign);
         }
-        /// <summary>Fabric thar returns an instance of BigFloat constructed from a number</summary>
+        /// <summary>Fabric thar returns an instance of BigDecimal constructed from a number</summary>
         /// <param name="number">Object of any numeric type</param>
-        /// <returns>An instance of BigFloat. null if parameter is invalid</returns>
-        public static BigFloat CreateFromNumber<T>(T number)
+        /// <returns>An instance of BigDecimal. null if parameter is invalid</returns>
+        public static BigDecimal CreateFromNumber<T>(T number)
         {
             string str = number.ToString();
             string sysDelim = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator;
             str = str.Replace(sysDelim, delimiter);
             return CreateFromString(str);
         }
-        /// <summary>Сonverts BigFloat into reversed digit list with padding zeroes</summary>
+        /// <summary>Сonverts BigDecimal into reversed digit list with padding zeroes</summary>
         /// <param name="desiredInt">int represening how many digits should integer part contain</param>
         /// <param name="desiredFrac">int represening how many digits should fractional part contain</param>
         /// <returns>List of digits</returns>
-        public static List<int> BigFloatToIntList(BigFloat num, int desiredInt = 0, int desiredFrac = 0)
+        public static List<int> BigDecimalToIntList(BigDecimal num, int desiredInt = 0, int desiredFrac = 0)
         {
             if (num is null)
                 return null;
@@ -151,11 +150,11 @@ namespace BignumArithmetics
         #endregion
 
         #region Public tools
-        /// <summary>Returns a copy of BigFloat instance </summary>
-        /// <returns>Copy of BigFloat instance</returns>
-        public BigFloat Copy()
+        /// <summary>Returns a copy of BigDecimal instance </summary>
+        /// <returns>Copy of BigDecimal instance</returns>
+        public BigDecimal Copy()
         {
-            return new BigFloat(this);
+            return new BigDecimal(this);
         }
         public override int GetHashCode()
         {
@@ -163,14 +162,14 @@ namespace BignumArithmetics
         }
         public override bool Equals(object obj)
         {
-            return (this == obj as BigFloat);
+            return (this == obj as BigDecimal);
         }
-        /// <summary> Returns |BigFloat| </summary>
-        /// <param name="bf">BigFloat parameter</param>
-        /// <returns>|BigFloat|</returns>
-        public static BigFloat Abs(BigFloat bf)
+        /// <summary> Returns |BigDecimal| </summary>
+        /// <param name="bf">BigDecimal parameter</param>
+        /// <returns>|BigDecimal|</returns>
+        public static BigDecimal Abs(BigDecimal bf)
         {
-            BigFloat ret = new BigFloat(bf);
+            BigDecimal ret = new BigDecimal(bf);
             if (bf.Sign < 0)
                 bf.Negate();
             return bf;
@@ -220,49 +219,49 @@ namespace BignumArithmetics
             }
         }
 
-        /// <summary>Method that is calculating (this + op) for BigFLoat objects.
+        /// <summary>Method that is calculating (this + op) for BigDecimal objects.
         /// Overrided from parent</summary>
         /// <param name="op">Second operand</param>
-        /// <returns>BigFloat equal to (this + op)  upcasted to BigNumber</returns>
+        /// <returns>BigDecimal equal to (this + op)  upcasted to BigNumber</returns>
         public override BigNumber Add(BigNumber op)
         {
-            if (!(op is BigFloat))
-                throw new ArgumentException("Cannot Add BigFloat to " + op.GetType());
+            if (!(op is BigDecimal))
+                throw new ArgumentException("Cannot Add BigDecimal to " + op.GetType());
 
-            BigFloat bfLeft = this;
-            BigFloat bfRight = (BigFloat)op;
+            BigDecimal bfLeft = this;
+            BigDecimal bfRight = (BigDecimal)op;
 
             if (bfLeft.Sign != bfRight.Sign)
                 return bfLeft.Substract(-bfRight);
 
             int desiredInt = Math.Max(bfLeft.Integer, bfRight.Integer);
             int desiredFrac = Math.Max(bfLeft.Fractional, bfRight.Fractional);
-            var leftList = BigFloatToIntList(bfLeft, desiredInt, desiredFrac);
-            var rightList = BigFloatToIntList(bfRight, desiredInt, desiredFrac);
+            var leftList = BigDecimalToIntList(bfLeft, desiredInt, desiredFrac);
+            var rightList = BigDecimalToIntList(bfRight, desiredInt, desiredFrac);
             var resultList = leftList.SumWithList(rightList);
             NormalizeList(resultList);
 
-            BigFloat bfAns = CreateFromString(IntListToString(resultList, resultList.Count - desiredFrac));
+            BigDecimal bfAns = CreateFromString(IntListToString(resultList, resultList.Count - desiredFrac));
             if (Sign < 0)
                 bfAns.Negate();
             return bfAns;
         }
-        /// <summary>Method that is calculating (this - op) for BigFLoat objects.
+        /// <summary>Method that is calculating (this - op) for BigDecimal objects.
         /// Overrided from parent</summary>
         /// <param name="op">Second operand</param>
-        /// <returns>BigFloat equal to (this - op)  upcasted to BigNumber</returns>
+        /// <returns>BigDecimal equal to (this - op)  upcasted to BigNumber</returns>
         public override BigNumber Substract(BigNumber op)
         {
-            if (!(op is BigFloat))
-                throw new ArgumentException("Cannot Add BigFloat and " + op.GetType());
+            if (!(op is BigDecimal))
+                throw new ArgumentException("Cannot Add BigDecimal and " + op.GetType());
 
-            BigFloat bfLeft = this;
-            BigFloat bfRight = (BigFloat)op;
+            BigDecimal bfLeft = this;
+            BigDecimal bfRight = (BigDecimal)op;
 
             if (bfLeft.Sign > 0 && bfRight.Sign < 0)
                 return bfLeft.Add(-bfRight);
             if (bfLeft.Sign < 0 && bfRight.Sign > 0)
-                return -(BigFloat)bfRight.Add(-bfLeft);
+                return -(BigDecimal)bfRight.Add(-bfLeft);
             if (bfLeft.Sign < 0 && bfRight.Sign < 0)
                 return (-bfRight).Substract(-bfLeft);
             //both operands are > 0 here
@@ -275,88 +274,88 @@ namespace BignumArithmetics
             }
             int desiredInt = Math.Max(bfLeft.Integer, bfRight.Integer);
             int desiredFrac = Math.Max(bfLeft.Fractional, bfRight.Fractional);
-            var leftList = BigFloatToIntList(bfLeft, desiredInt, desiredFrac);
-            var rightList = BigFloatToIntList(bfRight, desiredInt, desiredFrac);
+            var leftList = BigDecimalToIntList(bfLeft, desiredInt, desiredFrac);
+            var rightList = BigDecimalToIntList(bfRight, desiredInt, desiredFrac);
             var resultList = leftList.SubByList(rightList);
             NormalizeList(resultList);
 
-            BigFloat bfAns = CreateFromString(IntListToString(resultList, resultList.Count - desiredFrac));
+            BigDecimal bfAns = CreateFromString(IntListToString(resultList, resultList.Count - desiredFrac));
             if (sign < 0)
                 bfAns.Negate();
             return bfAns;
         }
-        /// <summary>Method that is calculating (this * op) for BigFLoat objects.
+        /// <summary>Method that is calculating (this * op) for BigDecimal objects.
         /// Overrided from parent</summary>
         /// <param name="op">Second operand</param>
-        /// <returns>BigFloat equal to (this * op)  upcasted to BigNumber</returns>
+        /// <returns>BigDecimal equal to (this * op)  upcasted to BigNumber</returns>
         public override BigNumber Multiply(BigNumber op)
         {
-            if (!(op is BigFloat))
-                throw new ArgumentException("Cannot Add BigFloat and " + op.GetType());
+            if (!(op is BigDecimal))
+                throw new ArgumentException("Cannot Add BigDecimal and " + op.GetType());
 
-            BigFloat bfLeft = this;
-            BigFloat bfRight = (BigFloat)op;
+            BigDecimal bfLeft = this;
+            BigDecimal bfRight = (BigDecimal)op;
             
             if (bfLeft.Integer + bfLeft.Fractional < bfRight.Integer + bfRight.Fractional)
                 Swap(ref bfLeft, ref bfRight);
             int newDot = bfLeft.Fractional + bfRight.Fractional;
-            var leftList = BigFloatToIntList(bfLeft);
-            var rightList = BigFloatToIntList(bfRight);
+            var leftList = BigDecimalToIntList(bfLeft);
+            var rightList = BigDecimalToIntList(bfRight);
             var resultList = leftList.MulWithList(rightList);
             NormalizeList(resultList);
 
-            BigFloat bfAns = CreateFromString(IntListToString(resultList, resultList.Count - newDot));
+            BigDecimal bfAns = CreateFromString(IntListToString(resultList, resultList.Count - newDot));
             if (bfLeft.Sign * bfRight.Sign < 0)
                 bfAns.Negate();
             return bfAns;
         }
-        /// <summary>Method that is calculating (this / op) for BigFLoat objects.
+        /// <summary>Method that is calculating (this / op) for BigDecimal objects.
         /// Overrided from parent</summary>
         /// <param name="op">Second operand</param>
-        /// <returns>BigFloat equal to (this / op)  upcasted to BigNumber</returns>
+        /// <returns>BigDecimal equal to (this / op)  upcasted to BigNumber</returns>
         public override BigNumber Divide(BigNumber op)
         {
-            if (!(op is BigFloat))
-                throw new ArgumentException("Cannot Add BigFloat and " + op.GetType());
+            if (!(op is BigDecimal))
+                throw new ArgumentException("Cannot Add BigDecimal and " + op.GetType());
 
             if (op.CleanString == "0")
                 throw new DivideByZeroException();
-            BigFloat bfLeft = this;
-            BigFloat bfRight = (BigFloat)op;
+            BigDecimal bfLeft = this;
+            BigDecimal bfRight = (BigDecimal)op;
 
             int multiplier = Math.Max(bfLeft.Fractional, bfRight.Fractional);
-            var leftList = BigFloatToIntList(bfLeft, 0, multiplier + FracPrecision);
-            var rightList = BigFloatToIntList(bfRight, 0, multiplier);
+            var leftList = BigDecimalToIntList(bfLeft, 0, multiplier + FracPrecision);
+            var rightList = BigDecimalToIntList(bfRight, 0, multiplier);
             leftList.RemoveTailingZeros();
             rightList.RemoveTailingZeros();
 
             List<int> resultList = leftList.DivByList(rightList, NormalizeList, out List<int> subList);
             int dotPos = resultList.Count - FracPrecision;
 
-            BigFloat bfAns = CreateFromString(IntListToString(resultList, dotPos));
+            BigDecimal bfAns = CreateFromString(IntListToString(resultList, dotPos));
             if (bfLeft.Sign * bfRight.Sign < 0)
                 bfAns.Negate();
             return bfAns;
         }
-        /// <summary>Method that is calculating (this % op) for BigFLoat objects.
+        /// <summary>Method that is calculating (this % op) for BigDecimal objects.
         /// Overrided from parent</summary>
         /// <param name="op">Second operand</param>
-        /// <returns>BigFloat equal to (this % op)  upcasted to BigNumber</returns>
+        /// <returns>BigDecimal equal to (this % op)  upcasted to BigNumber</returns>
         public override BigNumber Mod(BigNumber op)
         {
-            if (!(op is BigFloat))
-                throw new ArgumentException("Cannot Add BigFloat and " + op.GetType());
+            if (!(op is BigDecimal))
+                throw new ArgumentException("Cannot Add BigDecimal and " + op.GetType());
 
             if (op.CleanString == "0")
-                throw new ArgumentException("Cannot calculate BigFloat % 0");
-            BigFloat bfLeft = this;
-            BigFloat bfRight = (BigFloat)op;
+                throw new ArgumentException("Cannot calculate BigDecimal % 0");
+            BigDecimal bfLeft = this;
+            BigDecimal bfRight = (BigDecimal)op;
 
             int temp = FracPrecision;
             FracPrecision = 0;
-            BigFloat bfDiv = bfLeft / bfRight;
+            BigDecimal bfDiv = bfLeft / bfRight;
             FracPrecision = temp;
-            BigFloat bfAns = bfLeft - bfDiv * bfRight;
+            BigDecimal bfAns = bfLeft - bfDiv * bfRight;
             return bfAns;
         }
 
@@ -375,46 +374,46 @@ namespace BignumArithmetics
         #endregion
 
         #region Operators
-        public static BigFloat operator -(BigFloat num)
+        public static BigDecimal operator -(BigDecimal num)
         {
-            BigFloat ret = new BigFloat(num);
+            BigDecimal ret = new BigDecimal(num);
 
             ret.Negate();
             return ret;
         }
 
-        public static BigFloat operator +(BigFloat left, BigFloat right)
+        public static BigDecimal operator +(BigDecimal left, BigDecimal right)
         {
             if (left is null || right is null)
                 return null;
-            return (BigFloat)left.Add(right);
+            return (BigDecimal)left.Add(right);
         }
-        public static BigFloat operator -(BigFloat left, BigFloat right)
+        public static BigDecimal operator -(BigDecimal left, BigDecimal right)
         {
             if (left is null || right is null)
                 return null;
-            return (BigFloat)left.Substract(right);
+            return (BigDecimal)left.Substract(right);
         }
-        public static BigFloat operator *(BigFloat left, BigFloat right)
+        public static BigDecimal operator *(BigDecimal left, BigDecimal right)
         {
             if (left is null || right is null)
                 return null;
-            return (BigFloat)left.Multiply(right);
+            return (BigDecimal)left.Multiply(right);
         }
-        public static BigFloat operator /(BigFloat left, BigFloat right)
+        public static BigDecimal operator /(BigDecimal left, BigDecimal right)
         {
             if (left is null || right is null)
                 return null;
-            return (BigFloat)left.Divide(right);
+            return (BigDecimal)left.Divide(right);
         }
-        public static BigFloat operator %(BigFloat left, BigFloat right)
+        public static BigDecimal operator %(BigDecimal left, BigDecimal right)
         {
             if (left is null || right is null)
                 return null;
-            return (BigFloat)left.Mod(right);
+            return (BigDecimal)left.Mod(right);
         }
 
-        public static bool operator >(BigFloat left, BigFloat right)
+        public static bool operator >(BigDecimal left, BigDecimal right)
         {
             if (left.Sign > 0)
             {
@@ -438,25 +437,25 @@ namespace BignumArithmetics
                 return false;
             return true;
         }
-        public static bool operator <(BigFloat left, BigFloat right)
+        public static bool operator <(BigDecimal left, BigDecimal right)
         {
             return (!(left > right));
         }
-        public static bool operator ==(BigFloat left, BigFloat right)
+        public static bool operator ==(BigDecimal left, BigDecimal right)
         {
             if (string.Compare(left.CleanString, right.CleanString) != 0 
                 || left.Sign != right.Sign)
                 return false;
             return true;
         }
-        public static bool operator !=(BigFloat left, BigFloat right)
+        public static bool operator !=(BigDecimal left, BigDecimal right)
         {
             if (string.Compare(left.ToString(), right.ToString()) != 0)
                 return false;
             return true;
         }
 
-        public static explicit operator BigInteger(BigFloat bf)
+        public static explicit operator BigInteger(BigDecimal bf)
         {
             string intString = bf.CleanString.Substring(0, bf.DotPos);
             return BigInteger.CreateFromString(intString);
@@ -477,18 +476,17 @@ namespace BignumArithmetics
         private static readonly Regex cleanStringRegEx = 
             new Regex(@"([1-9]+[0-9]*(\.[0-9]*[1-9]+)?|0\.[0-9]*[1-9]+)", RegexOptions.Compiled);
         /// <summary>The _fracPrecision local field represents 
-        /// a number of fractional digits counted while division for BigFloat instances.</summary>
+        /// a number of fractional digits counted while division for BigDecimal instances.</summary>
         private static volatile int _fracPrecision = 20;
 
         /// <summary>The _dotPos local field represents a delimiter position 
-        /// of BigFloat instance in string format.</summary>
+        /// of BigDecimal instance in string format.</summary>
         private volatile int _dotPos = 0;
         /// <summary>The _fracLen local field represents a number of digits 
-        /// in the fractional part of BigFloat instance.</summary>
+        /// in the fractional part of BigDecimal instance.</summary>
         private volatile int _fracLen = -1;
         #endregion
-
-        //hm?
+        
         #region Mutexes
         ///<summary>Random variable used for thread-safe <see cref="DotPos"/>
         ///property first calculation </summary>
@@ -499,7 +497,7 @@ namespace BignumArithmetics
         #endregion
 
         #region Properties
-        /// <summary>The DotPos property represents a delimiter position of BigFloat instance in string format.</summary>
+        /// <summary>The DotPos property represents a delimiter position of BigDecimal instance in string format.</summary>
         /// <value>The DotPos property gets/private sets the value of the int field, <see cref="_dotPos"/></value>
         public int DotPos
         {
@@ -520,7 +518,7 @@ namespace BignumArithmetics
             }
         }
         /// <summary>The Integer property represents a number of digits 
-        /// in the integer part of BigFloat instance.</summary>
+        /// in the integer part of BigDecimal instance.</summary>
         /// <value>The Integer property gets the value of the int property, <see cref="DotPos"/></value>
         public int Integer
         {
@@ -530,7 +528,7 @@ namespace BignumArithmetics
             }
         }
         /// <summary>The Fractional property represents a number of digits 
-        /// in the fractional part of BigFloat instance.</summary>
+        /// in the fractional part of BigDecimal instance.</summary>
         /// <value>The Fractional property gets/private sets the value of the int property, <see cref="_fracLen"/></value>
         public int Fractional
         {
@@ -551,7 +549,7 @@ namespace BignumArithmetics
             }
         }
         /// <summary>The FracPrecision property represents 
-        /// a number of fractional digits counted while division for BigFloat instances.</summary>
+        /// a number of fractional digits counted while division for BigDecimal instances.</summary>
         /// <value>The FracPrecision property gets/sets the value of the int property, <see cref="_fracPrecision"/></value>
         public static int FracPrecision
         {

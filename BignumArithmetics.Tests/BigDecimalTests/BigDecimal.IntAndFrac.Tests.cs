@@ -1,15 +1,15 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BignumArithmetics.BigFloatTests
+namespace BignumArithmetics.BigDecimalTests
 {
     [TestClass]
-    public class BigFloatIntFracTests
+    public class BigDecimalIntFracTests
     {
         [TestMethod]
         public void Zero()
         {
-            BigFloat actual = BigFloat.CreateFromString("0");
+            BigDecimal actual = BigDecimal.CreateFromString("0");
 
             Assert.AreEqual(1, actual.Integer);
             Assert.AreEqual(0, actual.Fractional);
@@ -17,7 +17,7 @@ namespace BignumArithmetics.BigFloatTests
         [TestMethod]
         public void Hundred()
         {
-            BigFloat actual = BigFloat.CreateFromString("-100");
+            BigDecimal actual = BigDecimal.CreateFromString("-100");
 
             Assert.AreEqual(3, actual.Integer);
             Assert.AreEqual(0, actual.Fractional);
@@ -25,7 +25,7 @@ namespace BignumArithmetics.BigFloatTests
         [TestMethod]
         public void ZeroDot156()
         {
-            BigFloat actual = BigFloat.CreateFromString("-0.156");
+            BigDecimal actual = BigDecimal.CreateFromString("-0.156");
 
             Assert.AreEqual(1, actual.Integer);
             Assert.AreEqual(3, actual.Fractional);
@@ -33,7 +33,7 @@ namespace BignumArithmetics.BigFloatTests
         [TestMethod]
         public void BigNumber()
         {
-            BigFloat actual = BigFloat.CreateFromString("923742.42382");
+            BigDecimal actual = BigDecimal.CreateFromString("923742.42382");
 
             Assert.AreEqual(6, actual.Integer);
             Assert.AreEqual(5, actual.Fractional);

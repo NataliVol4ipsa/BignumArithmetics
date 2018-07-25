@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BigFloat.cs" />
+    <Compile Include="BigDecimal.cs" />
     <Compile Include="BigBased.cs" />
     <Compile Include="BigInteger.cs" />
     <Compile Include="BigNumber.cs" />

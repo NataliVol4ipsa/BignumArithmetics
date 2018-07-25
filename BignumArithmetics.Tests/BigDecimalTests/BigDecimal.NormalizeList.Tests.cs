@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BignumArithmetics.BigFloatTests
+namespace BignumArithmetics.BigDecimalTests
 {
     [TestClass]
-    public class BigFloatNormalizeListTests
+    public class BigDecimalNormalizeListTests
     {
         public void CompareLists(List<int> expected, List<int> actual)
         {
@@ -16,7 +16,7 @@ namespace BignumArithmetics.BigFloatTests
         [TestMethod]
         public void NullTest()
         {
-            new BigFloat().NormalizeList(null);
+            new BigDecimal().NormalizeList(null);
         }
 
         [TestMethod]
@@ -24,7 +24,7 @@ namespace BignumArithmetics.BigFloatTests
         {
             var actual = new List<int> { 5 };
             var expected = new List<int> { 5 };
-            new BigFloat().NormalizeList(actual);
+            new BigDecimal().NormalizeList(actual);
             CompareLists(expected, actual);
         }
 
@@ -33,7 +33,7 @@ namespace BignumArithmetics.BigFloatTests
         {
             var actual = new List<int> { 15 };
             var expected = new List<int> { 5, 1 };
-            new BigFloat().NormalizeList(actual);
+            new BigDecimal().NormalizeList(actual);
             CompareLists(expected, actual);
         }
 
@@ -42,7 +42,7 @@ namespace BignumArithmetics.BigFloatTests
         {
             var actual = new List<int> { 135673 };
             var expected = new List<int> { 3, 7, 6, 5, 3, 1 };
-            new BigFloat().NormalizeList(actual);
+            new BigDecimal().NormalizeList(actual);
             CompareLists(expected, actual);
         }
 
@@ -51,7 +51,7 @@ namespace BignumArithmetics.BigFloatTests
         {
             var actual = new List<int> { 1, 11, 9 };
             var expected = new List<int> { 1, 1, 0, 1 };
-            new BigFloat().NormalizeList(actual);
+            new BigDecimal().NormalizeList(actual);
             CompareLists(expected, actual);
         }
     }

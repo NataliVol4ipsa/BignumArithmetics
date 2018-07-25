@@ -420,9 +420,9 @@ namespace BignumArithmetics
             return true;
         }
 
-        public static explicit operator BigFloat(BigInteger bf)
+        public static explicit operator BigDecimal(BigInteger bf)
         {
-            return BigFloat.CreateFromString(bf.CleanString);
+            return BigDecimal.CreateFromString(bf.CleanString);
         }
         #endregion
 

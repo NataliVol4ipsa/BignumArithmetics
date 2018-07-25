@@ -6,10 +6,10 @@ namespace BignumArithmetics
 {
     class InputParser : IDisposable
     {
-        public InputParser(out List<BigFloat> Numbers, string FileName = null)
+        public InputParser(out List<BigDecimal> Numbers, string FileName = null)
         {
             this.FileName = FileName;
-            this.Numbers = new List<BigFloat>();
+            this.Numbers = new List<BigDecimal>();
             Numbers = this.Numbers;
         }
 
@@ -17,14 +17,14 @@ namespace BignumArithmetics
         {
             if (FileName == null)
             {
-                this.Numbers.Add(BigFloat.CreateFromString(Console.ReadLine()));
-                this.Numbers.Add(BigFloat.CreateFromString(Console.ReadLine()));
+                this.Numbers.Add(BigDecimal.CreateFromString(Console.ReadLine()));
+                this.Numbers.Add(BigDecimal.CreateFromString(Console.ReadLine()));
             }
             else
             {
                 SR = new StreamReader(FileName);
-                this.Numbers.Add(BigFloat.CreateFromString(SR.ReadLine()));
-                this.Numbers.Add(BigFloat.CreateFromString(SR.ReadLine()));
+                this.Numbers.Add(BigDecimal.CreateFromString(SR.ReadLine()));
+                this.Numbers.Add(BigDecimal.CreateFromString(SR.ReadLine()));
             }
         }
 
@@ -36,6 +36,6 @@ namespace BignumArithmetics
 
         private string FileName;
         private StreamReader SR;
-        private List<BigFloat> Numbers;
+        private List<BigDecimal> Numbers;
     }
 }
