@@ -38,39 +38,7 @@ namespace BignumArithmetics
         public abstract BigNumber Mod(BigNumber op);
         #endregion
 
-        //TODO: MOVE TO CHILDREN
         #region Static Methods
-        /// <summary>Converts numbers into matching char symbols</summary>
-        /// <param name="digit">Number to be converted. Must be in [0..15] range</param>
-        /// <param name="toUpper">shows if result should be uppercase</param>
-        /// <returns>A matching char; '0' if digit does not match limits</returns>
-        public static char ToChar(int digit, bool toUpper = false)
-        {
-            if (digit >= 0 && digit < 10)
-                return digit.ToString()[0];
-            if (digit > 9 && digit < 16)
-            {
-                if (!toUpper)
-                    return Convert.ToChar('a' + digit - 10);
-                return Convert.ToChar('A' + digit - 10);
-            }
-            return '0';
-        }
-        /// <summary>Converts characters to matching number</summary>
-        /// <param name="c">Character to be converted. Must consist of [0..9a..dA..D]</param>
-        /// <returns>A matching number; -1 if parameter does not match limits.</returns>
-        public static int ToDigit(char c)
-        {
-            if (Char.IsDigit(c))
-                return Convert.ToInt32(c - '0');
-            if (char.IsLetter(c))
-            {
-                c = Char.ToLower(c);
-                if (c < 'g')
-                    return c - 'a' + 10;
-            }
-            return -1;
-        }
         /// <summary>Swaps two objects of type T</summary>
         /// <typeparam name="T">Any type</typeparam>
         /// <param name="left">First parameter to swap</param>
@@ -94,16 +62,8 @@ namespace BignumArithmetics
         }
         /// <summary>Indexer allowing to get indexed digit values</summary>
         /// <param name="index">Integer representing index</param>
-        /// <returns>Integer representing digit</returns>
-        public virtual int this[int index]
-        {
-            get
-            {
-                if (index < 0 || index >= CleanString.Length)
-                    return -1;
-                return ToDigit(CleanString[index]);
-            }
-        }
+        /// <returns>Integer representing digit</rturns>
+        public abstract int this[int index] { get; }
         #endregion
 
         #region Operators

@@ -38,6 +38,25 @@ namespace BignumArithmetics
         #endregion
 
         #region Static Methods
+        /// <summary>Converts numbers into matching char symbols</summary>
+        /// <param name="digit">Number to be converted. Must be in [0..9] range</param>
+        /// <returns>A matching char; '0' if digit does not match limits</returns>
+        public static char ToChar(int digit)
+        {
+            if (digit >= 0 && digit < 10)
+                return digit.ToString()[0];
+            return '0';
+        }
+        /// <summary>Converts characters to matching number</summary>
+        /// <param name="c">Character to be converted. Must consist of ['0'..'9']</param>
+        /// <returns>A matching number; -1 if parameter does not match limits.</returns>
+        public static int ToDigit(char c)
+        {
+            if (Char.IsDigit(c))
+                return Convert.ToInt32(c - '0');
+            return -1;
+        }
+
         /// <summary>Fabric thar returns an instance of BigInteger constructed from a string
         /// that is matching <see cref="validStringRegEx"/> 
         /// and is cut with <see cref="cleanStringRegEx"/></summary>
@@ -304,9 +323,21 @@ namespace BignumArithmetics
             BigInteger bfDiv = bfLeft / bfRight;
             BigInteger bfAns = bfLeft - bfDiv * bfRight;
             return bfAns;
+        }       
+        /// <summary>Indexer allowing to get indexed digit values</summary>
+        /// <param name="index">Integer representing index</param>
+        /// <returns>Integer representing digit</rturns>
+        public override int this[int index]
+        {
+            get
+            {
+                if (index < 0 || index >= CleanString.Length)
+                    return -1;
+                return ToDigit(CleanString[index]);
+            }
         }
         #endregion
-        
+
         #region Operators
         public static BigInteger operator -(BigInteger num)
         {
