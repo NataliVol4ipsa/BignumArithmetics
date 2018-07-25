@@ -6,18 +6,29 @@ using System.Threading.Tasks;
 
 namespace BignumArithmetics
 {
+    public enum TokenType
+    {
+        Spigot, //at the beginning and the end of expression
+        OBracket, // (
+        CBracket, // )
+        Operation_priority1, // +, -
+        Operation_priority2, // *, /, %
+        Number // T
+    }
+
     public struct RPNToken
     {
-        public RPNParser<BigNumber>.TokenType tokenType;
-        public string token;
+        public TokenType tokenType;
+        public string str;
     }
+
     public abstract class RPNParser<T> where T : BigNumber
     {
         static RPNParser()
         {
             actions = new rpnAction[5, 6]
             {
-                {End,         InputToBuf,  InputToBuf,  InputToBuf,  InputToBuf, Error       },
+                {RmBrackets,  InputToBuf,  InputToBuf,  InputToBuf,  InputToBuf, Error       },
                 {BufToResult, BufToResult, BufToResult, InputToBuf,  InputToBuf, BufToResult },
                 {BufToResult, BufToResult, BufToResult, InputToBuf,  InputToBuf, BufToResult },
                 {BufToResult, BufToResult, BufToResult, BufToResult, InputToBuf, BufToResult },
@@ -25,20 +36,14 @@ namespace BignumArithmetics
             };
         }
         delegate void rpnAction(Stack<RPNToken> input, Stack<RPNToken> buffer, Queue<RPNToken> result);
+       
 
         public RPNParser(string str)
         {
             StringExpression = str;
         }
-        public enum TokenType {
-            Spigot, //at the beginning and the end of expression
-            OBracket, // (
-            CBracket, // )
-            Operation_priority1, // +, -
-            Operation_priority2, // *, /, %
-            Number // T
-        }
-        protected abstract T Number(RPNToken token);
+       
+        protected abstract T Number(string str);
         protected abstract Stack<RPNToken> Tokenize(string str);
         private Queue<RPNToken> ConvertToRPN(Stack<RPNToken> input)
         {
@@ -51,7 +56,41 @@ namespace BignumArithmetics
         }
         private T CalculateRPNExpression(Queue<RPNToken> expression)
         {
-            throw new NotImplementedException();
+            //todo: if empty?
+            RPNToken current;
+            Stack<T> calcBuf = new Stack<T>();
+            while (expression.Count > 0)
+            {
+                current = expression.Dequeue();
+                if (current.tokenType == TokenType.Number)
+                    calcBuf.Push(Number(current.str));
+                else
+                    try
+                    {
+                        calcBuf.Push(DoOp(calcBuf.Pop(), calcBuf.Pop(), current.str));
+                    }
+                    catch
+                    {
+                        throw new ArgumentException("Cannot calculate this expression");
+                    }
+            }
+            if (calcBuf.Count > 1)
+                throw new ArgumentException("Cannot calculate this expression");
+            return calcBuf.Pop();
+        }
+        private T DoOp(T right, T left, string op)
+        {
+            if (op.Equals("+"))
+                return (T)(left + right);
+            if (op.Equals("-"))
+                return (T)(left - right);
+            if (op.Equals("*"))
+                return (T)(left * right);
+            if (op.Equals("/"))
+                return (T)(left / right);
+            if (op.Equals("%"))
+                return (T)(left % right);
+            throw new NotImplementedException("RPNParser DoOp met unimplemented operator");
         }
         public T Parse()
         {
@@ -68,7 +107,6 @@ namespace BignumArithmetics
         static rpnAction InputToBuf = (input, buffer, result) => buffer.Push(input.Pop());
         static rpnAction BufToResult = (input, buffer, result) => result.Enqueue(buffer.Pop());
         static rpnAction RmBrackets = (input, buffer, result) => { buffer.Pop(); input.Pop(); };
-        static rpnAction End = (input, buffer, result) => { };
         static rpnAction Error = (input, buffer, result) => { throw new ArgumentException("Cannot calculate invalid expression"); };
         #endregion
     }
