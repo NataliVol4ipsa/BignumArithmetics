@@ -8,10 +8,10 @@ namespace BignumArithmetics.Parsers
     {
         Spigot, //at the beginning and the end of expression
         Operation_priority1, // +, -
-        Number, // T
         Operation_priority2, // *, /, %
         OBracket, // (
-        CBracket // )
+        CBracket, // )
+        Number // T
     }
 
     public struct RPNToken
@@ -29,13 +29,12 @@ namespace BignumArithmetics.Parsers
     {
         static RPNParser()
         {
-            actions = new rpnAction[5, 6]
+            actions = new rpnAction[4, 5]
             {
-                {RmBrackets,  InputToBuf,  InputToBuf,  InputToBuf,  InputToBuf, Error       },
-                {BufToResult, BufToResult, BufToResult, InputToBuf,  InputToBuf, BufToResult },
-                {BufToResult, BufToResult, BufToResult, InputToBuf,  InputToBuf, BufToResult },
-                {BufToResult, BufToResult, BufToResult, BufToResult, InputToBuf, BufToResult },
-                {Error,       InputToBuf,  InputToBuf,  InputToBuf,  InputToBuf, RmBrackets  }
+                {RmBrackets, InputToBuf, InputToBuf, InputToBuf, Error},
+                {BufToResult, BufToResult, InputToBuf, InputToBuf, BufToResult},
+                {BufToResult, BufToResult, BufToResult, InputToBuf, BufToResult},
+                {Error, InputToBuf, InputToBuf, InputToBuf, RmBrackets}
             };
         }
         delegate void rpnAction(Queue<RPNToken> input, Stack<RPNToken> buffer, Queue<RPNToken> result);
@@ -48,13 +47,28 @@ namespace BignumArithmetics.Parsers
         protected abstract T Number(string str);
         protected abstract Queue<RPNToken> Tokenize();
 
+        private Queue<RPNToken> AnalyseSyntax (Queue<RPNToken> tokens)
+        {
+            var cleanTokens = new Queue<RPNToken>();
+            return tokens;
+            //todo: FINISH THIS
+            //check operations binarity
+            //check few signs in a row
+            throw new NotImplementedException();
+            return cleanTokens;
+        }
         private Queue<RPNToken> ConvertToRPN(Queue<RPNToken> input)
         {
             var result = new Queue<RPNToken>();
             var buffer = new Stack<RPNToken>();
             InputToBuf(input, buffer, result);
             while (input.Count > 0)
-                actions[(int)buffer.Peek().tokenType, (int)input.Peek().tokenType](input,buffer,result);
+            {
+                if (input.Peek().tokenType == TokenType.Number)
+                    InputToResult(input, buffer, result);
+                else
+                    actions[(int)buffer.Peek().tokenType, (int)input.Peek().tokenType](input, buffer, result);
+            }
             return result;
         }
         private T CalculateRPNExpression(Queue<RPNToken> expression)
@@ -86,8 +100,6 @@ namespace BignumArithmetics.Parsers
         {
             if (op.Equals("+"))
                 return (T)(left + right);
-            if (op.Equals("-"))
-                return (T)(left - right);
             if (op.Equals("*"))
                 return (T)(left * right);
             if (op.Equals("/"))
@@ -97,22 +109,29 @@ namespace BignumArithmetics.Parsers
             throw new NotImplementedException("RPNParser met unimplemented operator");
         }
 
+        //todo: two parsing funcs : for postfix and infix string? constructor bool isInfix?
         public T Parse()
         {
             Queue<RPNToken> tokens = Tokenize();
-            //todo: validade mess between numbers such as many signs.
-            Queue<RPNToken> tokens_RPN = ConvertToRPN(tokens);
+            Queue<RPNToken> cleanTokens = AnalyseSyntax(tokens);
+            Queue<RPNToken> tokens_RPN = ConvertToRPN(cleanTokens);
             T answer = CalculateRPNExpression(tokens_RPN);
             return answer;
         }
 
         public string StringExpression { get; private set; }
-        protected static string regexFormat = @"\G\s*({0}|\+|-|\*|\\|%|\(|\))\s*";
+        protected static string regexFormat = @"\G\s*({0}|\+|-|\*|/|%|\(|\))\s*";
 
         #region Actions
         //todo: make buffers local vars and lambdas take no parameters
         static rpnAction[,] actions;
 
+        //static rpnAction InputToBuf = (input, buffer, result) => buffer.Push(input.Dequeue());
+        //static rpnAction BufToResult = (input, buffer, result) => result.Enqueue(buffer.Pop());
+        //static rpnAction RmBrackets = (input, buffer, result) => { buffer.Pop(); input.Dequeue(); };
+        //static rpnAction Error = (input, buffer, result) => { throw new ArgumentException("Cannot calculate invalid expression"); };
+
+        static rpnAction InputToResult = (input, buffer, result) => result.Enqueue(input.Dequeue());
         static rpnAction InputToBuf = (input, buffer, result) => buffer.Push(input.Dequeue());
         static rpnAction BufToResult = (input, buffer, result) => result.Enqueue(buffer.Pop());
         static rpnAction RmBrackets = (input, buffer, result) => { buffer.Pop(); input.Dequeue(); };

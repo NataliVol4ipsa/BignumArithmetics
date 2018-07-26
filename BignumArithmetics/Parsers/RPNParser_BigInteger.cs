@@ -27,13 +27,14 @@ namespace BignumArithmetics.Parsers
             {
                 lastMatchPos = match.Index;
                 lastMatchLen = match.Value.Length;
-                stringTokens.Enqueue(match.Value);
+                stringTokens.Enqueue(match.Value.Trim());
                 match = match.NextMatch();
             }
             if (lastMatchPos + lastMatchLen < StringExpression.Length)
                 throw new ArgumentException("Cannot calculate invalid expression");
             return RecognizeLexemS(stringTokens);
         }
+        //move this to main parser syntax analyze! take strings,  calc
         //takes valid strings
         private Queue<RPNToken> RecognizeLexemS(Queue<string> stringTokens)
         {

@@ -52,8 +52,9 @@
     <Compile Include="InputReader.cs" />
     <Compile Include="ListOperationExtensions.cs" />
     <Compile Include="main.cs" />
+    <Compile Include="Parsers\RPNParser_BigInteger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RPNParser.cs" />
+    <Compile Include="Parsers\RPNParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

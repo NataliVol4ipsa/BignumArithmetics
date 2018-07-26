@@ -1,4 +1,5 @@
 ﻿using System;
+using BignumArithmetics.Parsers;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.Collections.Generic;
@@ -9,7 +10,16 @@ namespace BignumArithmetics
     {
         public static int Main(string[] args)
         {
-            int lastMatchPos = 0;
+            try
+            {
+                var parser = new RPNParser("(2 + 2) * 2 / 4");
+                Console.WriteLine(parser.Parse());
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            /*int lastMatchPos = 0;
             int lastMatchLen = 0;
             string test = "   (2 + 2 )* 2    ";
             test = test.Trim();
@@ -25,7 +35,8 @@ namespace BignumArithmetics
             }
             Console.WriteLine("Last match {0} of len {1} at string of len {2}", lastMatchPos, lastMatchLen, test.Length);
             if (lastMatchPos + lastMatchLen < test.Length)
-                Console.WriteLine("Incorrect string");
+                Console.WriteLine("Incorrect string");*/
+
             Console.Read();
             return 0;
         } 
