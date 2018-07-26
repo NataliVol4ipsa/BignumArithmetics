@@ -218,9 +218,9 @@ namespace BignumArithmetics.Parsers
                 else if (currentToken.tokenType == TokenType.CBracket)
                 {
                     while ((tempToken = buffer.Pop()).tokenType != TokenType.CBracket)
-                        result.Push(DoBinaryOp(result.Pop(), result.Pop(), tempToken.str));
+                        CalcToken(tempToken);
                     if (buffer.Count() > 0 && buffer.Peek().tokenType == TokenType.Function)
-                        result.Push(DoFunc(result.Pop(), buffer.Pop().str));
+                        CalcToken(buffer.Pop());
                 }
                 else
                     throw new NotImplementedException("Unimplemented token");
