@@ -162,13 +162,13 @@ namespace BignumArithmetics.Parsers
         {
             var tokenQueue = new Queue<RPNToken>();
             TokenType tokenType;
+            TokenType prev = TokenType.Empty;
             foreach (var token in stringTokens)
             {
                 if (OpInfoMap[token].Count() > 0)
                 {
-                    if (tokenQueue.Count() > 0 && (
-                        tokenQueue.Peek().tokenType == TokenType.CBracket ||
-                        tokenQueue.Peek().tokenType == TokenType.Number))
+                    if (prev == TokenType.CBracket ||
+                        prev == TokenType.Number)
                         tokenType = TokenType.BinOp;
                     else
                         tokenType = TokenType.UnOp;
@@ -179,6 +179,7 @@ namespace BignumArithmetics.Parsers
                     tokenType = TokenType.CBracket;
                 else
                     tokenType = TokenType.Number;
+                prev = tokenType;
                 tokenQueue.Enqueue(new RPNToken(token, tokenType));
             }
             return tokenQueue;
@@ -217,7 +218,7 @@ namespace BignumArithmetics.Parsers
                     buffer.Push(currentToken);
                 else if (currentToken.tokenType == TokenType.CBracket)
                 {
-                    while ((tempToken = buffer.Pop()).tokenType != TokenType.CBracket)
+                    while ((tempToken = buffer.Pop()).tokenType != TokenType.OBracket)
                         CalcToken(tempToken);
                     if (buffer.Count() > 0 && buffer.Peek().tokenType == TokenType.Function)
                         CalcToken(buffer.Pop());
