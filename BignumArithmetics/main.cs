@@ -12,8 +12,8 @@ namespace BignumArithmetics
         {
             try
             {
-                var parser = new RPNParser("(2 + 2) * 2 / 4");
-                Console.WriteLine(parser.Parse());
+                var parser = new BigIntegerRPNParser("2 * (2 + 2) / 4").Parse();
+                Console.WriteLine(parser);
             }
             catch(Exception e)
             {

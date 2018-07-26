@@ -54,7 +54,7 @@
     <Compile Include="main.cs" />
     <Compile Include="Parsers\RPNParser_BigInteger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Parsers\RPNParser.cs" />
+    <Compile Include="Parsers\RPNParser_Base.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
