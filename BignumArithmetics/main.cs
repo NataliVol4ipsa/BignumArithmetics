@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 //todo: class structure https://referencesource.microsoft.com/#mscorlib/system/collections/generic/list.cs,cf7f4095e4de7646
+//todo: write docs for parser
 
 namespace BignumArithmetics
 {
@@ -14,7 +15,8 @@ namespace BignumArithmetics
         {
             try
             {
-                var parser = new BigIntegerRPNParser("(2 + 2)").Parse();
+                Console.WriteLine(2 + 2 * 3 % 2);
+                var parser = new BigIntegerRPNParser("abs(-(2 + 2 * 3 % 2))").Parse();
                 Console.WriteLine(parser);
             }
             catch(Exception e)

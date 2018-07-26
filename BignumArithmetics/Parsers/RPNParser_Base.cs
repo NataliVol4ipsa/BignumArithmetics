@@ -59,11 +59,12 @@ namespace BignumArithmetics.Parsers
     {
         #region Variables
         protected static readonly string regexFormat;
-        protected static readonly ILookup<string, OpInfo> OpInfoMap;
+        protected static ILookup<string, OpInfo> opInfoMap;
+        protected static List<string> funcs;
 
-        private Queue<RPNToken> expression = new Queue<RPNToken>();
-        private Stack<RPNToken> buffer = new Stack<RPNToken>();
-        private Stack<T> result = new Stack<T>();
+        protected Queue<RPNToken> expression = new Queue<RPNToken>();
+        protected Stack<RPNToken> buffer = new Stack<RPNToken>();
+        protected Stack<T> result = new Stack<T>();
         #endregion
 
         #region Properties
@@ -74,7 +75,7 @@ namespace BignumArithmetics.Parsers
         static RPNParser()
         {
             regexFormat = @"\G\s*({0}|\+|-|\*|/|%|\(|\))\s*";
-            OpInfoMap = new[]
+            opInfoMap = new[]
             {
                 new OpInfo("-", OpArity.Binary, 1, OpAssoc.Left),
                 new OpInfo("-", OpArity.Unary,  3, OpAssoc.Left),
@@ -82,8 +83,10 @@ namespace BignumArithmetics.Parsers
                 new OpInfo("+", OpArity.Unary,  3, OpAssoc.Left),
                 new OpInfo("*", OpArity.Binary, 2, OpAssoc.Left),
                 new OpInfo("/", OpArity.Binary, 2, OpAssoc.Left),
+                new OpInfo("%", OpArity.Binary, 2, OpAssoc.Left),
                 new OpInfo("^", OpArity.Binary, 2, OpAssoc.Right)
             }.ToLookup(op => op.op);
+            funcs = new List<string> {};
         }
 
         public RPNParser(string str)
@@ -137,7 +140,7 @@ namespace BignumArithmetics.Parsers
             OpArity arity = token.tokenType == TokenType.BinOp ?
                                     OpArity.Binary :
                                     OpArity.Unary;
-            var curOps = OpInfoMap[token.str];
+            var curOps = opInfoMap[token.str];
             var curOp = curOps.Count() == 1 ?
                                     curOps.Single() :
                                     curOps.Single(o => o.arity == arity);
@@ -157,7 +160,7 @@ namespace BignumArithmetics.Parsers
                 return 1;
             return 0;
         }
-        //todo: add funcs
+
         protected Queue<RPNToken> RecognizeLexems(Queue<string> stringTokens)
         {
             var tokenQueue = new Queue<RPNToken>();
@@ -165,7 +168,7 @@ namespace BignumArithmetics.Parsers
             TokenType prev = TokenType.Empty;
             foreach (var token in stringTokens)
             {
-                if (OpInfoMap[token].Count() > 0)
+                if (opInfoMap[token].Count() > 0)
                 {
                     if (prev == TokenType.CBracket ||
                         prev == TokenType.Number)
@@ -177,6 +180,8 @@ namespace BignumArithmetics.Parsers
                     tokenType = TokenType.OBracket;
                 else if (token == ")")
                     tokenType = TokenType.CBracket;
+                else if (funcs.Contains(token))
+                    tokenType = TokenType.Function;
                 else
                     tokenType = TokenType.Number;
                 prev = tokenType;
@@ -244,6 +249,7 @@ namespace BignumArithmetics.Parsers
             else if (op.tokenType == TokenType.UnOp)
                 result.Push(CalcUnaryOp(result.Pop(), op.str));
         }
+
         protected T CalcBinaryOp(T right, T left, string op)
         {
             if (op.Equals("+"))
@@ -256,13 +262,19 @@ namespace BignumArithmetics.Parsers
                 return (T)(left % right);
             throw new NotImplementedException("RPNParser met unimplemented operator");
         }
-        //todo: implement
         protected T CalcUnaryOp(T operand, string op)
         {
+            switch(op)
+            {
+                case "+":
+                    break;
+                case "-":
+                    operand.Negate();
+                    break;
+            }
             return operand;
         }
-        //todo: implement
-        protected T CalcFunc(T arg, string func)
+        protected virtual T CalcFunc(T arg, string func)
         {
             return arg;
         }
