@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 //todo: add minus and unar operations support
 //todo: split code into files
+//todo: test abs() func
 
 namespace BignumArithmetics.Parsers
 {
@@ -11,20 +13,19 @@ namespace BignumArithmetics.Parsers
         public RPNParserException() { }
         public RPNParserException(string message)
             : base(message) { }
-        public RPNParserException(string message, Exception inner) 
+        public RPNParserException(string message, Exception inner)
             : base(message, inner) { }
     }
-
     public enum TokenType
     {
-        Spigot, //at the beginning and the end of expression
-        Operation_priority1, // +, -
-        Operation_priority2, // *, /, %
-        OBracket, // (
-        CBracket, // )
-        Number // T
+        Empty,
+        BinOp,
+        UnOp,
+        OBracket,
+        CBracket,
+        Number,
+        Function
     }
-
     public struct RPNToken
     {
         public RPNToken(string str, TokenType tokenType)
@@ -36,22 +37,77 @@ namespace BignumArithmetics.Parsers
         public string str;
     }
 
+    public enum OpArity { Unary, Binary }
+    public enum OpAssoc { Left, Right }
+    public struct OpInfo
+    {
+        public OpInfo(string op, OpArity arity, int priority, OpAssoc assoc)
+        {
+            this.op = op;
+            this.arity = arity;
+            this.priority = priority;
+            this.assoc = assoc;
+        }
+        public string op;
+        public OpArity arity;
+        public int priority;
+        public OpAssoc assoc;
+
+    }
+
     public abstract class RPNParser<T> where T : BigNumber
     {
+        #region Variables
+        protected static readonly string regexFormat;
+        protected static readonly ILookup<string, OpInfo> OpInfoMap;
+
+        private Queue<RPNToken> expression = new Queue<RPNToken>();
+        private Stack<RPNToken> buffer = new Stack<RPNToken>();
+        private Stack<T> result = new Stack<T>();
+        #endregion
+
+        #region Properties
+        public string StringExpression { get; private set; }
+        #endregion
+
         #region Constructors
         static RPNParser()
         {
-            actions = new rpnAction[4, 5]
+            regexFormat = @"\G\s*({0}|\+|-|\*|/|%|\(|\))\s*";
+            OpInfoMap = new[]
             {
-                {RmBrackets,  InputToBuf,  InputToBuf,  InputToBuf, Error      },
-                {BufToResult, BufToResult, InputToBuf,  InputToBuf, BufToResult},
-                {BufToResult, BufToResult, BufToResult, InputToBuf, BufToResult},
-                {Error,       InputToBuf,  InputToBuf,  InputToBuf, RmBrackets }
-            };
-        }       
+                new OpInfo("-", OpArity.Binary, 1, OpAssoc.Left),
+                new OpInfo("-", OpArity.Unary,  3, OpAssoc.Left),
+                new OpInfo("+", OpArity.Binary, 1, OpAssoc.Left),
+                new OpInfo("+", OpArity.Unary,  3, OpAssoc.Left),
+                new OpInfo("*", OpArity.Binary, 2, OpAssoc.Left),
+                new OpInfo("/", OpArity.Binary, 2, OpAssoc.Left),
+                new OpInfo("^", OpArity.Binary, 2, OpAssoc.Right)
+            }.ToLookup(op => op.op);
+        }
+
         public RPNParser(string str)
         {
             StringExpression = str.Trim();
+        }
+        #endregion
+
+        //todo: two parsing funcs : for postfix and infix string? constructor bool isInfix?
+        #region Public Parse methods
+        public T Parse()
+        {
+            Queue<string> stringTokens = Tokenize();
+            expression = RecognizeLexems(stringTokens);
+            T answer;
+            try
+            {
+                answer = CalculateExpression();// <<<<<<<
+            }
+            catch (InvalidOperationException)
+            {
+                throw new RPNParserException("Invalid expression format");
+            }
+            return answer;
         }
         #endregion
 
@@ -61,101 +117,130 @@ namespace BignumArithmetics.Parsers
         #endregion
 
         #region Protected Algorithm methods 
+        //todo: check exception
+        private T ToNumber(string str)
+        {
+            T ans;
+            try
+            {
+                ans = Number(str);
+            }
+            catch
+            {
+                throw new RPNParserException("Invalid number \""
+                    + str + "\" parsed by " + this.GetType());
+            }
+            return ans;
+        }
+        private OpInfo GetOpInfo(RPNToken token)
+        {
+            OpArity arity = token.tokenType == TokenType.BinOp ?
+                                    OpArity.Binary :
+                                    OpArity.Unary;
+            var curOps = OpInfoMap[token.str];
+            var curOp = curOps.Count() == 1 ?
+                                    curOps.Single() :
+                                    curOps.Single(o => o.arity == arity);
+            return curOp;
+        }
+        private bool IsOp(RPNToken t)
+        {
+            if (t.tokenType == TokenType.BinOp || t.tokenType == TokenType.UnOp)
+                return true;
+            return false;
+        }
+        //returns 1 or -1. true||false?
+        private int CmpPriorities(OpInfo left, OpInfo right)
+        {
+            if ((right.assoc == OpAssoc.Left  && right.priority <= left.priority) ||
+                (right.assoc == OpAssoc.Right && right.priority < left.priority))
+                return 1;
+            return 0;
+        }
+        //todo: add funcs
         protected Queue<RPNToken> RecognizeLexems(Queue<string> stringTokens)
         {
             var tokenQueue = new Queue<RPNToken>();
-            tokenQueue.Enqueue(new RPNToken("", TokenType.Spigot));
             TokenType tokenType;
             foreach (var token in stringTokens)
             {
-                switch (token)
+                if (OpInfoMap[token].Count() > 0)
                 {
-                    case "+":
-                        tokenType = TokenType.Operation_priority1;
-                        break;
-                    case "-":
-                        tokenType = TokenType.Operation_priority1;
-                        break;
-                    case "*":
-                        tokenType = TokenType.Operation_priority2;
-                        break;
-                    case "/":
-                        tokenType = TokenType.Operation_priority2;
-                        break;
-                    case "%":
-                        tokenType = TokenType.Operation_priority2;
-                        break;
-                    case "(":
-                        tokenType = TokenType.OBracket;
-                        break;
-                    case ")":
-                        tokenType = TokenType.CBracket;
-                        break;
-                    default:
-                        tokenType = TokenType.Number;
-                        break;
+                    if (tokenQueue.Count() > 0 && (
+                        tokenQueue.Peek().tokenType == TokenType.CBracket ||
+                        tokenQueue.Peek().tokenType == TokenType.Number))
+                        tokenType = TokenType.BinOp;
+                    else
+                        tokenType = TokenType.UnOp;
                 }
+                else if (token == "(")
+                    tokenType = TokenType.OBracket;
+                else if (token == ")")
+                    tokenType = TokenType.CBracket;
+                else
+                    tokenType = TokenType.Number;
                 tokenQueue.Enqueue(new RPNToken(token, tokenType));
             }
-            tokenQueue.Enqueue(new RPNToken("", TokenType.Spigot));
             return tokenQueue;
         }
-        protected Queue<RPNToken> AnalyseSyntax (Queue<RPNToken> tokens)
-        {
-            var cleanTokens = new Queue<RPNToken>();
-            return tokens;
-            //todo: FINISH THIS
-            //check operations binarity
-            //check multiple signs in a row
-            throw new NotImplementedException();
-            return cleanTokens;
-        }
-        protected Queue<RPNToken> ConvertToRPN(Queue<RPNToken> input)
-        {
-            var result = new Queue<RPNToken>();
-            var buffer = new Stack<RPNToken>();
-            InputToBuf(input, buffer, result);
-            while (input.Count > 0)
-            {
-                if (input.Peek().tokenType == TokenType.Number)
-                    InputToResult(input, buffer, result);
-                else
-                    actions[(int)buffer.Peek().tokenType, (int)input.Peek().tokenType](input, buffer, result);
-            }
-            return result;
-        }
-        protected T CalculateRPNExpression(Queue<RPNToken> expression)
+        protected T CalculateExpression()
         {
             //todo: if empty?
-            RPNToken current;
-            var calcBuf = new Stack<T>();
+            RPNToken currentToken;
+            RPNToken prevToken = new RPNToken("", TokenType.Empty);
+            RPNToken tempToken;
+            OpInfo curOpInfo;
             while (expression.Count > 0)
             {
-                current = expression.Dequeue();
-                if (current.tokenType == TokenType.Number)
-                    try
+                currentToken = expression.Dequeue();
+                if (currentToken.tokenType == TokenType.Number)
+                    result.Push(ToNumber(currentToken.str));
+                else if (currentToken.tokenType == TokenType.Function)
+                    buffer.Push(currentToken);
+                else if (currentToken.tokenType == TokenType.BinOp || 
+                    currentToken.tokenType == TokenType.UnOp)
+                {
+                    curOpInfo = GetOpInfo(currentToken);
+                    while (buffer.Count() > 0)
                     {
-                        calcBuf.Push(Number(current.str));
+                        RPNToken cmpToken = buffer.Peek();
+                        if (cmpToken.tokenType == TokenType.Function ||
+                             (IsOp(cmpToken) && CmpPriorities(GetOpInfo(cmpToken), curOpInfo) < 0))
+                            CalcToken(buffer.Pop());
+                        else
+                            break;
+
                     }
-                    catch
-                    {
-                        throw new RPNParserException("Child parser has number recognition implemented in invalid way");
-                    }
+                    buffer.Push(currentToken);
+                }
+                else if (currentToken.tokenType == TokenType.OBracket)
+                    buffer.Push(currentToken);
+                else if (currentToken.tokenType == TokenType.CBracket)
+                {
+                    while ((tempToken = buffer.Pop()).tokenType != TokenType.CBracket)
+                        result.Push(DoBinaryOp(result.Pop(), result.Pop(), tempToken.str));
+                    if (buffer.Count() > 0 && buffer.Peek().tokenType == TokenType.Function)
+                        result.Push(DoFunc(result.Pop(), buffer.Pop().str));
+                }
                 else
-                    try
-                    {
-                        calcBuf.Push(DoOp(calcBuf.Pop(), calcBuf.Pop(), current.str));
-                    }
-                    catch
-                    {
-                        throw new ArgumentException("Cannot calculate this expression");
-                    }
+                    throw new NotImplementedException("Unimplemented token");
+                prevToken = currentToken;
             }
-            if (calcBuf.Count > 1)
-                throw new ArgumentException("Cannot calculate this expression. Remaining buf is not empty");
-            return calcBuf.Pop();
+            //if buffer > 0
+            //if result != 1
+            //throw new ArgumentException("Cannot calculate this expression. Remaining buf is not empty");
+            return result.Pop();
         }
-        protected T DoOp(T right, T left, string op)
+        protected void CalcToken(RPNToken op)
+        {
+            if (op.tokenType == TokenType.Function)
+                result.Push(CalcFunc(result.Pop(), op.str));
+            else if (op.tokenType == TokenType.BinOp)
+                result.Push(CalcBinaryOp(result.Pop(), result.Pop(), op.str));
+            else if (op.tokenType == TokenType.UnOp)
+                result.Push(CalcUnaryOp(result.Pop(), op.str));
+        }
+        protected T CalcBinaryOp(T right, T left, string op)
         {
             if (op.Equals("+"))
                 return (T)(left + right);
@@ -167,41 +252,18 @@ namespace BignumArithmetics.Parsers
                 return (T)(left % right);
             throw new NotImplementedException("RPNParser met unimplemented operator");
         }
-        #endregion
-
-        #region Public Parse methods
-        //todo: two parsing funcs : for postfix and infix string? constructor bool isInfix?
-        //this is in case of AnalyzeSyntax
-        public T Parse()
+        //todo: implement
+        protected T CalcUnaryOp(T operand, string op)
         {
-            Queue<string> stringTokens = Tokenize();
-            Queue<RPNToken> tokens = RecognizeLexems(stringTokens);
-            Queue<RPNToken> cleanTokens = AnalyseSyntax(tokens);
-            Queue<RPNToken> tokens_RPN = ConvertToRPN(cleanTokens);
-            T answer = CalculateRPNExpression(tokens_RPN);
-            return answer;
+            return operand;
+        }
+        //todo: implement
+        protected T CalcFunc(T arg, string func)
+        {
+            return arg;
         }
         #endregion
 
-        #region Variables
-        public string StringExpression { get; private set; }
-        protected static string regexFormat = @"\G\s*({0}|\+|-|\*|/|%|\(|\))\s*";
-        #endregion
 
-        #region Actions
-        private delegate void rpnAction(Queue<RPNToken> input, Stack<RPNToken> buffer, Queue<RPNToken> result);
-        private static readonly rpnAction[,] actions;
-
-        private static readonly rpnAction InputToResult =
-            (input, buffer, result) => result.Enqueue(input.Dequeue());
-        private static readonly rpnAction InputToBuf = 
-            (input, buffer, result) => buffer.Push(input.Dequeue());
-        private static readonly rpnAction BufToResult = 
-            (input, buffer, result) => result.Enqueue(buffer.Pop());
-        private static readonly rpnAction RmBrackets = 
-            (input, buffer, result) => { buffer.Pop(); input.Dequeue(); };
-        private static readonly rpnAction Error = 
-            (input, buffer, result) => throw new ArgumentException("Cannot convert invalid expression");
-        #endregion
     }
 }
