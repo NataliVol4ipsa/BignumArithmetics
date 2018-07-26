@@ -226,9 +226,12 @@ namespace BignumArithmetics.Parsers
                     throw new NotImplementedException("Unimplemented token");
                 prevToken = currentToken;
             }
-            //if buffer > 0
-            //if result != 1
-            //throw new ArgumentException("Cannot calculate this expression. Remaining buf is not empty");
+            while (buffer.Count() > 0)
+                CalcToken(buffer.Pop());
+            if (result.Count() > 1)
+                throw new ArgumentException("Cannot calculate this expression. Remaining buf is not empty");
+            else if (result.Count() == 0)
+                return ToNumber("0");
             return result.Pop();
         }
         protected void CalcToken(RPNToken op)
