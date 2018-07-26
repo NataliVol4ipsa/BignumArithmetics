@@ -2,9 +2,19 @@
 using System.Collections.Generic;
 
 //todo: add minus and unar operations support
+//todo: split code into files
 
 namespace BignumArithmetics.Parsers
 {
+    public class RPNParserException : Exception
+    {
+        public RPNParserException() { }
+        public RPNParserException(string message)
+            : base(message) { }
+        public RPNParserException(string message, Exception inner) 
+            : base(message, inner) { }
+    }
+
     public enum TokenType
     {
         Spigot, //at the beginning and the end of expression
@@ -123,7 +133,14 @@ namespace BignumArithmetics.Parsers
             {
                 current = expression.Dequeue();
                 if (current.tokenType == TokenType.Number)
-                    calcBuf.Push(Number(current.str));
+                    try
+                    {
+                        calcBuf.Push(Number(current.str));
+                    }
+                    catch
+                    {
+                        throw new RPNParserException("Child parser has number recognition implemented in invalid way");
+                    }
                 else
                     try
                     {
@@ -135,7 +152,7 @@ namespace BignumArithmetics.Parsers
                     }
             }
             if (calcBuf.Count > 1)
-                throw new ArgumentException("Cannot calculate this expression. Buf is not empty");
+                throw new ArgumentException("Cannot calculate this expression. Remaining buf is not empty");
             return calcBuf.Pop();
         }
         protected T DoOp(T right, T left, string op)
