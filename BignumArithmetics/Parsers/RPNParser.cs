@@ -1,23 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BignumArithmetics
+namespace BignumArithmetics.Parsers
 {
+    //todo: rearrange actions array and this enum
     public enum TokenType
     {
         Spigot, //at the beginning and the end of expression
-        OBracket, // (
-        CBracket, // )
         Operation_priority1, // +, -
+        Number, // T
         Operation_priority2, // *, /, %
-        Number // T
+        OBracket, // (
+        CBracket // )
     }
 
     public struct RPNToken
     {
+        public RPNToken(string str, TokenType tokenType)
+        {
+            this.str = str;
+            this.tokenType = tokenType;
+        }
         public TokenType tokenType;
         public string str;
     }
@@ -35,20 +38,20 @@ namespace BignumArithmetics
                 {Error,       InputToBuf,  InputToBuf,  InputToBuf,  InputToBuf, RmBrackets  }
             };
         }
-        delegate void rpnAction(Stack<RPNToken> input, Stack<RPNToken> buffer, Queue<RPNToken> result);
+        delegate void rpnAction(Queue<RPNToken> input, Stack<RPNToken> buffer, Queue<RPNToken> result);
        
-
         public RPNParser(string str)
         {
-            StringExpression = str;
+            StringExpression = str.Trim();
         }
        
         protected abstract T Number(string str);
-        protected abstract Stack<RPNToken> Tokenize(string str);
-        private Queue<RPNToken> ConvertToRPN(Stack<RPNToken> input)
+        protected abstract Queue<RPNToken> Tokenize();
+
+        private Queue<RPNToken> ConvertToRPN(Queue<RPNToken> input)
         {
-            Queue<RPNToken> result = new Queue<RPNToken>();
-            Stack<RPNToken> buffer = new Stack<RPNToken>();
+            var result = new Queue<RPNToken>();
+            var buffer = new Stack<RPNToken>();
             InputToBuf(input, buffer, result);
             while (input.Count > 0)
                 actions[(int)buffer.Peek().tokenType, (int)input.Peek().tokenType](input,buffer,result);
@@ -58,7 +61,7 @@ namespace BignumArithmetics
         {
             //todo: if empty?
             RPNToken current;
-            Stack<T> calcBuf = new Stack<T>();
+            var calcBuf = new Stack<T>();
             while (expression.Count > 0)
             {
                 current = expression.Dequeue();
@@ -78,6 +81,7 @@ namespace BignumArithmetics
                 throw new ArgumentException("Cannot calculate this expression");
             return calcBuf.Pop();
         }
+        //todo: is this fine?
         private T DoOp(T right, T left, string op)
         {
             if (op.Equals("+"))
@@ -90,23 +94,28 @@ namespace BignumArithmetics
                 return (T)(left / right);
             if (op.Equals("%"))
                 return (T)(left % right);
-            throw new NotImplementedException("RPNParser DoOp met unimplemented operator");
+            throw new NotImplementedException("RPNParser met unimplemented operator");
         }
+
         public T Parse()
         {
-            Stack<RPNToken> tokens = Tokenize(StringExpression);
+            Queue<RPNToken> tokens = Tokenize();
+            //todo: validade mess between numbers such as many signs.
             Queue<RPNToken> tokens_RPN = ConvertToRPN(tokens);
             T answer = CalculateRPNExpression(tokens_RPN);
             return answer;
         }
+
         public string StringExpression { get; private set; }
+        protected static string regexFormat = @"\G\s*({0}|\+|-|\*|\\|%|\(|\))\s*";
 
         #region Actions
+        //todo: make buffers local vars and lambdas take no parameters
         static rpnAction[,] actions;
 
-        static rpnAction InputToBuf = (input, buffer, result) => buffer.Push(input.Pop());
+        static rpnAction InputToBuf = (input, buffer, result) => buffer.Push(input.Dequeue());
         static rpnAction BufToResult = (input, buffer, result) => result.Enqueue(buffer.Pop());
-        static rpnAction RmBrackets = (input, buffer, result) => { buffer.Pop(); input.Pop(); };
+        static rpnAction RmBrackets = (input, buffer, result) => { buffer.Pop(); input.Dequeue(); };
         static rpnAction Error = (input, buffer, result) => { throw new ArgumentException("Cannot calculate invalid expression"); };
         #endregion
     }
