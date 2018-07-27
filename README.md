@@ -35,9 +35,9 @@ This is a small self-educational project I decided to start in order to refresh 
 
 [DELAYED] 7.1. Implement 2-6 for different base
 
-[DELAYED] 7.2. Implement 2-6 for fractional. Remember about reduction of fractions(factorization...)
+[DELAYED] 7.2. Implement 2-6 for fractional. Remember about reduction of fractions(factorization... NSD?)
 
-[DONE] 8.0. Try to implement a normal calculator, with brackets support. Look at stack-like collections. Regex? RPN? Class Expression. What if mul overflow?
+[DONE] 8.0. Try to implement a normal calculator, with brackets support. 
 
 <b>[CURRENT]</b> 8.1. Add testing and documentation
 
@@ -45,4 +45,4 @@ This is a small self-educational project I decided to start in order to refresh 
 
 ----------
 
-If anyone ever visits this project, any kind of feedback is highly appreciated (task ideas or literature propositions, code quality or architecture comments)
+If anyone ever visits this project, any kind of feedback is highly appreciated :D

@@ -5,6 +5,10 @@ using System.Linq;
 using System.Collections.Generic;
 
 //todo: test parser
+//todo: finish BigBased
+//todo: add BigFractional
+//todo: add more parsers
+//todo: append docs
 
 namespace BignumArithmetics
 {
