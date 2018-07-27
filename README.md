@@ -39,9 +39,7 @@ This is a small self-educational project I decided to start in order to refresh 
 
 <b>[CURRENT]</b> 8.0. Try to implement a normal calculator, with brackets support. Look at stack-like collections. Regex? RPN? Class Expression. What if mul overflow?
 
-[MAYBE] 9.0. Implement second calculator method (lexem tree) with multithreading
-
-[MAYBE] 10.0. Simplicity? Pow? Exp? Log?
+[MAYBE] 9.0. Simplicity? Pow? Exp? Log?
 
 
 ----------
