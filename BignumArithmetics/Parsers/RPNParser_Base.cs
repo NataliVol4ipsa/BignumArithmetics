@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Collections.Generic;
 
-//todo: add minus and unar operations support
-//todo: split code into files
-//todo: test abs() func
+//todo: split code into files ?
+//todo: 1 -1 return check
+//todo: no non-static local vars
 
 namespace BignumArithmetics.Parsers
 {
@@ -18,7 +18,6 @@ namespace BignumArithmetics.Parsers
     }
     public enum TokenType
     {
-        Empty,
         BinOp,
         UnOp,
         OBracket,
@@ -55,16 +54,20 @@ namespace BignumArithmetics.Parsers
 
     }
 
+    public struct RPNBufs<T> where T : BigNumber
+    {
+        public Queue<string> stringTokens;
+        public Queue<RPNToken> expression;
+        public Stack<RPNToken> buffer;
+        public Stack<T> result;
+    }
+
     public abstract class RPNParser<T> where T : BigNumber
     {
         #region Variables
         protected static readonly string regexFormat;
         protected static ILookup<string, OpInfo> opInfoMap;
         protected static List<string> funcs;
-
-        protected Queue<RPNToken> expression = new Queue<RPNToken>();
-        protected Stack<RPNToken> buffer = new Stack<RPNToken>();
-        protected Stack<T> result = new Stack<T>();
         #endregion
 
         #region Properties
@@ -94,23 +97,21 @@ namespace BignumArithmetics.Parsers
             StringExpression = str.Trim();
         }
         #endregion
-
-        //todo: two parsing funcs : for postfix and infix string? constructor bool isInfix?
+        
         #region Public Parse methods
         public T Parse()
         {
-            Queue<string> stringTokens = Tokenize();
-            expression = RecognizeLexems(stringTokens);
-            T answer;
+            RPNBufs<T> bufs = InitBufs();
+            bufs.stringTokens = Tokenize();
+            bufs.expression = RecognizeLexems(bufs.stringTokens);
             try
             {
-                answer = CalculateExpression();// <<<<<<<
+                return CalculateExpression(bufs);
             }
             catch (InvalidOperationException)
             {
                 throw new RPNParserException("Invalid expression format");
             }
-            return answer;
         }
         #endregion
 
@@ -119,8 +120,17 @@ namespace BignumArithmetics.Parsers
         protected abstract Queue<string> Tokenize();
         #endregion
 
-        #region Protected Algorithm methods 
-        //todo: check exception
+        #region Protected Algorithm methods
+        private RPNBufs<T> InitBufs()
+        {
+            var ret = new RPNBufs<T>
+            {
+                expression = new Queue<RPNToken>(),
+                buffer = new Stack<RPNToken>(),
+                result = new Stack<T>()
+            };
+            return ret;
+        }
         private T ToNumber(string str)
         {
             T ans;
@@ -158,20 +168,20 @@ namespace BignumArithmetics.Parsers
             if ((right.assoc == OpAssoc.Left  && right.priority <= left.priority) ||
                 (right.assoc == OpAssoc.Right && right.priority < left.priority))
                 return 1;
-            return 0;
+            return -1;
         }
 
         protected Queue<RPNToken> RecognizeLexems(Queue<string> stringTokens)
         {
             var tokenQueue = new Queue<RPNToken>();
             TokenType tokenType;
-            TokenType prev = TokenType.Empty;
+            TokenType? prev = null;
             foreach (var token in stringTokens)
             {
                 if (opInfoMap[token].Count() > 0)
                 {
-                    if (prev == TokenType.CBracket ||
-                        prev == TokenType.Number)
+                    if (prev.Value == TokenType.CBracket ||
+                        prev.Value == TokenType.Number)
                         tokenType = TokenType.BinOp;
                     else
                         tokenType = TokenType.UnOp;
@@ -189,65 +199,63 @@ namespace BignumArithmetics.Parsers
             }
             return tokenQueue;
         }
-        protected T CalculateExpression()
+        protected T CalculateExpression(RPNBufs<T> bufs)
         {
             //todo: if empty?
             RPNToken currentToken;
-            RPNToken prevToken = new RPNToken("", TokenType.Empty);
             RPNToken tempToken;
             OpInfo curOpInfo;
-            while (expression.Count > 0)
+            while (bufs.expression.Count > 0)
             {
-                currentToken = expression.Dequeue();
+                currentToken = bufs.expression.Dequeue();
                 if (currentToken.tokenType == TokenType.Number)
-                    result.Push(ToNumber(currentToken.str));
+                    bufs.result.Push(ToNumber(currentToken.str));
                 else if (currentToken.tokenType == TokenType.Function)
-                    buffer.Push(currentToken);
+                    bufs.buffer.Push(currentToken);
                 else if (currentToken.tokenType == TokenType.BinOp || 
                     currentToken.tokenType == TokenType.UnOp)
                 {
                     curOpInfo = GetOpInfo(currentToken);
-                    while (buffer.Count() > 0)
+                    while (bufs.buffer.Count() > 0)
                     {
-                        RPNToken cmpToken = buffer.Peek();
+                        RPNToken cmpToken = bufs.buffer.Peek();
                         if (cmpToken.tokenType == TokenType.Function ||
                              (IsOp(cmpToken) && CmpPriorities(GetOpInfo(cmpToken), curOpInfo) < 0))
-                            CalcToken(buffer.Pop());
+                            CalcToken(bufs, bufs.buffer.Pop());
                         else
                             break;
 
                     }
-                    buffer.Push(currentToken);
+                    bufs.buffer.Push(currentToken);
                 }
                 else if (currentToken.tokenType == TokenType.OBracket)
-                    buffer.Push(currentToken);
+                    bufs.buffer.Push(currentToken);
                 else if (currentToken.tokenType == TokenType.CBracket)
                 {
-                    while ((tempToken = buffer.Pop()).tokenType != TokenType.OBracket)
-                        CalcToken(tempToken);
-                    if (buffer.Count() > 0 && buffer.Peek().tokenType == TokenType.Function)
-                        CalcToken(buffer.Pop());
+                    while ((tempToken = bufs.buffer.Pop()).tokenType != TokenType.OBracket)
+                        CalcToken(bufs, tempToken);
+                    if (bufs.buffer.Count() > 0 && bufs.buffer.Peek().tokenType == TokenType.Function)
+                        CalcToken(bufs, bufs.buffer.Pop());
                 }
                 else
                     throw new NotImplementedException("Unimplemented token");
-                prevToken = currentToken;
             }
-            while (buffer.Count() > 0)
-                CalcToken(buffer.Pop());
-            if (result.Count() > 1)
-                throw new ArgumentException("Cannot calculate this expression. Remaining buf is not empty");
-            else if (result.Count() == 0)
+            while (bufs.buffer.Count() > 0)
+                CalcToken(bufs, bufs.buffer.Pop());
+            if (bufs.result.Count() > 1)
+                throw new ArgumentException("Cannot calculate this expression. Remaining buf contains extra numbers.");
+            else if (bufs.result.Count() == 0)
                 return ToNumber("0");
-            return result.Pop();
+            return bufs.result.Pop();
         }
-        protected void CalcToken(RPNToken op)
+        protected void CalcToken(RPNBufs<T> bufs, RPNToken op)
         {
             if (op.tokenType == TokenType.Function)
-                result.Push(CalcFunc(result.Pop(), op.str));
+                bufs.result.Push(CalcFunc(bufs.result.Pop(), op.str));
             else if (op.tokenType == TokenType.BinOp)
-                result.Push(CalcBinaryOp(result.Pop(), result.Pop(), op.str));
+                bufs.result.Push(CalcBinaryOp(bufs.result.Pop(), bufs.result.Pop(), op.str));
             else if (op.tokenType == TokenType.UnOp)
-                result.Push(CalcUnaryOp(result.Pop(), op.str));
+                bufs.result.Push(CalcUnaryOp(bufs.result.Pop(), op.str));
         }
 
         protected T CalcBinaryOp(T right, T left, string op)
