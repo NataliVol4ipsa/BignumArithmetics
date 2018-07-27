@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 //todo: test parser
+//todo: add more parsers
 
 namespace BignumArithmetics
 {
