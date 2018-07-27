@@ -4,7 +4,6 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using System.Collections.Generic;
 
-//todo: write docs for parser
 //todo: test parser
 
 namespace BignumArithmetics
@@ -16,7 +15,7 @@ namespace BignumArithmetics
             try
             {
                 Console.WriteLine(2 + 2 * 3 % 2);
-                var parser = new BigIntegerRPNParser("abs(-(2 + 2 * 3 % 2))").Parse();
+                var parser = new BigIntegerRPNParser().Parse("abs(-(2 + 2 * 3 % 2))");
                 Console.WriteLine(parser);
             }
             catch(Exception e)

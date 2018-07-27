@@ -4,6 +4,8 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
 
+//todo: add exception to constructor summary
+
 namespace BignumArithmetics
 {
     /// <summary>Сlass for decimal big numbers</summary>

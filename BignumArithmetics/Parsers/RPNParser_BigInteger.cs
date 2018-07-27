@@ -16,7 +16,6 @@ namespace BignumArithmetics.Parsers
             funcs.Add("abs");
             regex = new Regex(String.Format(regexFormat, @"\d+|abs"), RegexOptions.Compiled);
         }
-        public BigIntegerRPNParser(string str) : base(str) { }
         #endregion
 
         #region Private
@@ -24,12 +23,12 @@ namespace BignumArithmetics.Parsers
         {
             return new BigInteger(str);
         }
-        protected override Queue<string> Tokenize()
+        protected override Queue<string> Tokenize(string str)
         {
             var stringTokens = new Queue<string>();
             int lastMatchPos = 0;
             int lastMatchLen = 0;
-            Match match = regex.Match(StringExpression);
+            Match match = regex.Match(str);
             while (match.Success)
             {
                 lastMatchPos = match.Index;
@@ -37,7 +36,7 @@ namespace BignumArithmetics.Parsers
                 stringTokens.Enqueue(match.Value.Trim());
                 match = match.NextMatch();
             }
-            if (lastMatchPos + lastMatchLen < StringExpression.Length)
+            if (lastMatchPos + lastMatchLen < str.Length)
                 throw new ArgumentException("Cannot calculate invalid expression");
             return stringTokens;
         }
