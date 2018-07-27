@@ -7,6 +7,34 @@ namespace BignumArithmetics
     /// <summary>Abstract class for big numbers</summary>
     public abstract class BigNumber
     {
+        #region Variables
+
+        #region Instance 
+        /// <summary>The CleanString property represents number without spaces, extra zeroes etc</summary>
+        /// <value> The CleanString property gets/sets the value of the string field, _cleanString</value>
+        public string CleanString { get; protected set; } = "0";
+        /// <summary>The Sign property represents sign of the number</summary>
+        /// <value> The CleanString property gets/sets the value of the int field, _sign</value>
+        public int Sign { get; private set; } = 1;
+        #endregion
+
+        #endregion
+
+        #region Public Methods
+
+        #region Static Methods
+        /// <summary>Swaps two objects of type T</summary>
+        /// <typeparam name="T">Any type</typeparam>
+        /// <param name="left">First parameter to swap</param>
+        /// <param name="right">Second parameter to swap</param>
+        public static void Swap<T>(ref T left, ref T right)
+        {
+            T buf = left;
+            left = right;
+            right = buf;
+        }
+        #endregion
+
         #region Abstract Methods
         /// <summary>Normalizes reversed list of digits</summary>
         /// <param name="digits">List of digits</param>
@@ -38,20 +66,7 @@ namespace BignumArithmetics
         public abstract BigNumber Mod(BigNumber op);
         #endregion
 
-        #region Static Methods
-        /// <summary>Swaps two objects of type T</summary>
-        /// <typeparam name="T">Any type</typeparam>
-        /// <param name="left">First parameter to swap</param>
-        /// <param name="right">Second parameter to swap</param>
-        public static void Swap<T>(ref T left, ref T right)
-        {
-            T buf = left;
-            left = right;
-            right = buf;
-        }
-        #endregion
-
-        #region Public Methods
+        #region Casual Methods
         /// <summary> Negate is switching <see cref="Sign"/> to the opposite one </summary>
         public void Negate()
         {
@@ -106,13 +121,7 @@ namespace BignumArithmetics
         }
         #endregion
 
-        #region Properties
-        /// <summary>The CleanString property represents number without spaces, extra zeroes etc</summary>
-        /// <value> The CleanString property gets/sets the value of the string field, _cleanString</value>
-        public string CleanString { get; protected set; } = "0";
-        /// <summary>The Sign property represents sign of the number</summary>
-        /// <value> The CleanString property gets/sets the value of the int field, _sign</value>
-        public int Sign { get; private set; } = 1;
         #endregion
+
     }
 }

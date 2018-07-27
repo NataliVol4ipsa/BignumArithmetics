@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
@@ -14,6 +15,16 @@ namespace BignumArithmetics
     /// big numbers</summary>
     public class BigBased : BigNumber
     {
+        #region Static Variables
+        /// <summary>validRegexFormat is a string representing RegEx format
+        /// used to validate input string in fabric method <see cref="new BigInteger"/>
+        /// into integer and fractional parts </summary>
+        private static readonly string validRegexFormat = @"^\s*[+-]?[0-{0}]+\s*$";
+        /// <summary>cleanRegexFormat is a string representing RegEx format
+        /// used to clean valid input string in fabric method <see cref="new BigInteger"/></summary>
+        private static readonly string cleanRegexFormat = @"[1-{0}]+[0-{0}]*";
+        #endregion        
+
         #region Constructors
         /// <summary>Constructor creates a BigBased equal to 0 in base 10</summary>
         /// <returns>An instance of BigBased</returns>
@@ -51,7 +62,11 @@ namespace BignumArithmetics
         }
         #endregion
 
-        #region Static Methods
+        #region Properties
+        public int Base { get; private set; } = 10;
+        #endregion
+
+        #region Public Static Methods
         /// <summary>Fabric thar returns an instance of BigBased constructed from a string
         /// that is matching <see cref="validStringRegEx"/> 
         /// and is cut with <see cref="cleanStringRegEx"/>
@@ -123,7 +138,7 @@ namespace BignumArithmetics
         /// <param name="digits">List of digits</param>
         /// <param name="dotPos">Integer representing reversed position of dot in string</param>
         /// <returns>A string representing a number; null in case of invalid arguments</returns>
-        public static string IntListToString(List<int> digits)
+        private static string IntListToString(List<int> digits)
         {
             int i;
             StringBuilder sb;
@@ -503,18 +518,6 @@ namespace BignumArithmetics
         }
         #endregion
 
-        #region Variables
-        /// <summary>validRegexFormat is a string representing RegEx format
-        /// used to validate input string in fabric method <see cref="new BigInteger"/>
-        /// into integer and fractional parts </summary>
-        private static readonly string validRegexFormat = @"^\s*[+-]?[0-{0}]+\s*$";
-        /// <summary>cleanRegexFormat is a string representing RegEx format
-        /// used to clean valid input string in fabric method <see cref="new BigInteger"/></summary>
-        private static readonly string cleanRegexFormat = @"[1-{0}]+[0-{0}]*";
-        #endregion
-
-        #region Properties
-        public int Base { get; private set; } = 10;
-        #endregion
     }
 }
+*/

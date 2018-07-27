@@ -9,6 +9,49 @@ namespace BignumArithmetics
     /// <summary>Сlass for decimal big numbers</summary>
     public class BigDecimal : BigNumber
     {
+        #region Variables
+
+        #region Static Const
+        /// <summary>delimiter represents a symbol or string that splits number
+        /// into integer and fractional parts </summary>
+        private static readonly string delimiter = ".";
+        /// <summary>validStringRegEx is a string representing RegEx
+        /// used to validate input string in fabric method <see cref="new BigInteger"/>
+        /// into integer and fractional parts </summary>
+        private static readonly Regex validStringRegEx = new
+            Regex(@"^\s*[+-]?\d+(\.\d+)?\s*$", RegexOptions.Compiled);
+        /// <summary>cleanStringRegEx is a string representing RegEx
+        /// used to clean valid input string in fabric method <see cref="new BigInteger"/></summary>
+        private static readonly Regex cleanStringRegEx =
+            new Regex(@"[1-9]+[0-9]*(\.[0-9]*[1-9]+)?|0\.[0-9]*[1-9]+", RegexOptions.Compiled);
+        #endregion
+
+        #region Static
+        /// <summary>The _fracPrecision local field represents 
+        /// a number of fractional digits counted while division for BigDecimal instances.</summary>
+        private static volatile int _fracPrecision = 20;
+        #endregion
+
+        #region Instance
+        /// <summary>The _dotPos local field represents a delimiter position 
+        /// of BigDecimal instance in string format.</summary>
+        private volatile int _dotPos = 0;
+        /// <summary>The _fracLen local field represents a number of digits 
+        /// in the fractional part of BigDecimal instance.</summary>
+        private volatile int _fracLen = -1;
+        #endregion
+
+        #region Mutexes
+        ///<summary>Random variable used for thread-safe <see cref="DotPos"/>
+        ///property first calculation </summary>
+        private readonly Object dotPosMutex = new Object();
+        ///<summary>Random variable used for thread-safe <see cref="Fractional"/>
+        ///property first calculation </summary>
+        private readonly Object fracLenMutex = new Object();
+        #endregion
+
+        #endregion
+
         #region Constructors
         /// <summary>Constructor creates a BigDecimal equal to 0</summary>
         /// <returns>An instance of BigDecimal</returns>
@@ -52,7 +95,80 @@ namespace BignumArithmetics
         }
         #endregion
 
-        #region Static Methods
+        #region Properties
+        /// <summary>The DotPos property represents a delimiter position of BigDecimal instance in string format.</summary>
+        /// <value>The DotPos property gets/private sets the value of the int field, <see cref="_dotPos"/></value>
+        public int DotPos
+        {
+            get
+            {
+                if (_dotPos == 0)
+                {
+                    lock (dotPosMutex)
+                    {
+                        FindDotPos();
+                    }
+                }
+                return _dotPos;
+            }
+            private set
+            {
+                _dotPos = value;
+            }
+        }
+        /// <summary>The Integer property represents a number of digits 
+        /// in the integer part of BigDecimal instance.</summary>
+        /// <value>The Integer property gets the value of the int property, <see cref="DotPos"/></value>
+        public int Integer
+        {
+            get
+            {
+                return DotPos;
+            }
+        }
+        /// <summary>The Fractional property represents a number of digits 
+        /// in the fractional part of BigDecimal instance.</summary>
+        /// <value>The Fractional property gets/private sets the value of the int property, <see cref="_fracLen"/></value>
+        public int Fractional
+        {
+            get
+            {
+                if (_fracLen < 0)
+                    lock (fracLenMutex)
+                    {
+                        _fracLen = CleanString.Length - DotPos;
+                        if (_fracLen > 0)
+                            _fracLen--;
+                    }
+                return _fracLen;
+            }
+            private set
+            {
+                _fracLen = value;
+            }
+        }
+        /// <summary>The FracPrecision property represents 
+        /// a number of fractional digits counted while division for BigDecimal instances.</summary>
+        /// <value>The FracPrecision property gets/sets the value of the int property, <see cref="_fracPrecision"/></value>
+        public static int FracPrecision
+        {
+            get
+            {
+                return _fracPrecision;
+            }
+            set
+            {
+                if (value < 0)
+                    _fracPrecision = 0;
+                else
+                    _fracPrecision = value;
+            }
+        }
+        #endregion
+
+        #region Public
+
+        #region Static 
         /// <summary>Converts numbers into matching char symbols</summary>
         /// <param name="digit">Number to be converted. Must be in [0..9] range</param>
         /// <returns>A matching char; '0' if digit does not match limits</returns>
@@ -71,9 +187,6 @@ namespace BignumArithmetics
                 return Convert.ToInt32(c - '0');
             return -1;
         }
-        /// <summary>Fabric thar returns an instance of BigDecimal constructed from a number</summary>
-        /// <param name="number">Object of any numeric type</param>
-        /// <returns>An instance of BigDecimal. null if parameter is invalid</returns>
  
         /// <summary>Сonverts BigDecimal into reversed digit list with padding zeroes</summary>
         /// <param name="desiredInt">int represening how many digits should integer part contain</param>
@@ -122,42 +235,6 @@ namespace BignumArithmetics
             }
             return sb.ToString();
         }
-
-        /// <summary>CleanNumericString method cleans digit string with <see cref="cleanStringRegEx"/></summary>
-        /// <param name="rawString">String representing of digits</param>
-        /// <param name="sign">Integer representing position of dot in cleaned string</param>
-        /// <returns>A clean string; "0" in case of invalid arguments</returns>
-        protected void CleanAndSaveNumericString(string rawString)
-        {
-            string substr;
-
-            substr = cleanStringRegEx.Match(rawString).Value;
-            if (substr == "")
-            {
-                CleanString = "0";
-                return;
-            }
-            CleanString = substr;
-            if (rawString.Contains("-"))
-                Negate();
-        }
-        #endregion
-
-        #region Public tools
-        /// <summary>Returns a copy of BigDecimal instance </summary>
-        /// <returns>Copy of BigDecimal instance</returns>
-        public BigDecimal Copy()
-        {
-            return new BigDecimal(this);
-        }
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-        public override bool Equals(object obj)
-        {
-            return (this == obj as BigDecimal);
-        }
         /// <summary> Returns |BigDecimal| </summary>
         /// <param name="bf">BigDecimal parameter</param>
         /// <returns>|BigDecimal|</returns>
@@ -167,19 +244,6 @@ namespace BignumArithmetics
             if (bf.Sign < 0)
                 bf.Negate();
             return bf;
-        }
-        #endregion
-
-        #region Private Methods
-        /// <summary>Calculates a position of delimiter
-        /// in <see cref="CleanString"/></summary>
-        private void FindDotPos()
-        {
-            if (_dotPos > 0)
-                return;
-            _dotPos = CleanString.IndexOf(delimiter);
-            if (_dotPos < 0)
-                _dotPos = CleanString.Length;
         }
         #endregion
 
@@ -456,109 +520,56 @@ namespace BignumArithmetics
         }
         #endregion
 
-        #region Variables
-        /// <summary>delimiter represents a symbol or string that splits number
-        /// into integer and fractional parts </summary>
-        private static readonly string delimiter = ".";
-        /// <summary>validStringRegEx is a string representing RegEx
-        /// used to validate input string in fabric method <see cref="new BigInteger"/>
-        /// into integer and fractional parts </summary>
-        private static readonly Regex validStringRegEx = new
-            Regex(@"^\s*[+-]?\d+(\.\d+)?\s*$", RegexOptions.Compiled);
-        /// <summary>cleanStringRegEx is a string representing RegEx
-        /// used to clean valid input string in fabric method <see cref="new BigInteger"/></summary>
-        private static readonly Regex cleanStringRegEx = 
-            new Regex(@"[1-9]+[0-9]*(\.[0-9]*[1-9]+)?|0\.[0-9]*[1-9]+", RegexOptions.Compiled);
-        /// <summary>The _fracPrecision local field represents 
-        /// a number of fractional digits counted while division for BigDecimal instances.</summary>
-        private static volatile int _fracPrecision = 20;
+        #region Tools
+        /// <summary>Returns a copy of BigDecimal instance </summary>
+        /// <returns>Copy of BigDecimal instance</returns>        
+        /// <summary>CleanNumericString method cleans digit string with <see cref="cleanStringRegEx"/></summary>
+        /// <param name="rawString">String representing of digits</param>
+        /// <param name="sign">Integer representing position of dot in cleaned string</param>
+        /// <returns>A clean string; "0" in case of invalid arguments</returns>
+        protected void CleanAndSaveNumericString(string rawString)
+        {
+            string substr;
 
-        /// <summary>The _dotPos local field represents a delimiter position 
-        /// of BigDecimal instance in string format.</summary>
-        private volatile int _dotPos = 0;
-        /// <summary>The _fracLen local field represents a number of digits 
-        /// in the fractional part of BigDecimal instance.</summary>
-        private volatile int _fracLen = -1;
-        #endregion
-        
-        #region Mutexes
-        ///<summary>Random variable used for thread-safe <see cref="DotPos"/>
-        ///property first calculation </summary>
-        private readonly Object dotPosMutex = new Object();
-        ///<summary>Random variable used for thread-safe <see cref="Fractional"/>
-        ///property first calculation </summary>
-        private readonly Object fracLenMutex = new Object();
+            substr = cleanStringRegEx.Match(rawString).Value;
+            if (substr == "")
+            {
+                CleanString = "0";
+                return;
+            }
+            CleanString = substr;
+            if (rawString.Contains("-"))
+                Negate();
+        }
+
+        public BigDecimal Copy()
+        {
+            return new BigDecimal(this);
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+        public override bool Equals(object obj)
+        {
+            return (this == obj as BigDecimal);
+        }
         #endregion
 
-        #region Properties
-        /// <summary>The DotPos property represents a delimiter position of BigDecimal instance in string format.</summary>
-        /// <value>The DotPos property gets/private sets the value of the int field, <see cref="_dotPos"/></value>
-        public int DotPos
+        #endregion
+
+        #region Private
+        /// <summary>Calculates a position of delimiter
+        /// in <see cref="CleanString"/></summary>
+        private void FindDotPos()
         {
-            get
-            {
-                if (_dotPos == 0)
-                {
-                    lock (dotPosMutex)
-                    {
-                        FindDotPos();
-                    }
-                }
-                return _dotPos;
-            }
-            private set
-            {
-                _dotPos = value;
-            }
-        }
-        /// <summary>The Integer property represents a number of digits 
-        /// in the integer part of BigDecimal instance.</summary>
-        /// <value>The Integer property gets the value of the int property, <see cref="DotPos"/></value>
-        public int Integer
-        {
-            get
-            {
-                return DotPos;
-            }
-        }
-        /// <summary>The Fractional property represents a number of digits 
-        /// in the fractional part of BigDecimal instance.</summary>
-        /// <value>The Fractional property gets/private sets the value of the int property, <see cref="_fracLen"/></value>
-        public int Fractional
-        {
-            get
-            {
-                if (_fracLen < 0)
-                    lock (fracLenMutex)
-                    {
-                        _fracLen = CleanString.Length - DotPos;
-                        if (_fracLen > 0)
-                            _fracLen--;
-                    }
-                return _fracLen;
-            }
-            private set
-            {
-                _fracLen = value;
-            }
-        }
-        /// <summary>The FracPrecision property represents 
-        /// a number of fractional digits counted while division for BigDecimal instances.</summary>
-        /// <value>The FracPrecision property gets/sets the value of the int property, <see cref="_fracPrecision"/></value>
-        public static int FracPrecision
-        {
-            get
-            {
-                return _fracPrecision;
-            }
-            set
-            {
-                if (value < 0)
-                    _fracPrecision = 0;
-                else
-                    _fracPrecision = value;
-            }
+            if (_dotPos > 0)
+                return;
+            _dotPos = CleanString.IndexOf(delimiter);
+            if (_dotPos < 0)
+                _dotPos = CleanString.Length;
         }
         #endregion
+
     }
 }

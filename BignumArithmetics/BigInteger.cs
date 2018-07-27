@@ -10,6 +10,22 @@ namespace BignumArithmetics
     /// big numbers</summary>
     public class BigInteger : BigNumber
     {
+        #region Variables
+
+        #region Static Const
+        /// <summary>validStringRegEx is a string representing RegEx
+        /// used to validate input string in fabric method <see cref="new BigInteger"/>
+        /// into integer and fractional parts </summary>
+        private static readonly Regex validStringRegEx = new
+            Regex(@"^\s*[+-]?[0-9]+\s*$", RegexOptions.Compiled);
+        /// <summary>cleanStringRegEx is a string representing RegEx
+        /// used to clean valid input string in fabric method <see cref="new BigInteger"/></summary>
+        private static readonly Regex cleanStringRegEx =
+            new Regex(@"[1-9]+[0-9]*", RegexOptions.Compiled);
+        #endregion
+
+        #endregion
+
         #region Constructors
         /// <summary>Constructor creates a BigInteger equal to 0</summary>
         /// <returns>An instance of BigInteger</returns>
@@ -23,7 +39,7 @@ namespace BignumArithmetics
             if (from.Sign < 0)
                 Negate();
         }
-        /// <summary>Private constructor creates a BigInteger from a valid string </summary>
+        /// <summary>Public constructor creates a BigInteger from a valid string </summary>
         /// <param name="str">string representing number digits and delimiter</param>
         /// <exception cref="ArgumentException">ArgumentException
         /// thrown in case of invalid input</exception>
@@ -49,7 +65,9 @@ namespace BignumArithmetics
         }
         #endregion
 
-        #region Static Methods
+        #region Public
+
+        #region Static 
         /// <summary>Converts numbers into matching char symbols</summary>
         /// <param name="digit">Number to be converted. Must be in [0..9] range</param>
         /// <returns>A matching char; '0' if digit does not match limits</returns>
@@ -68,7 +86,6 @@ namespace BignumArithmetics
                 return Convert.ToInt32(c - '0');
             return -1;
         }
-
         /// <summary>Сonverts BigInteger into reversed digit list with padding zeroes</summary>
         /// <param name="desiredInt">int represening how many digits should integer part contain</param>
         /// <param name="desiredFrac">int represening how many digits should fractional part contain</param>
@@ -87,7 +104,6 @@ namespace BignumArithmetics
             ret.AddRange(Enumerable.Repeat(0, IntZeros));
             return ret;
         }
-
         /// <summary>IntListToString method converts digit list to string</summary>
         /// <param name="digits">List of digits</param>
         /// <param name="dotPos">Integer representing reversed position of dot in string</param>
@@ -104,50 +120,7 @@ namespace BignumArithmetics
                 sb.Append(ToChar(digits[i]));           
             return sb.ToString();
         }
-        /// <summary>CleanNumericString method cleans digit string with <see cref="cleanStringRegEx"/></summary>
-        /// <param name="rawString">String representing of digits</param>
-        /// <returns>A clean string; "0" in case of invalid arguments</returns>
-        protected void CleanAndSaveNumericString(string rawString)
-        {
-            string substr;
-
-            substr = cleanStringRegEx.Match(rawString).Value;
-            if (substr == "")
-            {
-                CleanString = "0";
-                return;
-            }
-            CleanString = substr;
-            if (rawString.Contains("-"))
-                Negate();
-        }
-        #endregion
-
-        #region Public tools
-        /// <summary>Returns a copy of BigInteger instance </summary>
-        /// <returns>Copy of BigInteger instance</returns>
-        public BigInteger Copy()
-        {
-            return new BigInteger(this);
-        }
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-        public override bool Equals(object obj)
-        {
-            return (this == obj as BigInteger);
-        }
-        /// <summary> Returns |BigInteger| </summary>
-        /// <param name="bf">BigInteger parameter</param>
-        /// <returns>|BigInteger|</returns>
-        public static BigInteger Abs(BigInteger bf)
-        {
-            BigInteger ret = new BigInteger(bf);
-            if (bf.Sign < 0)
-                bf.Negate();
-            return bf;
-        }
+        
         #endregion
 
         #region Parent Overrides
@@ -412,16 +385,54 @@ namespace BignumArithmetics
         }
         #endregion
 
-        #region Variables
-        /// <summary>validStringRegEx is a string representing RegEx
-        /// used to validate input string in fabric method <see cref="new BigInteger"/>
-        /// into integer and fractional parts </summary>
-        private static readonly Regex validStringRegEx = new
-            Regex(@"^\s*[+-]?[0-9]+\s*$", RegexOptions.Compiled);
-        /// <summary>cleanStringRegEx is a string representing RegEx
-        /// used to clean valid input string in fabric method <see cref="new BigInteger"/></summary>
-        private static readonly Regex cleanStringRegEx =
-            new Regex(@"[1-9]+[0-9]*", RegexOptions.Compiled);
+        #region Tools
+        /// <summary>Returns a copy of BigInteger instance </summary>
+        /// <returns>Copy of BigInteger instance</returns>
+        public BigInteger Copy()
+        {
+            return new BigInteger(this);
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+        public override bool Equals(object obj)
+        {
+            return (this == obj as BigInteger);
+        }
+        /// <summary> Returns |BigInteger| </summary>
+        /// <param name="bf">BigInteger parameter</param>
+        /// <returns>|BigInteger|</returns>
+        public static BigInteger Abs(BigInteger bf)
+        {
+            BigInteger ret = new BigInteger(bf);
+            if (bf.Sign < 0)
+                bf.Negate();
+            return bf;
+        }
         #endregion
+
+        #endregion
+
+        #region Private 
+        /// <summary>CleanNumericString method cleans digit string with <see cref="cleanStringRegEx"/></summary>
+        /// <param name="rawString">String representing of digits</param>
+        /// <returns>A clean string; "0" in case of invalid arguments</returns>
+        protected void CleanAndSaveNumericString(string rawString)
+        {
+            string substr;
+
+            substr = cleanStringRegEx.Match(rawString).Value;
+            if (substr == "")
+            {
+                CleanString = "0";
+                return;
+            }
+            CleanString = substr;
+            if (rawString.Contains("-"))
+                Negate();
+        }
+        #endregion
+
     }
 }

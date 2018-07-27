@@ -4,8 +4,8 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using System.Collections.Generic;
 
-//todo: class structure https://referencesource.microsoft.com/#mscorlib/system/collections/generic/list.cs,cf7f4095e4de7646
 //todo: write docs for parser
+//todo: test parser
 
 namespace BignumArithmetics
 {

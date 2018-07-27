@@ -6,15 +6,20 @@ namespace BignumArithmetics.Parsers
 {
     public class BigIntegerRPNParser : RPNParser<BigInteger>
     {
+        #region Variables
         private static Regex regex;
+        #endregion
 
+        #region Constructors
         static BigIntegerRPNParser()
         {
             funcs.Add("abs");
             regex = new Regex(String.Format(regexFormat, @"\d+|abs"), RegexOptions.Compiled);
         }
         public BigIntegerRPNParser(string str) : base(str) { }
+        #endregion
 
+        #region Private
         protected override BigInteger Number(string str)
         {
             return new BigInteger(str);
@@ -47,5 +52,6 @@ namespace BignumArithmetics.Parsers
             }
             return arg;
         }
+        #endregion
     }
 }

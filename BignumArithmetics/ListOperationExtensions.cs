@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-//TODO: TESTS?
-
 namespace BignumArithmetics
 {
     static class ListOperationExtensions

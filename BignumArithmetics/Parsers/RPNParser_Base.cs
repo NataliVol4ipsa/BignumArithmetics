@@ -6,72 +6,70 @@ using System.Collections.Generic;
 
 namespace BignumArithmetics.Parsers
 {
-    public class RPNParserException : Exception
-    {
-        public RPNParserException() { }
-        public RPNParserException(string message)
-            : base(message) { }
-        public RPNParserException(string message, Exception inner)
-            : base(message, inner) { }
-    }
-    public enum TokenType
-    {
-        BinOp,
-        UnOp,
-        OBracket,
-        CBracket,
-        Number,
-        Function
-    }
-    public struct RPNToken
-    {
-        public RPNToken(string str, TokenType tokenType)
-        {
-            this.str = str;
-            this.tokenType = tokenType;
-        }
-        public TokenType tokenType;
-        public string str;
-    }
-
-    public enum OpArity { Unary, Binary }
-    public enum OpAssoc { Left, Right }
-    public struct OpInfo
-    {
-        public OpInfo(string op, OpArity arity, int priority, OpAssoc assoc)
-        {
-            this.op = op;
-            this.arity = arity;
-            this.priority = priority;
-            this.assoc = assoc;
-        }
-        public string op;
-        public OpArity arity;
-        public int priority;
-        public OpAssoc assoc;
-
-    }
-
-    public struct RPNBufs<T> where T : BigNumber
-    {
-        public Queue<string> stringTokens;
-        public Queue<RPNToken> expression;
-        public Stack<RPNToken> buffer;
-        public Stack<T> result;
-    }
-
     public abstract class RPNParser<T> where T : BigNumber
     {
+        #region Enums
+        protected enum TokenType
+        {
+            BinOp,
+            UnOp,
+            OBracket,
+            CBracket,
+            Number,
+            Function
+        }
+        protected enum OpArity { Unary, Binary }
+        protected enum OpAssoc { Left, Right }
+        #endregion
+
+        #region Structs
+        protected struct RPNToken
+        {
+            public RPNToken(string str, TokenType tokenType)
+            {
+                this.str = str;
+                this.tokenType = tokenType;
+            }
+            public TokenType tokenType;
+            public string str;
+        }
+        protected struct OpInfo
+        {
+            public OpInfo(string op, OpArity arity, int priority, OpAssoc assoc)
+            {
+                this.op = op;
+                this.arity = arity;
+                this.priority = priority;
+                this.assoc = assoc;
+            }
+            public string op;
+            public OpArity arity;
+            public int priority;
+            public OpAssoc assoc;
+
+        }
+        protected struct RPNBufs
+        {
+            public Queue<string> stringTokens;
+            public Queue<RPNToken> expression;
+            public Stack<RPNToken> buffer;
+            public Stack<T> result;
+        }
+        #endregion
+
         #region Variables
+
+        #region Static Const
         protected static readonly string regexFormat;
+        #endregion
+
+        #region Static
         protected static ILookup<string, OpInfo> opInfoMap;
         protected static List<string> funcs;
         #endregion
 
-        #region Properties
-        public string StringExpression { get; private set; }
         #endregion
-
+   
         #region Constructors
         static RPNParser()
         {
@@ -87,7 +85,7 @@ namespace BignumArithmetics.Parsers
                 new OpInfo("%", OpArity.Binary, 2, OpAssoc.Left),
                 new OpInfo("^", OpArity.Binary, 2, OpAssoc.Right)
             }.ToLookup(op => op.op);
-            funcs = new List<string> {};
+            funcs = new List<string> { };
         }
 
         public RPNParser(string str)
@@ -95,11 +93,15 @@ namespace BignumArithmetics.Parsers
             StringExpression = str.Trim();
         }
         #endregion
-        
-        #region Public Parse methods
+
+        #region Properties
+        public string StringExpression { get; private set; }
+        #endregion
+
+        #region Public
         public T Parse()
         {
-            RPNBufs<T> bufs = InitBufs();
+            RPNBufs bufs = InitBufs();
             bufs.stringTokens = Tokenize();
             bufs.expression = RecognizeLexems(bufs.stringTokens);
             try
@@ -112,6 +114,8 @@ namespace BignumArithmetics.Parsers
             }
         }
         #endregion
+
+        #region Private
 
         #region Abstract methods
         protected abstract T Number(string str);
@@ -147,7 +151,7 @@ namespace BignumArithmetics.Parsers
             }
             return tokenQueue;
         }
-        protected T CalculateExpression(RPNBufs<T> bufs)
+        protected T CalculateExpression(RPNBufs bufs)
         {
             RPNToken currentToken;
             RPNToken tempToken;
@@ -198,9 +202,9 @@ namespace BignumArithmetics.Parsers
         #endregion
 
         #region Private Algorithm tools
-        private RPNBufs<T> InitBufs()
+        private RPNBufs InitBufs()
         {
-            var ret = new RPNBufs<T>
+            var ret = new RPNBufs
             {
                 expression = new Queue<RPNToken>(),
                 buffer = new Stack<RPNToken>(),
@@ -241,7 +245,7 @@ namespace BignumArithmetics.Parsers
         }
         private int CmpPriorities(OpInfo left, OpInfo right)
         {
-            if ((right.assoc == OpAssoc.Left  && right.priority <= left.priority) ||
+            if ((right.assoc == OpAssoc.Left && right.priority <= left.priority) ||
                 (right.assoc == OpAssoc.Right && right.priority < left.priority))
                 return 1;
             return -1;
@@ -249,7 +253,7 @@ namespace BignumArithmetics.Parsers
         #endregion        
 
         #region Protected Algorithm tools
-        protected void CalcToken(RPNBufs<T> bufs, RPNToken op)
+        protected void CalcToken(RPNBufs bufs, RPNToken op)
         {
             if (op.tokenType == TokenType.Function)
                 bufs.result.Push(CalcFunc(bufs.result.Pop(), op.str));
@@ -272,7 +276,7 @@ namespace BignumArithmetics.Parsers
         }
         protected T CalcUnaryOp(T operand, string op)
         {
-            switch(op)
+            switch (op)
             {
                 case "+":
                     break;
@@ -288,6 +292,6 @@ namespace BignumArithmetics.Parsers
         }
         #endregion
 
-
+        #endregion
     }
 }
