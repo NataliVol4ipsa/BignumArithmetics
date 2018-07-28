@@ -319,13 +319,15 @@ namespace BignumArithmetics.Parsers
         {
             if (op.Equals("+"))
                 return (T)(left + right);
+            if (op.Equals("-"))
+                return (T)(left - right);
             if (op.Equals("*"))
                 return (T)(left * right);
             if (op.Equals("/"))
                 return (T)(left / right);
             if (op.Equals("%"))
                 return (T)(left % right);
-            throw new NotImplementedException("RPNParser met unimplemented operator");
+            throw new NotImplementedException("RPNParser met unimplemented operator \"" + op + "\"");
         }
         /// <summary> Calculates unary operation </summary>
         /// <param name="operand">Operand</param>
