@@ -155,8 +155,9 @@ namespace BignumArithmetics.Parsers
             {
                 if (opInfoMap[token].Count() > 0)
                 {
-                    if (prev.Value == TokenType.CBracket ||
-                        prev.Value == TokenType.Number)
+                    if (!(prev is null) &&
+                        (prev.Value == TokenType.CBracket ||
+                        prev.Value == TokenType.Number))
                         tokenType = TokenType.BinOp;
                     else
                         tokenType = TokenType.UnOp;

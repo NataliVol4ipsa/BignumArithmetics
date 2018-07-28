@@ -41,7 +41,7 @@ This is a small self-educational project I decided to start in order to refresh 
 
 <b>[CURRENT]</b> 8.1. Add testing and documentation
 
-[MAYBE] 9.0. Simplicity? Pow? Exp? Log?
+[MAYBE] 9.0. Simplicity? Pow? Exp? Log? Factorial?
 
 ----------
 

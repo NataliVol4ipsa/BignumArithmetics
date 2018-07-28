@@ -89,6 +89,7 @@
     <Compile Include="BigDecimalTests\BigDecimal.Operations.Add.Tests.cs" />
     <Compile Include="BigDecimalTests\BigDecimal.Operations.Sub.Tests.cs" />
     <Compile Include="BigDecimalTests\BigDecimal.Operations.Mul.Tests.cs" />
+    <Compile Include="RPNParserTests\BigIntegerRPNParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

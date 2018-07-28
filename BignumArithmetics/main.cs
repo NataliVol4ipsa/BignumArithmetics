@@ -18,9 +18,8 @@ namespace BignumArithmetics
         {
             try
             {
-                Console.WriteLine(2 + 2 * 3 % 2);
-                var parser = new BigIntegerRPNParser().Parse("abs(-(2 + 2 * 3 % 2))");
-                Console.WriteLine(parser);
+                var p = new BigIntegerRPNParser().Parse("-0");
+                Console.WriteLine(p);
             }
             catch(Exception e)
             {

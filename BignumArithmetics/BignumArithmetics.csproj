@@ -49,7 +49,6 @@
     <Compile Include="BigBased.cs" />
     <Compile Include="BigInteger.cs" />
     <Compile Include="BigNumber.cs" />
-    <Compile Include="InputReader.cs" />
     <Compile Include="ListOperationExtensions.cs" />
     <Compile Include="main.cs" />
     <Compile Include="Parsers\RPNParserException.cs" />
