@@ -1,48 +1,25 @@
 ﻿# Bignum-Arithmetics #
-Simple calculator for numbers that overflow all numeric types in C#
 
-This is a small self-educational project I decided to start in order to refresh memories of writing in C#. The final result gonna be reached by smaller steps:
+Simple library to proceed numbers that overflow all numeric types in C#
 
-[DONE] 0. Learn how to use git with Visual Studio 2017 :D
+There is a BigNumber abstract class that can be used as a base for different big number classes.
+It has abstract functions for simple operators: '+', '-', '*', '/', '%'
+There are also two already implemented child classes, BigInteger and BigDecimal. 
+You can also convert them between each other.
+BigDecimal class has a precision representing number of fractional digits for division operation, which is a static variable that can be changed.
+Project contains extension class for List<int>, whose methods do operations for reversed lists representing digits.
+These are used actively. You may change them. 
+For example implement some known algorithms in multiplication method in order to fastern calculations.
 
-[DONE] 1.0. Implement Interface\Abstract class for storing numbers. Child classes will be : integer, fixed point, fractional, 2..16-base and maybe literal numbers.
+There is an abstract RPNParser<T> class for calculating string expressions for BigNumber children.
+Expression can contain any whitespaces, numbers, operators, brackets and custom functions. 
+This class can be inherited for any custom BigNumber and all you need to do is implement two functions: 
+first is creating an instance of your class 
+and second is splitting string into lexems combining parent regex, which is stored in regexFormat variable, and regex for your class.
+You may add some custom unary functions there.
+There are two parser classes already implemented: BigIntegerRPNParser and BigDecimalRPNParser.
+You may have a look at their implementation as a code sample.
 
-[DONE] 1.1. Implement simple reading and storing either from a console and file.
+There is also a project named BigNumArithmetics.Tests included. Id does some library testing.
 
-[DONE] 2.0. Implement long sum
-
-[DONE] 2.1. Start creating documentation
-
-[DONE] 2.2. Implement long dif. Remember to proceed negative and zero numbers.
-
-[DONE] 3.0. Implement basic error management using exception system + advanced input parsing.
-
-[DONE] 3.1. Write more tests
-
-[DONE] 4.0. Implement long mul. //rejected pow and factorial because not so useful
-
-[DONE] 5.0. Implement div
-
-[DONE] 5.1. Test Div
-
-[DONE] 5.2. Implement mod
-
-[DONE] 6.0. Implement more useful methods (copy etc)
-
-[DONE] 6.1. Append documentation
-
-[DONE] 7.0. Implement 2-6 for integer.
-
-[DELAYED] 7.1. Implement 2-6 for different base
-
-[DELAYED] 7.2. Implement 2-6 for fractional. Remember about reduction of fractions(factorization... NSD?)
-
-[DONE] 8.0. Try to implement a normal calculator, with brackets support. 
-
-<b>[CURRENT]</b> 8.1. Add testing and documentation
-
-[MAYBE] 9.0. Simplicity? Pow? Exp? Log? Factorial?
-
-----------
-
-If anyone ever visits this project, any kind of feedback is highly appreciated :D
+Code is filled with xml documentation.

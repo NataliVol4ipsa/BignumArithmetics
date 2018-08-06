@@ -99,8 +99,9 @@ namespace BignumArithmetics.Parsers
                 new OpInfo("+", OpArity.Unary,  3, OpAssoc.Left),
                 new OpInfo("*", OpArity.Binary, 2, OpAssoc.Left),
                 new OpInfo("/", OpArity.Binary, 2, OpAssoc.Left),
-                new OpInfo("%", OpArity.Binary, 2, OpAssoc.Left),
-                new OpInfo("^", OpArity.Binary, 2, OpAssoc.Right)
+                new OpInfo("%", OpArity.Binary, 2, OpAssoc.Left)
+                //example of OpAssoc.Right operator is
+                //new OpInfo("^", OpArity.Binary, 2, OpAssoc.Right)
             }.ToLookup(op => op.op);
             funcs = new List<string> { };
         }
