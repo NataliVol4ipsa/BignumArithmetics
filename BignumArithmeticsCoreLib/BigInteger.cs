@@ -6,8 +6,7 @@ using System.Linq;
 
 namespace BignumArithmetics
 {
-    /// <summary>Сlass for integer 
-    /// big numbers</summary>
+    /// <summary>Сlass for integer big numbers</summary>
     public class BigInteger : BigNumber
     {
         #region Variables
