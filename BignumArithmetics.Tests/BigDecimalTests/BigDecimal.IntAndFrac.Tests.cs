@@ -1,12 +1,12 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace BignumArithmetics.BigDecimalTests
 {
-    [TestClass]
+    [TestFixture]
     public class BigDecimalIntFracTests
     {
-        [TestMethod]
+        [Test]
         public void Zero()
         {
             BigDecimal actual = new BigDecimal("0");
@@ -14,7 +14,7 @@ namespace BignumArithmetics.BigDecimalTests
             Assert.AreEqual(1, actual.Integer);
             Assert.AreEqual(0, actual.Fractional);
         }
-        [TestMethod]
+        [Test]
         public void Hundred()
         {
             BigDecimal actual = new BigDecimal("-100");
@@ -22,7 +22,7 @@ namespace BignumArithmetics.BigDecimalTests
             Assert.AreEqual(3, actual.Integer);
             Assert.AreEqual(0, actual.Fractional);
         }
-        [TestMethod]
+        [Test]
         public void ZeroDot156()
         {
             BigDecimal actual = new BigDecimal("-0.156");
@@ -30,7 +30,7 @@ namespace BignumArithmetics.BigDecimalTests
             Assert.AreEqual(1, actual.Integer);
             Assert.AreEqual(3, actual.Fractional);
         }
-        [TestMethod]
+        [Test]
         public void BigNumber()
         {
             BigDecimal actual = new BigDecimal("923742.42382");

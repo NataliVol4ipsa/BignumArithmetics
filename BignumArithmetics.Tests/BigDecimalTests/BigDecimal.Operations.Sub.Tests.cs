@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace BignumArithmetics.BigDecimalTests
 {
-    [TestClass]
+    [TestFixture]
     public class BigDecimalOperationsSubTests
     {
         static Random rnd = new Random((int)DateTime.Now.Ticks);
@@ -46,49 +46,49 @@ namespace BignumArithmetics.BigDecimalTests
                     DecimalToString(C));
         }
 
-        [TestMethod]
+        [Test]
         public void Zero_Zero()
         {
             DoTesting("0", "0", "0");
         }
 
-        [TestMethod]
+        [Test]
         public void Zero_m5()
         {
             DoTesting("0", "-5", "5");
         }
 
-        [TestMethod]
+        [Test]
         public void m5_zero()
         {
             DoTesting("-5", "0", "-5");
         }
 
-        [TestMethod]
+        [Test]
         public void m5_p6()
         {
             DoTesting("-5", "6", "-11");
         }
 
-        [TestMethod]
+        [Test]
         public void p123D45_p45D678()
         {
             DoTesting("123.45", "45.678", "77.772");
         }
 
-        [TestMethod]
+        [Test]
         public void m3D1_p10D005()
         {
             DoTesting("-3.1", "10.005", "-13.105");
         }
 
-        [TestMethod]
+        [Test]
         public void m10D005_m3D1()
         {
             DoTesting("-10.005", "-3.1", "-6.905");
         }
 
-        [TestMethod]
+        [Test]
         public void random_10000_tests()
         {
             for (int i = 0; i < 10000; i++)

@@ -2,6 +2,7 @@
 
 namespace BignumArithmetics.Parsers
 {
+    [Serializable]
     public class RPNParserException : Exception
     {
         public RPNParserException() { }

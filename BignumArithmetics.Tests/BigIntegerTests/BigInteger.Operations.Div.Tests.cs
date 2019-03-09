@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace BignumArithmetics.BigIntegerTests
 {
-    [TestClass]
+    [TestFixture]
     public class BigIntegerOperationsDivTests
     {
         static Random rnd = new Random((int)DateTime.Now.Ticks);
@@ -27,33 +27,33 @@ namespace BignumArithmetics.BigIntegerTests
             DoTesting(a.ToString(), b.ToString(), c.ToString());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(DivideByZeroException))]
+        [Test]
         public void Zero_Zero()
         {
-            DoTesting("0", "0", "0");
+            Assert.Throws<DivideByZeroException>(() =>
+             DoTesting("0", "0", "0"));
         }
 
-        [TestMethod]
+        [Test]
         public void Zero_m5()
         {
             DoTesting("0", "-5", "0");
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(DivideByZeroException))]
+        [Test]
         public void m5_zero()
         {
-            DoTesting("-5", "0", "0");
+            Assert.Throws<DivideByZeroException>(() =>
+            DoTesting("-5", "0", "0"));
         }
 
-        [TestMethod]
+        [Test]
         public void m6_p5()
         {
             DoTesting("-6", "5", "-1");
         }
 
-        [TestMethod]
+        [Test]
         public void random_10000_tests()
         {
             for (int i = 0; i < 10000; i++)

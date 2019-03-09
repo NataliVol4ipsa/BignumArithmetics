@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace BignumArithmetics.BigDecimalTests
 {
-    [TestClass]
+    [TestFixture]
     public class BigDecimalIntListToStringTests
     {
-        [TestMethod]
+        [Test]
         public void NullTest()
         {
             string actual = BigDecimal.IntListToString(null, 0);
@@ -14,7 +14,7 @@ namespace BignumArithmetics.BigDecimalTests
             Assert.AreEqual(expected, actual);
         }
 
-        [TestMethod]
+        [Test]
         public void EmptyTest()
         {
             string actual = BigDecimal.IntListToString(new List<int>(), 0);
@@ -22,7 +22,7 @@ namespace BignumArithmetics.BigDecimalTests
             Assert.AreEqual(expected, actual);
         }
 
-        [TestMethod]
+        [Test]
         public void SimpleTest()
         {
             var list = new List<int> { 5 };
@@ -31,7 +31,7 @@ namespace BignumArithmetics.BigDecimalTests
             Assert.AreEqual(expected, actual);
         }
 
-        [TestMethod]
+        [Test]
         public void Num56Dot7_Test()
         {
             var list = new List<int> { 7, 6, 5 };
@@ -40,7 +40,7 @@ namespace BignumArithmetics.BigDecimalTests
             Assert.AreEqual(expected, actual);
         }
 
-        [TestMethod]
+        [Test]
         public void Num0Dot15_Test()
         {
             var list = new List<int> { 5, 1, 0 };
@@ -49,7 +49,7 @@ namespace BignumArithmetics.BigDecimalTests
             Assert.AreEqual(expected, actual);
         }
 
-        [TestMethod]
+        [Test]
         public void Num0598Dot20836610_Test()
         {
             var list = new List<int> { 0, 1, 6, 6, 3, 8, 0, 2, 8, 9, 5, 0 };

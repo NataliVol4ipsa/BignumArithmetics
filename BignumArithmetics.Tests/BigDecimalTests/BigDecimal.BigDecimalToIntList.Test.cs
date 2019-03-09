@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace BignumArithmetics.BigDecimalTests
 {
-    [TestClass]
+    [TestFixture]
     public class BigDecimalBigDecimalToIntListTest
     {
         public void CompareLists(List<int> expected, List<int>actual)
@@ -13,14 +13,14 @@ namespace BignumArithmetics.BigDecimalTests
                 Assert.AreEqual(expected[i], actual[i]);
         }
 
-        [TestMethod]
+        [Test]
         public void NullTest()
         {
             List<int> actual = BigDecimal.BigDecimalToIntList(null, 0, 0);
             Assert.IsNull(actual);
         }
 
-        [TestMethod]
+        [Test]
         public void Zero_Test()
         {
             var bf = new BigDecimal("0");
@@ -28,7 +28,7 @@ namespace BignumArithmetics.BigDecimalTests
             List<int> expected = new List<int> { 0 };
             CompareLists(expected, actual);
         }
-        [TestMethod]
+        [Test]
         public void Zero23_Test()
         {
             var bf = new BigDecimal("0");
@@ -37,7 +37,7 @@ namespace BignumArithmetics.BigDecimalTests
             CompareLists(expected, actual);
         }
 
-        [TestMethod]
+        [Test]
         public void Digit23_Test()
         {
             var bf = new BigDecimal("5");
@@ -46,7 +46,7 @@ namespace BignumArithmetics.BigDecimalTests
             CompareLists(expected, actual);
         }
 
-        [TestMethod]
+        [Test]
         public void Digits32_Test()
         {
             var bf = new BigDecimal("65.1");
@@ -55,7 +55,7 @@ namespace BignumArithmetics.BigDecimalTests
             CompareLists(expected, actual);
         }
 
-        [TestMethod]
+        [Test]
         public void Digits13_Test()
         {
             var bf = new BigDecimal("65.1");

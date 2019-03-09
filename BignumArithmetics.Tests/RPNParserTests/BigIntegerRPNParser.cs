@@ -1,49 +1,48 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using BignumArithmetics.Parsers;
 
 namespace BignumberArithmetics.Tests.RPNParserTests
 {
-    [TestClass]
+    [TestFixture]
     public class BigIntegerRpnTests
     {
-        [TestMethod]
+        [Test]
         public void EmptyString()
         {
             var p = new BigIntegerRPNParser().Parse("");
             Assert.AreEqual("0", p.ToString());
         }
-        [TestMethod]
+        [Test]
         public void M0()
         {
             var p = new BigIntegerRPNParser().Parse("-0");
             Assert.AreEqual("0", p.ToString());
         }
-        [TestMethod]
+        [Test]
         public void M5()
         {
             var p = new BigIntegerRPNParser().Parse("-5");
             Assert.AreEqual("-5", p.ToString());
         }
-        [TestMethod]
+        [Test]
         public void P2_p_P2()
         {
             var p = new BigIntegerRPNParser().Parse("2 + 2");
             Assert.AreEqual("4", p.ToString());
         }
-        [TestMethod]
+        [Test]
         public void M2_p_M2()
         {
             var p = new BigIntegerRPNParser().Parse("-2 + -2");
             Assert.AreEqual("-4", p.ToString());
         }
-        [TestMethod]
+        [Test]
         public void M2_m_M2()
         {
             var p = new BigIntegerRPNParser().Parse("-2 * -2");
             Assert.AreEqual("4", p.ToString());
         }
-        [TestMethod]
+        [Test]
         public void BracketsTests()
         {
             var p = new BigIntegerRPNParser().Parse("(2)");
@@ -57,7 +56,7 @@ namespace BignumberArithmetics.Tests.RPNParserTests
             p = new BigIntegerRPNParser().Parse("(((((2) + (2)))))");
             Assert.AreEqual("4", p.ToString());
         }
-        [TestMethod]
+        [Test]
         public void ManySimpleTests()
         {
             var p = new BigIntegerRPNParser().Parse("2 * -2");
@@ -74,6 +73,8 @@ namespace BignumberArithmetics.Tests.RPNParserTests
             Assert.AreEqual("4", p.ToString());
             p = new BigIntegerRPNParser().Parse("(2 / 3) * 7 + ((5 - 7) * (21 % (11/3)))");
             Assert.AreEqual("0", p.ToString());
+            //p = new BigIntegerRPNParser().Parse("2 + --2");
+            //Assert.AreEqual("4", p.ToString());
         }
     }
 }

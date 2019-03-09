@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace BignumArithmetics.BigDecimalTests
 {
-    [TestClass]
+    [TestFixture]
     public class BigDecimalNormalizeListTests
     {
         public void CompareLists(List<int> expected, List<int> actual)
@@ -13,13 +13,13 @@ namespace BignumArithmetics.BigDecimalTests
                 Assert.AreEqual(expected[i], actual[i]);
         }
 
-        [TestMethod]
+        [Test]
         public void NullTest()
         {
             new BigDecimal().NormalizeList(null);
         }
 
-        [TestMethod]
+        [Test]
         public void OneElemList_Test()
         {
             var actual = new List<int> { 5 };
@@ -28,7 +28,7 @@ namespace BignumArithmetics.BigDecimalTests
             CompareLists(expected, actual);
         }
 
-        [TestMethod]
+        [Test]
         public void OneElemList_Unnormalized_Test()
         {
             var actual = new List<int> { 15 };
@@ -37,7 +37,7 @@ namespace BignumArithmetics.BigDecimalTests
             CompareLists(expected, actual);
         }
 
-        [TestMethod]
+        [Test]
         public void OneElemList_VeryUnnormalized_Test()
         {
             var actual = new List<int> { 135673 };
@@ -46,7 +46,7 @@ namespace BignumArithmetics.BigDecimalTests
             CompareLists(expected, actual);
         }
 
-        [TestMethod]
+        [Test]
         public void BigList_Unnormalized_Test()
         {
             var actual = new List<int> { 1, 11, 9 };
