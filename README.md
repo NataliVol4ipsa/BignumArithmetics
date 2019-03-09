@@ -19,6 +19,5 @@ There is an abstract RPNParser<T> class for calculating string expressions for B
 - You may add some custom unary functions there, folowing the example of abs
 - There are two parser classes already implemented: BigIntegerRPNParser and BigDecimalRPNParser. You may have a look at their implementation as a code sample.
 
-There is also a project named BigNumArithmeticsCoreLib.Tests included. Id does some library testing.
-
+There is also a project named BigNumArithmeticsCoreLib.Tests included. It runs library tests
 Code is filled with xml documentation.
